@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 950" preserveAspectRatio="xMidYMid slice" role="img" aria-label="디자인 비교 뷰어 — 21 design variants">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef6e4"/>
+      <stop offset="55%" stop-color="#fdf2f8"/>
+      <stop offset="100%" stop-color="#e0e7ff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cardShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="14" stdDeviation="22" flood-color="#1e1b4b" flood-opacity="0.18"/>
+    </filter>
+    <filter id="softShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#1e1b4b" flood-opacity="0.10"/>
+    </filter>
+
+    <linearGradient id="hero1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a5b4fc"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="hero2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fdba74"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="hero3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5eead4"/>
+      <stop offset="100%" stop-color="#0d9488"/>
+    </linearGradient>
+    <linearGradient id="hero4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fcd34d"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+
+    <pattern id="dots" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#1e1b4b" opacity="0.10"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="950" fill="url(#bg)"/>
+  <rect width="1600" height="950" fill="url(#dots)"/>
+  <rect width="1600" height="950" fill="url(#glow)"/>
+
+  <!-- Decorative scattered swatches (background) -->
+  <g opacity="0.55">
+    <circle cx="110" cy="120" r="14" fill="#818cf8"/>
+    <circle cx="160" cy="155" r="9"  fill="#c2410c"/>
+    <circle cx="1490" cy="115" r="12" fill="#ec4899"/>
+    <circle cx="1450" cy="160" r="8"  fill="#10b981"/>
+    <circle cx="80"  cy="810" r="11" fill="#f59e0b"/>
+    <circle cx="1520" cy="830" r="13" fill="#a78bfa"/>
+  </g>
+
+  <!-- LEFT STACK: three browser frames in a fan -->
+  <g transform="translate(180 200)">
+    <!-- back -->
+    <g transform="translate(60 60) rotate(-10)" filter="url(#cardShadow)">
+      <rect width="380" height="260" rx="18" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+      <rect width="380" height="34" rx="18" fill="#f8fafc"/>
+      <rect y="17" width="380" height="17" fill="#f8fafc"/>
+      <circle cx="22" cy="17" r="5" fill="#fda4af"/>
+      <circle cx="42" cy="17" r="5" fill="#fcd34d"/>
+      <circle cx="62" cy="17" r="5" fill="#86efac"/>
+      <rect x="20" y="54" width="340" height="120" rx="10" fill="url(#hero2)"/>
+      <rect x="20" y="184" width="180" height="14" rx="4" fill="#e2e8f0"/>
+      <rect x="20" y="206" width="260" height="10" rx="3" fill="#eef2ff"/>
+      <rect x="20" y="222" width="220" height="10" rx="3" fill="#eef2ff"/>
+    </g>
+    <!-- mid -->
+    <g transform="translate(30 30) rotate(-4)" filter="url(#cardShadow)">
+      <rect width="380" height="260" rx="18" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+      <rect width="380" height="34" rx="18" fill="#f8fafc"/>
+      <rect y="17" width="380" height="17" fill="#f8fafc"/>
+      <circle cx="22" cy="17" r="5" fill="#fda4af"/>
+      <circle cx="42" cy="17" r="5" fill="#fcd34d"/>
+      <circle cx="62" cy="17" r="5" fill="#86efac"/>
+      <rect x="20" y="54" width="340" height="120" rx="10" fill="url(#hero3)"/>
+      <rect x="20" y="184" width="200" height="14" rx="4" fill="#e2e8f0"/>
+      <rect x="20" y="206" width="280" height="10" rx="3" fill="#eef2ff"/>
+      <rect x="20" y="222" width="240" height="10" rx="3" fill="#eef2ff"/>
+    </g>
+    <!-- front -->
+    <g filter="url(#cardShadow)">
+      <rect width="380" height="260" rx="18" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+      <rect width="380" height="34" rx="18" fill="#f8fafc"/>
+      <rect y="17" width="380" height="17" fill="#f8fafc"/>
+      <circle cx="22" cy="17" r="5" fill="#fda4af"/>
+      <circle cx="42" cy="17" r="5" fill="#fcd34d"/>
+      <circle cx="62" cy="17" r="5" fill="#86efac"/>
+      <rect x="20" y="54" width="340" height="120" rx="10" fill="url(#hero1)"/>
+      <rect x="20" y="184" width="220" height="14" rx="4" fill="#e2e8f0"/>
+      <rect x="20" y="206" width="300" height="10" rx="3" fill="#eef2ff"/>
+      <rect x="20" y="222" width="260" height="10" rx="3" fill="#eef2ff"/>
+    </g>
+  </g>
+
+  <!-- RIGHT STACK: mirrored fan -->
+  <g transform="translate(1040 230)">
+    <!-- back -->
+    <g transform="translate(-60 60) rotate(10)" filter="url(#cardShadow)">
+      <rect width="380" height="260" rx="18" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+      <rect width="380" height="34" rx="18" fill="#f8fafc"/>
+      <rect y="17" width="380" height="17" fill="#f8fafc"/>
+      <circle cx="22" cy="17" r="5" fill="#fda4af"/>
+      <circle cx="42" cy="17" r="5" fill="#fcd34d"/>
+      <circle cx="62" cy="17" r="5" fill="#86efac"/>
+      <rect x="20" y="54" width="340" height="120" rx="10" fill="url(#hero4)"/>
+      <rect x="20" y="184" width="180" height="14" rx="4" fill="#e2e8f0"/>
+      <rect x="20" y="206" width="260" height="10" rx="3" fill="#eef2ff"/>
+      <rect x="20" y="222" width="220" height="10" rx="3" fill="#eef2ff"/>
+    </g>
+    <!-- mid -->
+    <g transform="translate(-30 30) rotate(4)" filter="url(#cardShadow)">
+      <rect width="380" height="260" rx="18" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+      <rect width="380" height="34" rx="18" fill="#f8fafc"/>
+      <rect y="17" width="380" height="17" fill="#f8fafc"/>
+      <circle cx="22" cy="17" r="5" fill="#fda4af"/>
+      <circle cx="42" cy="17" r="5" fill="#fcd34d"/>
+      <circle cx="62" cy="17" r="5" fill="#86efac"/>
+      <rect x="20" y="54" width="340" height="120" rx="10" fill="url(#hero3)"/>
+      <rect x="20" y="184" width="200" height="14" rx="4" fill="#e2e8f0"/>
+      <rect x="20" y="206" width="280" height="10" rx="3" fill="#eef2ff"/>
+      <rect x="20" y="222" width="240" height="10" rx="3" fill="#eef2ff"/>
+    </g>
+    <!-- front -->
+    <g filter="url(#cardShadow)">
+      <rect width="380" height="260" rx="18" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+      <rect width="380" height="34" rx="18" fill="#f8fafc"/>
+      <rect y="17" width="380" height="17" fill="#f8fafc"/>
+      <circle cx="22" cy="17" r="5" fill="#fda4af"/>
+      <circle cx="42" cy="17" r="5" fill="#fcd34d"/>
+      <circle cx="62" cy="17" r="5" fill="#86efac"/>
+      <rect x="20" y="54" width="340" height="120" rx="10" fill="url(#hero2)"/>
+      <rect x="20" y="184" width="220" height="14" rx="4" fill="#e2e8f0"/>
+      <rect x="20" y="206" width="300" height="10" rx="3" fill="#eef2ff"/>
+      <rect x="20" y="222" width="260" height="10" rx="3" fill="#eef2ff"/>
+    </g>
+  </g>
+
+  <!-- CENTER TITLE BLOCK -->
+  <g transform="translate(800 475)">
+    <!-- Glass pill background -->
+    <rect x="-440" y="-110" width="880" height="220" rx="110" fill="#ffffff" fill-opacity="0.85" stroke="#c7d2fe" stroke-width="2" filter="url(#cardShadow)"/>
+    <!-- Title -->
+    <text x="0" y="-12" text-anchor="middle" font-family="'Pretendard Variable', Pretendard, 'Noto Sans KR', system-ui, -apple-system, sans-serif" font-size="120" font-weight="800" fill="#0f172a" letter-spacing="-4">디자인 비교</text>
+    <!-- Subtitle -->
+    <text x="0" y="58" text-anchor="middle" font-family="'Pretendard Variable', Pretendard, system-ui, sans-serif" font-size="22" font-weight="600" fill="#4f46e5" letter-spacing="6">21 VARIANTS · 6 CATEGORIES</text>
+  </g>
+
+  <!-- Bottom palette row -->
+  <g transform="translate(800 870)">
+    <text x="0" y="-32" text-anchor="middle" font-family="'Pretendard Variable', Pretendard, system-ui, sans-serif" font-size="14" font-weight="700" fill="#64748b" letter-spacing="5">PALETTE</text>
+    <g transform="translate(-260 0)" filter="url(#softShadow)">
+      <circle cx="0"   cy="0" r="20" fill="#818cf8"/>
+      <circle cx="104" cy="0" r="20" fill="#c2410c"/>
+      <circle cx="208" cy="0" r="20" fill="#10b981"/>
+      <circle cx="312" cy="0" r="20" fill="#f59e0b"/>
+      <circle cx="416" cy="0" r="20" fill="#a78bfa"/>
+      <circle cx="520" cy="0" r="20" fill="#ec4899"/>
+    </g>
+  </g>
+</svg>
