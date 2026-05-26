@@ -93,6 +93,43 @@
             overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
             flex: 1;
         }
+        .skill-btn .open-link {
+            flex-shrink: 0;
+            color: var(--ink-3);
+            text-decoration: none;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            padding: 0.1875rem 0.4375rem;
+            border-radius: 5px;
+            background: transparent;
+            border: 1px solid transparent;
+            opacity: 0;
+            transition: opacity 0.15s, color 0.15s, background 0.15s, border-color 0.15s;
+            line-height: 1;
+        }
+        .skill-btn:hover .open-link { opacity: 1; color: var(--accent); border-color: var(--line); }
+        .skill-btn .open-link:hover { background: rgba(125, 211, 192, 0.15); color: var(--accent); border-color: var(--accent); }
+        .skill-btn.active .open-link { opacity: 1; color: #061e1a; border-color: rgba(6, 30, 26, 0.25); }
+        .skill-btn.active .open-link:hover { background: rgba(6, 30, 26, 0.12); border-color: rgba(6, 30, 26, 0.45); }
+
+        .notes-actions {
+            display: flex; gap: 0.375rem;
+            margin-top: 0.625rem;
+        }
+        .notes-actions a {
+            flex: 1;
+            text-align: center;
+            background: var(--panel-3);
+            border: 1px solid var(--line);
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.4375rem 0.625rem;
+            border-radius: 7px;
+            transition: all 0.15s;
+        }
+        .notes-actions a:hover { background: var(--accent); color: #061e1a; border-color: var(--accent); }
 
         .mode-toggle {
             display: flex; background: var(--panel-2);
@@ -492,6 +529,16 @@
             lbl.textContent = f.label;
             btn.appendChild(lbl);
 
+            const openLink = document.createElement('a');
+            openLink.className = 'open-link';
+            openLink.href = f.src;
+            openLink.target = '_blank';
+            openLink.rel = 'noopener';
+            openLink.title = '새 창으로 열기';
+            openLink.textContent = '↗';
+            openLink.addEventListener('click', e => e.stopPropagation());
+            btn.appendChild(openLink);
+
             list.appendChild(btn);
         });
         sidebarList.appendChild(list);
@@ -592,6 +639,16 @@
             p.appendChild(document.createTextNode(v));
             notesBody.appendChild(p);
         });
+
+        const actions = document.createElement('div');
+        actions.className = 'notes-actions';
+        const openNew = document.createElement('a');
+        openNew.href = f.src;
+        openNew.target = '_blank';
+        openNew.rel = 'noopener';
+        openNew.textContent = '새 창으로 열기 ↗';
+        actions.appendChild(openNew);
+        notesBody.appendChild(actions);
     }
 
     document.querySelectorAll('.skill-btn').forEach(btn => {
