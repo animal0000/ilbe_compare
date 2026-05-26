@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>스킬·작업물 통합 비교 — ilbe terms</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0a0a0b;
+            --panel: #141416;
+            --panel-2: #1c1c1f;
+            --panel-3: #232328;
+            --line: #26262a;
+            --ink: #f5f5f7;
+            --ink-2: #a8a8b0;
+            --ink-3: #6a6a72;
+            --accent: #7DD3C0;
+            --accent-2: #5BA697;
+            --orange: #f59e0b;
+            --pink: #ec4899;
+            --indigo: #818cf8;
+            --green: #84cc16;
+        }
+        html, body { height: 100%; overflow: hidden; }
+        body {
+            font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            grid-template-rows: 56px 1fr;
+            grid-template-areas: "topbar topbar" "sidebar main";
+        }
+        .topbar {
+            grid-area: topbar;
+            background: var(--panel);
+            border-bottom: 1px solid var(--line);
+            display: flex; align-items: center;
+            padding: 0 1.25rem; gap: 1rem;
+        }
+        .topbar h1 { font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.01em; }
+        .topbar .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+        .topbar .meta { color: var(--ink-3); font-size: 0.75rem; margin-left: auto; }
+        .topbar .meta strong { color: var(--accent); font-variant-numeric: tabular-nums; }
+
+        .sidebar {
+            grid-area: sidebar;
+            background: var(--panel);
+            border-right: 1px solid var(--line);
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        .sidebar h2 {
+            font-size: 0.6875rem; font-weight: 600;
+            color: var(--ink-3);
+            text-transform: uppercase; letter-spacing: 0.12em;
+            margin: 0.875rem 0 0.5rem; padding: 0 0.5rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .sidebar h2 .badge {
+            background: var(--panel-3);
+            color: var(--ink-2);
+            padding: 0.0625rem 0.4375rem;
+            border-radius: 999px;
+            font-size: 0.625rem;
+            font-weight: 500;
+        }
+        .sidebar h2:first-of-type { margin-top: 0.5rem; }
+
+        .skill-list { display: flex; flex-direction: column; gap: 0.1875rem; }
+        .skill-btn {
+            background: transparent; border: 1px solid transparent;
+            padding: 0.5625rem 0.75rem; border-radius: 8px;
+            text-align: left; color: var(--ink-2);
+            font-family: inherit; font-size: 0.8125rem; font-weight: 500;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 0.5rem;
+            width: 100%;
+        }
+        .skill-btn:hover { background: var(--panel-2); color: var(--ink); }
+        .skill-btn.active { background: var(--accent); color: #061e1a; font-weight: 600; }
+        .skill-btn .num {
+            font-variant-numeric: tabular-nums;
+            font-size: 0.6875rem; opacity: 0.55; font-weight: 600;
+            min-width: 1.25rem;
+        }
+        .skill-btn .swatch {
+            width: 10px; height: 10px; border-radius: 3px;
+            flex-shrink: 0;
+        }
+        .skill-btn .label-text {
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            flex: 1;
+        }
+
+        .mode-toggle {
+            display: flex; background: var(--panel-2);
+            border-radius: 9px; padding: 0.1875rem; margin-bottom: 0.875rem;
+        }
+        .mode-btn {
+            flex: 1; background: transparent; border: 0;
+            padding: 0.5rem; border-radius: 6px;
+            color: var(--ink-2); font-family: inherit;
+            font-size: 0.75rem; font-weight: 500;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .mode-btn.active { background: var(--accent); color: #061e1a; font-weight: 600; }
+
+        .notes {
+            margin-top: 0.875rem; padding: 0.75rem;
+            background: var(--panel-2); border-radius: 9px;
+            border: 1px solid var(--line);
+            font-size: 0.75rem; line-height: 1.6;
+            color: var(--ink-2);
+        }
+        .notes-title { color: var(--ink); display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.8125rem; }
+        .notes-line { margin-top: 0.4375rem; }
+        .notes-line:first-of-type { margin-top: 0; }
+        .notes-key { color: var(--accent); margin-right: 0.375rem; font-weight: 500; }
+
+        main { grid-area: main; background: var(--bg); overflow: hidden; position: relative; }
+
+        .frames-single { width: 100%; height: 100%; }
+        .frames-single iframe { width: 100%; height: 100%; border: 0; background: white; }
+        .frames-single.hidden { display: none; }
+
+        .frames-grid {
+            display: none;
+            width: 100%; height: 100%;
+            overflow-y: auto;
+            background: var(--bg);
+            padding: 0.5rem;
+        }
+        .frames-grid.active { display: block; }
+        .grid-toolbar {
+            position: sticky; top: 0;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 0.5rem;
+            display: flex; gap: 0.375rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+            z-index: 10;
+        }
+        .grid-toolbar .filter-chip {
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink-2);
+            padding: 0.3125rem 0.75rem;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .grid-toolbar .filter-chip:hover { color: var(--ink); border-color: var(--ink-3); }
+        .grid-toolbar .filter-chip.active { background: var(--accent); color: #061e1a; border-color: var(--accent); font-weight: 600; }
+        .grid-toolbar .size-toggle {
+            margin-left: auto;
+            display: flex;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 0.1875rem;
+        }
+        .grid-toolbar .size-toggle button {
+            background: transparent;
+            border: 0;
+            padding: 0.25rem 0.6875rem;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: var(--ink-2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .grid-toolbar .size-toggle button.active { background: var(--accent); color: #061e1a; }
+
+        .grid-inner {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 0.5rem;
+        }
+        .grid-inner.size-sm { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+        .grid-inner.size-lg { grid-template-columns: repeat(auto-fill, minmax(640px, 1fr)); }
+
+        .frame-cell {
+            position: relative;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            aspect-ratio: 4 / 3;
+        }
+        .frame-cell.hidden { display: none; }
+        .frame-cell .label {
+            position: absolute; top: 8px; left: 8px; right: 8px;
+            background: rgba(10,10,11,0.88);
+            backdrop-filter: blur(8px);
+            color: var(--ink);
+            font-size: 0.6875rem; font-weight: 600;
+            padding: 0.3125rem 0.625rem;
+            border-radius: 999px;
+            z-index: 5; letter-spacing: 0.02em;
+            display: flex; align-items: center; gap: 0.4375rem;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .frame-cell .label .swatch {
+            width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0;
+        }
+        .frame-cell .label .open-btn {
+            margin-left: auto;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.625rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            background: rgba(125, 211, 192, 0.12);
+            flex-shrink: 0;
+        }
+        .frame-cell .label .open-btn:hover { background: rgba(125, 211, 192, 0.25); }
+        .frame-cell iframe {
+            width: 200%; height: 200%;
+            border: 0;
+            transform: scale(0.5);
+            transform-origin: top left;
+        }
+        .size-sm .frame-cell iframe { width: 250%; height: 250%; transform: scale(0.4); }
+        .size-lg .frame-cell iframe { width: 142.857%; height: 142.857%; transform: scale(0.7); }
+    </style>
+</head>
+<body>
+
+<header class="topbar">
+    <span class="dot"></span>
+    <h1>일베용어 가이드 · 디자인 작업물 통합 비교</h1>
+    <span class="meta">총 <strong id="totalCount">0</strong>개 파일 비교 중</span>
+</header>
+
+<aside class="sidebar">
+    <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="single">단일 보기</button>
+        <button class="mode-btn" data-mode="grid">전체 그리드</button>
+    </div>
+
+    <div id="sidebarList"></div>
+
+    <div class="notes" id="notes">
+        <span class="notes-title" id="notesTitle">—</span>
+        <div id="notesBody"></div>
+    </div>
+</aside>
+
+<main>
+    <div class="frames-single" id="single">
+        <iframe id="frame" src=""></iframe>
+    </div>
+    <div class="frames-grid" id="grid">
+        <div class="grid-toolbar" id="gridToolbar"></div>
+        <div class="grid-inner" id="gridInner"></div>
+    </div>
+</main>
+
+<script>
+    // ===== Data =====
+    const FILES = [
+        {
+            key: 'orig', num: '00', cat: 'orig', catLabel: '원본',
+            label: '원본 (antigravity)',
+            src: 'ilbe_terms_guide_antigravity.html',
+            swatch: '#818cf8',
+            notes: [
+                ['베이스라인:', '스킬 미적용. 인디고+핑크 그라데이션 헤더.'],
+                ['폰트:', 'Noto Sans KR + Outfit. 라이트/다크 토글 + 아코디언 카드.']
+            ]
+        },
+        {
+            key: 'orig-1', num: '00a', cat: 'orig', catLabel: '원본',
+            label: '원본 (antigravity v1)',
+            src: 'ilbe_terms_guide_antigravity_1.html',
+            swatch: '#a5b4fc',
+            notes: [['베리에이션:', 'antigravity 원본 변형 v1']]
+        },
+        {
+            key: 'orig-2', num: '00b', cat: 'orig', catLabel: '원본',
+            label: '원본 (antigravity v2)',
+            src: 'ilbe_terms_guide_antigravity_2.html',
+            swatch: '#a5b4fc',
+            notes: [['베리에이션:', 'antigravity 원본 변형 v2']]
+        },
+        {
+            key: 'orig-3', num: '00c', cat: 'orig', catLabel: '원본',
+            label: '원본 (antigravity v3)',
+            src: 'ilbe_terms_guide_antigravity_3.html',
+            swatch: '#a5b4fc',
+            notes: [['베리에이션:', 'antigravity 원본 변형 v3']]
+        },
+
+        // ===== 기존 클로드 작업 (Desktop 파일들) =====
+        {
+            key: 'cl-edu', num: '11', cat: 'claude', catLabel: '기존 클로드',
+            label: '교육자료 (클로드)',
+            src: '일베용어_교육자료_클로드.html',
+            swatch: '#f59e0b',
+            notes: [['형식:', '교육자료 페이지 (Claude 기본 산출물)']]
+        },
+        {
+            key: 'cl-mind', num: '12', cat: 'claude', catLabel: '기존 클로드',
+            label: '토의 마인드맵 (클로드)',
+            src: '일베용어_토의_마인드맵_클로드.html',
+            swatch: '#f59e0b',
+            notes: [['형식:', '토의용 마인드맵 시각화']]
+        },
+        {
+            key: 'cl-s0', num: '13', cat: 'claude', catLabel: '기존 클로드',
+            label: '수업 슬라이드 — claude',
+            src: '일베용어_수업슬라이드_claude.html',
+            swatch: '#f59e0b',
+            notes: [['형식:', '수업용 슬라이드 v0 (Claude 기본)']]
+        },
+        {
+            key: 'cl-s1', num: '14', cat: 'claude', catLabel: '기존 클로드',
+            label: '수업 슬라이드 — claude_1',
+            src: '일베용어_수업슬라이드_claude_1.html',
+            swatch: '#f59e0b',
+            notes: [['형식:', '수업용 슬라이드 v1']]
+        },
+        {
+            key: 'cl-s2', num: '15', cat: 'claude', catLabel: '기존 클로드',
+            label: '수업 슬라이드 — claude_2',
+            src: '일베용어_수업슬라이드_claude_2.html',
+            swatch: '#f59e0b',
+            notes: [['형식:', '수업용 슬라이드 v2']]
+        },
+        {
+            key: 'cl-s3', num: '16', cat: 'claude', catLabel: '기존 클로드',
+            label: '수업 슬라이드 — claude_3',
+            src: '일베용어_수업슬라이드_claude_3.html',
+            swatch: '#f59e0b',
+            notes: [['형식:', '수업용 슬라이드 v3']]
+        },
+
+        // ===== Codex 작업 =====
+        {
+            key: 'codex', num: '31', cat: 'codex', catLabel: 'Codex 작업',
+            label: 'ilbe-terms-education (Codex)',
+            src: 'ilbe-terms-education_codex.html',
+            swatch: '#10b981',
+            notes: [['형식:', 'Codex CLI 산출물 — 교육 자료 페이지']]
+        },
+
+        // ===== 기존 Supanova · 가이드 시리즈 =====
+        {
+            key: 'sup-g-de', num: '41', cat: 'sup-guide', catLabel: 'Supanova 가이드',
+            label: '가이드 — supanova_design_engine',
+            src: 'ilbe_terms_guide__supanova_design_engine.html',
+            swatch: '#a78bfa',
+            notes: [['형식:', 'Supanova Design Engine 적용 가이드 (수업슬라이드 시리즈와 별도)']]
+        },
+        {
+            key: 'sup-g-pa', num: '42', cat: 'sup-guide', catLabel: 'Supanova 가이드',
+            label: '가이드 — supanova_premium_aesthetic',
+            src: 'ilbe_terms_guide__supanova_premium_aesthetic.html',
+            swatch: '#a78bfa',
+            notes: [['형식:', 'Supanova Premium Aesthetic 적용 가이드']]
+        },
+        {
+            key: 'sup-g-re', num: '43', cat: 'sup-guide', catLabel: 'Supanova 가이드',
+            label: '가이드 — supanova_redesign_engine',
+            src: 'ilbe_terms_guide__supanova_redesign_engine.html',
+            swatch: '#a78bfa',
+            notes: [['형식:', 'Supanova Redesign Engine 적용 가이드']]
+        },
+
+        // ===== 기존 Supanova · 수업 슬라이드 시리즈 =====
+        {
+            key: 'sup-de', num: '21', cat: 'sup-old', catLabel: '기존 Supanova',
+            label: '수업 슬라이드 — supanova_design_engine',
+            src: '일베용어_수업슬라이드__supanova_design_engine.html',
+            swatch: '#ec4899',
+            notes: [['형식:', 'Supanova Design Engine 적용 슬라이드 (수업용)']]
+        },
+        {
+            key: 'sup-pa', num: '22', cat: 'sup-old', catLabel: '기존 Supanova',
+            label: '수업 슬라이드 — supanova_premium_aesthetic',
+            src: '일베용어_수업슬라이드__supanova_premium_aesthetic.html',
+            swatch: '#ec4899',
+            notes: [['형식:', 'Supanova Premium Aesthetic 적용 슬라이드']]
+        },
+        {
+            key: 'sup-re', num: '23', cat: 'sup-old', catLabel: '기존 Supanova',
+            label: '수업 슬라이드 — supanova_redesign_engine',
+            src: '일베용어_수업슬라이드__supanova_redesign_engine.html',
+            swatch: '#ec4899',
+            notes: [['형식:', 'Supanova Redesign Engine 적용 슬라이드']]
+        },
+
+        // ===== 이번 세션 4개 스킬 변형 =====
+        {
+            key: 'v01', num: '01', cat: 'new', catLabel: '이번 세션',
+            label: '01 · redesign-skill',
+            src: '01_redesign-skill.html',
+            swatch: '#c2410c',
+            notes: [
+                ['방향:', '번트 오렌지 단일 액센트 + Stone 뉴트럴. AI 보라/핑크 제거.'],
+                ['폰트:', 'Pretendard + Outfit (숫자 tabular)'],
+                ['레이아웃:', '비대칭 헤더 + 벤토형 3대 원칙']
+            ]
+        },
+        {
+            key: 'v02', num: '02', cat: 'new', catLabel: '이번 세션',
+            label: '02 · soft-skill (Warm Editorial)',
+            src: '02_soft-skill.html',
+            swatch: '#8E3A3A',
+            notes: [
+                ['아키타입:', 'Warm Editorial · 크림/에스프레소/세이지'],
+                ['폰트:', 'Fraunces (serif) + Pretendard. 이탤릭 강조'],
+                ['핵심:', 'Double-Bezel 카드, Floating glass nav, Solar iconify']
+            ]
+        },
+        {
+            key: 'v03', num: '03', cat: 'new', catLabel: '이번 세션',
+            label: '03 · supanova-redesign-engine (Vantablack)',
+            src: '03_supanova-redesign-engine.html',
+            swatch: '#7DD3C0',
+            notes: [
+                ['방향:', 'Vantablack Luxe · OLED 블랙 + 민트 단일 액센트'],
+                ['폰트:', 'Geist (영문) + Pretendard'],
+                ['핵심:', '메쉬 그래디언트 오브 + 그리드 패턴 마스크']
+            ]
+        },
+        {
+            key: 'v04', num: '04', cat: 'new', catLabel: '이번 세션',
+            label: '04 · theme-factory (Forest Canopy)',
+            src: '04_theme-factory.html',
+            swatch: '#2d4a2b',
+            notes: [
+                ['테마:', 'Forest Green · Sage · Olive · Ivory'],
+                ['폰트:', 'Crimson Pro (serif) + Inter + Noto Sans KR'],
+                ['핵심:', '필드 가이드/도감 스타일. 카드 번호링, i.ii.iii 섹션']
+            ]
+        }
+    ];
+
+    const CATEGORIES = [
+        { id: 'orig', label: '원본' },
+        { id: 'new', label: '이번 세션 (4종)' },
+        { id: 'codex', label: 'Codex 작업' },
+        { id: 'claude', label: '기존 클로드' },
+        { id: 'sup-guide', label: '기존 Supanova · 가이드 시리즈' },
+        { id: 'sup-old', label: '기존 Supanova · 수업슬라이드 시리즈' }
+    ];
+
+    // ===== Render sidebar =====
+    const sidebarList = document.getElementById('sidebarList');
+    CATEGORIES.forEach(cat => {
+        const items = FILES.filter(f => f.cat === cat.id);
+        if (!items.length) return;
+
+        const h2 = document.createElement('h2');
+        h2.textContent = cat.label;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = items.length;
+        h2.appendChild(badge);
+        sidebarList.appendChild(h2);
+
+        const list = document.createElement('div');
+        list.className = 'skill-list';
+        items.forEach(f => {
+            const btn = document.createElement('button');
+            btn.className = 'skill-btn';
+            btn.dataset.key = f.key;
+            btn.dataset.src = f.src;
+
+            const num = document.createElement('span');
+            num.className = 'num';
+            num.textContent = f.num;
+            btn.appendChild(num);
+
+            const sw = document.createElement('span');
+            sw.className = 'swatch';
+            sw.style.background = f.swatch;
+            btn.appendChild(sw);
+
+            const lbl = document.createElement('span');
+            lbl.className = 'label-text';
+            lbl.textContent = f.label;
+            btn.appendChild(lbl);
+
+            list.appendChild(btn);
+        });
+        sidebarList.appendChild(list);
+    });
+
+    document.getElementById('totalCount').textContent = FILES.length;
+
+    // ===== Render grid toolbar =====
+    const gridToolbar = document.getElementById('gridToolbar');
+    const allChip = document.createElement('button');
+    allChip.className = 'filter-chip active';
+    allChip.dataset.cat = 'all';
+    allChip.textContent = `전체 (${FILES.length})`;
+    gridToolbar.appendChild(allChip);
+
+    CATEGORIES.forEach(cat => {
+        const n = FILES.filter(f => f.cat === cat.id).length;
+        if (!n) return;
+        const chip = document.createElement('button');
+        chip.className = 'filter-chip';
+        chip.dataset.cat = cat.id;
+        chip.textContent = `${cat.label} (${n})`;
+        gridToolbar.appendChild(chip);
+    });
+
+    const sizeWrap = document.createElement('div');
+    sizeWrap.className = 'size-toggle';
+    ['sm', 'md', 'lg'].forEach(sz => {
+        const b = document.createElement('button');
+        b.dataset.size = sz;
+        b.textContent = { sm: 'SM', md: 'MD', lg: 'LG' }[sz];
+        if (sz === 'md') b.classList.add('active');
+        sizeWrap.appendChild(b);
+    });
+    gridToolbar.appendChild(sizeWrap);
+
+    // ===== Render grid cells =====
+    const gridInner = document.getElementById('gridInner');
+    FILES.forEach(f => {
+        const cell = document.createElement('div');
+        cell.className = 'frame-cell';
+        cell.dataset.cat = f.cat;
+
+        const lbl = document.createElement('div');
+        lbl.className = 'label';
+
+        const sw = document.createElement('span');
+        sw.className = 'swatch';
+        sw.style.background = f.swatch;
+        lbl.appendChild(sw);
+
+        const lblText = document.createElement('span');
+        lblText.textContent = f.label;
+        lblText.style.overflow = 'hidden';
+        lblText.style.textOverflow = 'ellipsis';
+        lblText.style.whiteSpace = 'nowrap';
+        lbl.appendChild(lblText);
+
+        const open = document.createElement('a');
+        open.className = 'open-btn';
+        open.href = f.src;
+        open.target = '_blank';
+        open.rel = 'noopener';
+        open.textContent = '열기 ↗';
+        lbl.appendChild(open);
+
+        cell.appendChild(lbl);
+
+        const ifr = document.createElement('iframe');
+        ifr.src = f.src;
+        ifr.loading = 'lazy';
+        ifr.title = f.label;
+        cell.appendChild(ifr);
+
+        gridInner.appendChild(cell);
+    });
+
+    // ===== Single view handlers =====
+    const frame = document.getElementById('frame');
+    const single = document.getElementById('single');
+    const grid = document.getElementById('grid');
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const notesTitle = document.getElementById('notesTitle');
+    const notesBody = document.getElementById('notesBody');
+
+    function setNotes(key) {
+        const f = FILES.find(x => x.key === key);
+        notesBody.replaceChildren();
+        if (!f) { notesTitle.textContent = '—'; return; }
+        notesTitle.textContent = `${f.num} · ${f.label}`;
+        f.notes.forEach(([k, v]) => {
+            const p = document.createElement('p');
+            p.className = 'notes-line';
+            const ks = document.createElement('span');
+            ks.className = 'notes-key';
+            ks.textContent = k;
+            p.appendChild(ks);
+            p.appendChild(document.createTextNode(v));
+            notesBody.appendChild(p);
+        });
+    }
+
+    document.querySelectorAll('.skill-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.skill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            frame.src = btn.dataset.src;
+            setNotes(btn.dataset.key);
+        });
+    });
+
+    // Default selection = first new variant (v01)
+    const defaultBtn = document.querySelector('.skill-btn[data-key="v01"]') || document.querySelector('.skill-btn');
+    if (defaultBtn) {
+        defaultBtn.classList.add('active');
+        frame.src = defaultBtn.dataset.src;
+        setNotes(defaultBtn.dataset.key);
+    }
+
+    // Mode toggle
+    modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modeBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (btn.dataset.mode === 'single') {
+                single.classList.remove('hidden');
+                grid.classList.remove('active');
+            } else {
+                single.classList.add('hidden');
+                grid.classList.add('active');
+            }
+        });
+    });
+
+    // Grid filter chips
+    gridToolbar.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            gridToolbar.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            const cat = chip.dataset.cat;
+            document.querySelectorAll('.frame-cell').forEach(cell => {
+                if (cat === 'all' || cell.dataset.cat === cat) cell.classList.remove('hidden');
+                else cell.classList.add('hidden');
+            });
+        });
+    });
+
+    // Grid size toggle
+    sizeWrap.querySelectorAll('button').forEach(b => {
+        b.addEventListener('click', () => {
+            sizeWrap.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+            b.classList.add('active');
+            gridInner.classList.remove('size-sm', 'size-md', 'size-lg');
+            gridInner.classList.add('size-' + b.dataset.size);
+        });
+    });
+</script>
+</body>
+</html>

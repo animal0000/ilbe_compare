@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, initial-scale=1">
+<title>혐오의 말, 우리 교실에는 없도록 - Supanova Premium Aesthetic</title>
+<meta name="description" content="Supanova Premium Aesthetic 기준으로 에디토리얼 발표 자료 미감을 적용한 일베 용어 예방교육 슬라이드입니다.">
+<meta property="og:title" content="일베 용어 예방교육 2차시 - Supanova Premium Aesthetic">
+<meta property="og:description" content="Supanova Premium Aesthetic 기준으로 에디토리얼 발표 자료 미감을 적용한 일베 용어 예방교육 슬라이드입니다.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+<style>
+:root {
+  --ink: #152033;
+  --paper: #f7f8fb;
+  --surface: #ffffff;
+  --surface-soft: #eef2f7;
+  --accent: #1f5f74;
+  --accent-2: #b7792b;
+  --accent-soft: rgba(31, 95, 116, 0.12);
+  --ok: #2f6b46;
+  --ok-soft: #e9f5ee;
+  --warn: #a06118;
+  --warn-soft: #fbf0df;
+  --muted: #5e6b7c;
+  --line: rgba(21, 32, 51, 0.14);
+  --line-strong: rgba(21, 32, 51, 0.24);
+  --shadow: 0 20px 70px -45px rgba(21, 32, 51, 0.65);
+  --radius: 14px;
+  --deck-font: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--paper);
+}
+
+.reveal {
+  font-family: var(--deck-font);
+  color: var(--ink);
+  background: var(--paper);
+  word-break: keep-all;
+  letter-spacing: 0;
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides section {
+  width: 1280px !important;
+  height: 720px !important;
+  min-height: 720px;
+  padding: 46px 64px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.reveal .slides section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: var(--grid-opacity, 0.26);
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal p,
+.reveal li,
+.reveal table {
+  position: relative;
+  z-index: 1;
+}
+
+.reveal h1 {
+  max-width: 980px;
+  margin: 0 0 0.36em;
+  color: var(--ink);
+  font-size: 1.95em;
+  font-weight: 850;
+  line-height: 1.12;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.reveal h2 {
+  margin: 0 0 24px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--accent);
+  color: var(--accent);
+  font-size: 1.32em;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+.reveal h3 {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  margin: 0 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.5em;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.reveal h4 {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 0.78em;
+  font-weight: 850;
+  line-height: 1.38;
+}
+
+.reveal p,
+.reveal li {
+  color: var(--muted);
+  font-size: 0.75em;
+  line-height: 1.62;
+}
+
+.reveal ul {
+  position: relative;
+  z-index: 1;
+  margin: 12px 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.reveal ul li {
+  position: relative;
+  margin: 0;
+  padding: 7px 0 7px 30px;
+}
+
+.reveal ul li::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 0.95em;
+  width: 10px;
+  height: 2px;
+  border-radius: 99px;
+  background: var(--accent);
+}
+
+.cover {
+  display: grid !important;
+  align-content: center;
+}
+
+.cover h1 {
+  max-width: 880px;
+  font-size: 2.42em;
+}
+
+.cover .sub {
+  margin: 0 0 1.4em;
+  color: var(--muted);
+  font-size: 0.95em;
+}
+
+.cover .meta {
+  width: min(620px, 100%);
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  color: var(--muted);
+  font-size: 0.62em;
+}
+
+.cover .chip {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  min-height: 34px;
+  margin-bottom: 24px;
+  border-radius: 999px;
+  padding: 0 14px;
+  background: var(--accent);
+  color: var(--chip-text, #fff);
+  font-size: 0.48em;
+  font-weight: 850;
+  letter-spacing: 0.13em;
+}
+
+.cover .chalk {
+  position: absolute;
+  top: 64px;
+  right: 70px;
+  color: var(--accent);
+  font-size: 5em;
+  font-weight: 900;
+  opacity: 0.08;
+  transform: rotate(-8deg);
+}
+
+.card-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.card h4 {
+  color: var(--accent);
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.6em;
+  line-height: 1.52;
+}
+
+.num-badge {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--chip-text, #fff);
+  font-size: 0.72em;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+
+.callout,
+.ok-callout,
+.warn-callout {
+  position: relative;
+  z-index: 1;
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  background: var(--accent-soft);
+}
+
+.callout p,
+.ok-callout p,
+.warn-callout p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.69em;
+}
+
+.ok-callout {
+  border-left-color: var(--ok);
+  background: var(--ok-soft);
+}
+
+.warn-callout {
+  border-left-color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.two-col {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 10px;
+}
+
+.two-col > div {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.reveal table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.reveal table th,
+.reveal table td {
+  border-bottom: 1px solid var(--line);
+  padding: 11px 14px;
+  color: var(--muted);
+  font-size: 0.62em;
+  line-height: 1.48;
+  text-align: left;
+  vertical-align: top;
+}
+
+.reveal table th {
+  background: var(--surface-soft);
+  color: var(--ink);
+  font-weight: 850;
+}
+
+.reveal table tr:last-child td {
+  border-bottom: 0;
+}
+
+.reveal table td.cri {
+  color: var(--accent);
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.pattern-row {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  margin: 12px 0;
+}
+
+.pattern-num {
+  color: var(--accent);
+  font-size: 1.38em;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.pattern-body h4 {
+  margin: 0 0 4px;
+  color: var(--ink);
+  font-size: 0.82em;
+}
+
+.pattern-body p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.62em;
+}
+
+.chat {
+  position: relative;
+  z-index: 1;
+  width: min(480px, 100%);
+  margin: 16px auto 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 20px;
+  padding: 18px 16px;
+  background: #c4d2df;
+  box-shadow: var(--shadow);
+}
+
+.chat .name {
+  margin: 5px 2px 3px 9px;
+  color: #334155;
+  font-size: 0.52em;
+}
+
+.chat .bubble {
+  display: inline-block;
+  max-width: 78%;
+  margin: 2px 8px;
+  border-radius: 15px;
+  padding: 8px 12px;
+  background: #fff;
+  color: #1f2937;
+  font-size: 0.64em;
+}
+
+.chat .me {
+  text-align: right;
+}
+
+.chat .me .bubble {
+  background: #f4dd4f;
+}
+
+.big-words {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.big-words .w {
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 0.78em;
+  font-weight: 850;
+}
+
+.closing {
+  display: grid !important;
+  align-content: center;
+  text-align: center;
+}
+
+.closing h1 {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.help-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.help-grid .card {
+  text-align: center;
+}
+
+.help-grid .card h4 {
+  font-size: 0.66em;
+}
+
+.help-grid .card p {
+  font-size: 0.55em;
+}
+
+.pgnum {
+  position: absolute;
+  right: 28px;
+  bottom: 20px;
+  z-index: 2;
+  color: var(--muted);
+  font-family: "Outfit", "Pretendard", system-ui, sans-serif;
+  font-size: 0.42em;
+  font-variant-numeric: tabular-nums;
+}
+
+.src {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 0.53em;
+}
+
+.src::before {
+  content: "출처 - ";
+  color: var(--accent);
+  font-weight: 850;
+}
+
+.reveal .progress {
+  color: var(--accent);
+}
+
+.reveal .controls {
+  color: var(--accent);
+}
+
+@media print {
+  .reveal section {
+    padding: 28px 42px;
+  }
+}
+
+:root {
+  --ink: #152033;
+  --paper: #eef5f6;
+  --surface: rgba(255, 255, 255, 0.9);
+  --surface-soft: #e5eff0;
+  --accent: #2f736b;
+  --accent-2: #7a5a31;
+  --accent-soft: rgba(47, 115, 107, 0.12);
+  --ok: #2f6b46;
+  --ok-soft: #e8f5ef;
+  --warn: #9b651e;
+  --warn-soft: #fbf0df;
+  --muted: #596b78;
+  --line: rgba(21, 32, 51, 0.12);
+  --line-strong: rgba(21, 32, 51, 0.22);
+  --shadow: 0 22px 70px -48px rgba(21, 32, 51, 0.55);
+  --grid-opacity: 0.42;
+}
+
+body.variant-slide-premium-aesthetic,
+.variant-slide-premium-aesthetic .reveal {
+  background:
+    linear-gradient(90deg, rgba(47,115,107,0.06) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(47,115,107,0.1), transparent 260px),
+    var(--paper);
+  background-size: 72px 72px, auto, auto;
+}
+
+.variant-slide-premium-aesthetic .reveal section,
+.variant-slide-premium-aesthetic .reveal section[style] {
+  background: linear-gradient(135deg, rgba(255,255,255,0.42), rgba(255,255,255,0.08)) !important;
+}
+
+.variant-slide-premium-aesthetic .reveal h1 {
+  max-width: 910px;
+  font-size: 2.05em;
+  line-height: 1.09;
+}
+
+.variant-slide-premium-aesthetic .cover h1,
+.variant-slide-premium-aesthetic .closing h1 {
+  font-size: 2.52em;
+}
+
+.variant-slide-premium-aesthetic .card,
+.variant-slide-premium-aesthetic .two-col > div,
+.variant-slide-premium-aesthetic .reveal table {
+  border-radius: 18px;
+}
+
+.variant-slide-premium-aesthetic .reveal h3,
+.variant-slide-premium-aesthetic .cover .chip {
+  letter-spacing: 0.16em;
+}
+
+.variant-slide-premium-aesthetic .chat {
+  background: linear-gradient(135deg, #d7e5ea, #c2d8df);
+}
+</style>
+</head>
+<body class="variant-slide-premium-aesthetic">
+<div class="reveal">
+<div class="slides">
+
+<!-- 1: 표지 -->
+<section class="cover">
+  <div class="chalk">교실</div>
+  <span class="chip">학생 지도용 · 2차시</span>
+  <h1>혐오의 말,<br>우리 교실에는 없도록</h1>
+  <p class="sub">일베 용어로 배우는 혐오표현 인식</p>
+  <div class="meta">
+    대상: 중학교 2~3학년 · 분량: 2차시(각 45분)<br>
+    제작: 배재중학교 박효용 · 2026
+  </div>
+  <div class="pgnum">01 / 15</div>
+</section>
+
+<!-- 2: 오늘의 약속 -->
+<section>
+  <h3>도입</h3>
+  <h1>오늘 수업의 약속, 세 가지</h1>
+  <div class="card-grid">
+    <div class="card"><h4><span class="num-badge">1</span>이해</h4><p>단어를 외우는 수업이 아닙니다. 그 말이 어떻게 작동하는지 <strong>구조</strong>를 보는 시간입니다.</p></div>
+    <div class="card"><h4><span class="num-badge">2</span>존중</h4><p>누구의 출신·외모·정체성도 농담 소재로 삼지 않습니다. 옆 친구가 당사자일 수 있습니다.</p></div>
+    <div class="card"><h4><span class="num-badge">3</span>용기</h4><p>모르고 썼다면 부끄러워 말기. 알고 멈추는 용기가 더 큰 자산입니다.</p></div>
+  </div>
+  <div class="callout"><p>이 수업의 목표는 처벌이 아니라 <strong>알아차림</strong>입니다.</p></div>
+  <div class="pgnum">02 / 15</div>
+</section>
+
+<!-- 3: 도입 - 단톡방 -->
+<section>
+  <h3>도입 질문</h3>
+  <h1>이런 말, 본 적 있나요?</h1>
+  <div class="chat">
+    <div class="name">A</div>
+    <div class="bubble">아 ㅋㅋ 운지해라 진짜</div>
+    <div class="name">B</div>
+    <div class="bubble">~노 너 또 그러노</div>
+    <div class="me"><div class="name">나</div><div class="bubble">대깨문 ㅋㅋ</div></div>
+    <div class="name">C</div>
+    <div class="bubble">게이야 이거 봐바</div>
+  </div>
+  <ul>
+    <li>게임 채팅·SNS·단톡방에 한 번쯤 등장하는 말들</li>
+    <li>뜻을 아는 학생? 그냥 따라 써본 학생?</li>
+    <li>이 말이 <strong>어디서 · 왜 · 누구를 향해</strong> 만들어졌는지 함께 봅니다</li>
+  </ul>
+  <div class="pgnum">03 / 15</div>
+</section>
+
+<!-- 4: ○○절 -->
+<section>
+  <h3>카테고리 1 — 가장 무거운 부류</h3>
+  <h1>"○○절" 시리즈 — 죽음을 명절로 부르는 말</h1>
+  <table>
+    <thead><tr><th>용어</th><th>가리키는 날</th><th>비판받는 지점</th></tr></thead>
+    <tbody>
+      <tr><td class="cri">중력절·운지절</td><td>전직 대통령 서거일</td><td>자살을 농담으로 박제</td></tr>
+      <tr><td class="cri">어묵절·오뎅데이</td><td>세월호 참사일 (4·16)</td><td>희생 학생 시신을 음식에 비유</td></tr>
+      <tr><td class="cri">통구이절</td><td>대구 지하철 참사일 (2·18)</td><td>화재 희생자 시신 모욕</td></tr>
+      <tr><td class="cri">홍어절·민주화절</td><td>5·18 (5·18)</td><td>민주화운동 폄훼 + 지역 비하</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><p>사망일·참사일을 <strong>'명절(節)'</strong>로 부르는 화법 자체가 인간 존엄의 부정입니다.</p></div>
+  <div class="pgnum">04 / 15</div>
+</section>
+
+<!-- 5: 시체팔이·교통사고드립 -->
+<section>
+  <h3>카테고리 2 — 유가족 2차 가해</h3>
+  <h1>시체팔이 · 교통사고드립</h1>
+  <div class="two-col">
+    <div>
+      <h4 style="color:var(--accent)">시체팔이</h4>
+      <p style="font-size:.72em">유가족이 보상금을 노리고 희생자를 이용한다는 음모론적 비난.<br>진상규명을 요구하는 가족에게 가하는 <strong>두 번째 폭력</strong>.</p>
+    </div>
+    <div>
+      <h4 style="color:var(--accent)">교통사고드립</h4>
+      <p style="font-size:.72em">"세월호는 단순 교통사고일 뿐"이라며 참사 의미를 축소.<br>304명이 사망한 사회적 참사를 <strong>책임 회피 논리</strong>로 환원.</p>
+    </div>
+  </div>
+  <div class="warn-callout"><p>참사를 농담으로 다루는 순간, 다음 참사를 막을 사회적 학습이 멈춥니다.</p></div>
+  <div class="pgnum">05 / 15</div>
+</section>
+
+<!-- 6: 지역 -->
+<section>
+  <h3>카테고리 3 — 지역 차별</h3>
+  <h1>지역을 음식으로 부르는 말</h1>
+  <ul>
+    <li><strong>홍어</strong> — 호남 향토음식을 사람 비하 호칭으로 사용</li>
+    <li><strong>전라디언</strong> — "전라도 + 인디언". 호남인을 미개한 원주민으로 비유</li>
+    <li><strong>라도것</strong> — 인간을 '것'으로 지칭하는 비인격화</li>
+  </ul>
+  <div class="callout"><p>출신 지역으로 사람을 평가하는 것 = <strong>「국가인권위법」 제2조 차별행위</strong>. 「헌법」 평등권 침해.</p></div>
+  <p class="src">국가인권위원회 「혐오표현 리포트」(2019)</p>
+  <div class="pgnum">06 / 15</div>
+</section>
+
+<!-- 7: 정치인 -->
+<section>
+  <h3>카테고리 4 — 정치인 비하</h3>
+  <h1>말투를 박제하고, 이름을 멸칭으로</h1>
+  <ul>
+    <li><strong>~~노 · 이기야</strong> — 전직 대통령의 말투를 자살 암시로 박제</li>
+    <li><strong>슨상님 · 머통령 · 문재앙 · 대깨문 · 찢재명</strong> — 정치인 이름을 멸칭으로 변형</li>
+    <li><strong>좌좀</strong> — "좌파 + 좀비". 견해 차이를 인간성 부정으로 비약</li>
+  </ul>
+  <div class="callout"><p>정치 비판은 <strong>정책</strong>으로 합니다. <strong>사람 자체</strong>를 깎아내리는 것은 비판이 아니라 혐오입니다.</p></div>
+  <div class="pgnum">07 / 15</div>
+</section>
+
+<!-- 8: 여성·소수자 -->
+<section>
+  <h3>카테고리 5 — 여성 · 소수자</h3>
+  <h1>가장 흔하게 마주칠 부류</h1>
+  <table>
+    <tbody>
+      <tr><td class="cri">김치녀 · 삼일한</td><td>여성 전체 일반화, 가정폭력 미화</td></tr>
+      <tr><td class="cri">게이야</td><td>성소수자를 일상 호칭·농담 소재화</td></tr>
+      <tr><td class="cri">짱깨 · 똥남아 · 튀기</td><td>인종·민족 멸칭</td></tr>
+      <tr><td class="cri">장애드립</td><td>장애인을 농담 소재로 삼는 발언 일반</td></tr>
+    </tbody>
+  </table>
+  <div class="warn-callout"><p>다문화 학생, 여학생, 성소수자 친구가 <strong>지금 옆자리에 있을 수 있다</strong>는 사실을 기억해 주세요.</p></div>
+  <div class="pgnum">08 / 15</div>
+</section>
+
+<!-- 9: 5대 패턴 (핵심) -->
+<section>
+  <h3>핵심 정리</h3>
+  <h1>혐오표현 5대 작동 패턴</h1>
+  <p style="font-size:.7em;color:var(--muted);margin:0 0 10px">단어가 달라도 작동 방식은 같습니다. 패턴만 알아도 신조어에 대응할 수 있습니다.</p>
+  <div class="pattern-row"><div class="pattern-num">1</div><div class="pattern-body"><h4>죽음을 농담으로 뒤집기</h4><p>사망·참사를 '명절'·'드립'·'기념일'로 부른다.</p></div></div>
+  <div class="pattern-row"><div class="pattern-num">2</div><div class="pattern-body"><h4>사투리·외모를 조롱 도구로</h4><p>특정 지역 말투, 신체 특징을 멸칭화한다.</p></div></div>
+  <div class="pattern-row"><div class="pattern-num">3</div><div class="pattern-body"><h4>단어 의미 뒤집기</h4><p>'민주화' = 공격, '선생님' = 멸칭. 정상 어휘를 오염시킨다.</p></div></div>
+  <div class="pattern-row"><div class="pattern-num">4</div><div class="pattern-body"><h4>집단 정체성 비인격화</h4><p>"○○것 · ○○충 · ○○족"으로 인간을 사물·벌레로 지칭한다.</p></div></div>
+  <div class="pattern-row"><div class="pattern-num">5</div><div class="pattern-body"><h4>"농담이었다"로 빠져나가기</h4><p>풍자를 가장하지만, 반복·집단성이 곧 혐오 표현이다.</p></div></div>
+  <div class="pgnum">09 / 15</div>
+</section>
+
+<!-- 10: 농담 회피 논리 -->
+<section>
+  <h3>회피 논리 해체</h3>
+  <h1>"농담이었어"라고 하면 괜찮을까?</h1>
+  <div class="big-words">
+    <span class="w">한 명이 쓰면 농담</span>
+    <span class="w">모두가 쓰면 문화</span>
+    <span class="w">문화가 되면 폭력</span>
+  </div>
+  <ul style="margin-top:18px">
+    <li>일대일 농담과 <strong>집단적·반복적 사용</strong>은 전혀 다른 차원입니다</li>
+    <li>듣는 사람이 그 집단의 일원이라면 의도와 무관하게 <strong>2차 가해</strong></li>
+    <li>'깨진 유리창 이론' — 작은 표현을 방치하면 더 큰 차별로 자랍니다</li>
+  </ul>
+  <div class="pgnum">10 / 15</div>
+</section>
+
+<!-- 11: 법적 책임 -->
+<section>
+  <h3>법적 책임</h3>
+  <h1>법은 어떻게 보고 있을까?</h1>
+  <div class="card-grid">
+    <div class="card"><h4>정보통신망법 §70</h4><p>사자(死者) 명예훼손 — 고인 조롱은 형사 처벌 대상.</p></div>
+    <div class="card"><h4>5·18 특별법 §8</h4><p>5·18 왜곡·폄훼 처벌 (2021 신설). 학교·온라인 모두 적용.</p></div>
+    <div class="card"><h4>학교폭력예방법</h4><p>언어폭력·사이버폭력 사안으로 처리 가능. 단톡방·게임 채팅 포함.</p></div>
+    <div class="card"><h4>국가인권위법 §2</h4><p>출신지역·성별·장애로 인한 차별행위 금지.</p></div>
+    <div class="card"><h4>양성평등기본법</h4><p>성별을 이유로 한 차별 표현 금지.</p></div>
+    <div class="card"><h4>교칙·학칙</h4><p>혐오표현 사용은 선도위원회 회부 가능.</p></div>
+  </div>
+  <div class="pgnum">11 / 15</div>
+</section>
+
+<!-- 12: 마인드맵 활동 (2차시 시작) -->
+<section style="background:linear-gradient(160deg,#ecf5ef 0%,#faf3e6 100%)">
+  <h3 style="color:var(--ok)">2차시 · 활동 1</h3>
+  <h1>마인드맵으로 정리하기</h1>
+  <ul>
+    <li>6개 가지로 마인드맵 그리기 — 고인 조롱 / 지역 / 정치 / 여성·소수자 / 패턴 / 법</li>
+    <li>학습지 빈칸 채우기 — 모둠 4인 토의</li>
+    <li>발표 — 가장 위험하다고 생각한 패턴 1개 선정 + 이유</li>
+  </ul>
+  <div class="ok-callout"><p>마인드맵의 목표는 <strong>단어 암기가 아니라 구조 이해</strong>입니다.</p></div>
+  <p style="font-size:.6em;color:var(--muted);margin-top:18px">활동 시간: 20분 (개별 5분 + 모둠 토의 10분 + 발표 5분)</p>
+  <div class="pgnum">12 / 15</div>
+</section>
+
+<!-- 13: 토론 -->
+<section style="background:linear-gradient(160deg,#ecf5ef 0%,#faf3e6 100%)">
+  <h3 style="color:var(--ok)">2차시 · 활동 2</h3>
+  <h1>찬반 토론 — 논제 선택</h1>
+  <div class="card-grid">
+    <div class="card"><h4>논제 A</h4><p>단톡방 일베 말투를 <strong>학교폭력 사안</strong>으로 다루어야 하는가</p></div>
+    <div class="card"><h4>논제 B</h4><p>혐오표현 처벌은 <strong>표현의 자유</strong> 침해인가</p></div>
+    <div class="card"><h4>논제 C</h4><p>혐오표현을 보고도 말리지 않은 <strong>방관자</strong>도 책임이 있는가</p></div>
+  </div>
+  <table style="margin-top:14px">
+    <thead><tr><th>단계</th><th>시간</th><th>형식</th></tr></thead>
+    <tbody>
+      <tr><td>입론</td><td>찬 3분 → 반 3분</td><td>모둠 입론 카드 활용</td></tr>
+      <tr><td>교차질의</td><td>각 4분</td><td>"그렇다면 ○○ 경우는?"</td></tr>
+      <tr><td>최종변론</td><td>반 3분 → 찬 3분</td><td>역순으로 마지막 발언권 균형</td></tr>
+    </tbody>
+  </table>
+  <div class="pgnum">13 / 15</div>
+</section>
+
+<!-- 14: 자기 점검 -->
+<section>
+  <h3>마무리 자기 점검</h3>
+  <h1>내가 바꾸어야 할 것 한 가지</h1>
+  <div class="two-col">
+    <div>
+      <h4 style="color:var(--accent)">① 멈출 단어 1개</h4>
+      <p style="font-size:.72em">평소 무심코 쓰던 말 중에 오늘부터 멈출 단어 <strong>한 개</strong>를 적어 봅니다.</p>
+    </div>
+    <div>
+      <h4 style="color:var(--accent)">② 친구에게 건넬 한 문장</h4>
+      <p style="font-size:.72em">친구가 그런 말을 썼을 때 어떻게 말해 줄지 <strong>한 문장</strong> 준비합니다.</p>
+    </div>
+  </div>
+  <div class="ok-callout" style="margin-top:18px">
+    <p>침묵도 동의가 됩니다. 작은 한마디가 교실 문화를 바꿉니다.<br>
+    <strong>'검열'이 아니라 '존중'</strong>입니다.</p>
+  </div>
+  <div class="pgnum">14 / 15</div>
+</section>
+
+<!-- 15: 닫는 슬라이드 -->
+<section class="closing" style="background:linear-gradient(160deg,#fff4ec 0%,#faf3e6 100%)">
+  <h1>고맙습니다</h1>
+  <p style="font-size:.85em;color:var(--muted);margin-bottom:24px">함께 만드는 안전한 교실</p>
+  <h3 style="color:var(--accent);text-align:center">도움이 필요할 때</h3>
+  <div class="help-grid">
+    <div class="card"><h4>담임 선생님</h4><p>가장 먼저, 편하게</p></div>
+    <div class="card"><h4>생활안전부</h4><p>박효용 선생님</p></div>
+    <div class="card"><h4>Wee클래스</h4><p>비밀 상담 가능</p></div>
+    <div class="card"><h4>117</h4><p>학교폭력 신고</p></div>
+  </div>
+  <p class="src" style="text-align:center;margin-top:28px">참고 — 1차시 학습지 마지막 페이지 · 국가인권위 「혐오표현 리포트」(2019) · 교육부 「학교 민주시민교육 가이드북」</p>
+  <div class="pgnum">15 / 15</div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: false,
+    transition: 'fade',
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    controls: true,
+    progress: true,
+    keyboard: true,
+    overview: true,
+    pdfSeparateFragments: false
+  });
+</script>
+</body>
+</html>

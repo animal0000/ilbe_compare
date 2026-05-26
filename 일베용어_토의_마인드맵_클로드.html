@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>일베 용어 — 토의·마인드맵 수업 패키지</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral', mindmap: { padding: 12 } });
+  });
+</script>
+<style>
+  :root {
+    --bg: #fafaf7;
+    --panel: #ffffff;
+    --ink: #1f1f1f;
+    --muted: #5a5a5a;
+    --line: #e5e1d8;
+    --accent: #8b2c2c;
+    --accent-soft: #fbeeee;
+    --pro: #2f6b46;
+    --pro-soft: #ecf5ef;
+    --con: #b04a2a;
+    --con-soft: #fdeee6;
+    --warn-soft: #fdf5e3;
+    --warn: #b07c1a;
+    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.04);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Pretendard','Noto Sans KR',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    font-size: 16px; line-height: 1.7; word-break: keep-all;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 56px 28px 96px; }
+
+  header.hero { border-left: 4px solid var(--accent); padding: 8px 0 8px 20px; margin-bottom: 28px; }
+  .eyebrow { font-size: 13px; letter-spacing: .08em; color: var(--accent); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  h1 { font-size: 28px; margin: 0 0 8px; letter-spacing: -0.01em; font-weight: 800; }
+  .lede { color: var(--muted); font-size: 15px; }
+
+  .meta {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px; margin: 20px 0 36px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 18px; box-shadow: var(--shadow);
+  }
+  .meta div { font-size: 13.5px; }
+  .meta .k { color: var(--muted); display: block; font-size: 12px; letter-spacing: .04em; }
+  .meta .v { font-weight: 700; }
+
+  section { margin-top: 56px; }
+  h2 {
+    font-size: 22px; margin: 0 0 8px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--ink); font-weight: 800; letter-spacing: -0.01em;
+  }
+  .sec-sub { color: var(--muted); font-size: 14.5px; margin: 6px 0 18px; }
+
+  /* 마인드맵 */
+  .mindmap-box {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px; box-shadow: var(--shadow); overflow-x: auto;
+  }
+  .mindmap-box .mermaid { min-height: 480px; }
+  .activity-note {
+    margin-top: 14px; padding: 14px 18px; background: var(--warn-soft);
+    border-left: 3px solid var(--warn); border-radius: 6px; font-size: 14.5px; color: #5a4318;
+  }
+
+  /* 빈칸 채우기 */
+  .blank-board {
+    margin-top: 24px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 14px; padding: 22px 26px; box-shadow: var(--shadow);
+  }
+  .blank-board h3 { margin: 0 0 4px; font-size: 16px; font-weight: 800; }
+  .blank-board .hint { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+  .blank-board ul { padding-left: 18px; margin: 0; }
+  .blank-board li { margin: 6px 0; font-size: 14.5px; }
+  .blank { display: inline-block; min-width: 110px; border-bottom: 1.5px dotted #999; padding: 0 6px; color: #aaa; font-weight: 600; }
+
+  /* 토의 자료 */
+  .topic-card {
+    background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+    border-radius: 12px; padding: 16px 20px; margin: 12px 0; box-shadow: var(--shadow);
+  }
+  .topic-card .label { font-size: 12px; color: var(--accent); letter-spacing: .08em; font-weight: 700; }
+  .topic-card .q { font-size: 16px; font-weight: 700; margin: 4px 0 0; }
+  .topic-card .why { font-size: 13.5px; color: var(--muted); margin-top: 6px; }
+
+  .stance-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px;
+  }
+  @media (max-width: 720px) { .stance-grid { grid-template-columns: 1fr; } }
+  .stance {
+    border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+  }
+  .stance.pro { background: var(--pro-soft); border-color: #cfe3d7; }
+  .stance.con { background: var(--con-soft); border-color: #f3d6c6; }
+  .stance h4 { margin: 0 0 8px; font-size: 15px; letter-spacing: .02em; }
+  .stance.pro h4 { color: var(--pro); }
+  .stance.con h4 { color: var(--con); }
+  .stance ol { padding-left: 20px; margin: 0; }
+  .stance li { font-size: 14px; margin: 6px 0; }
+  .stance .fill { display: block; height: 22px; border-bottom: 1px dotted #999; margin: 4px 0; }
+
+  /* 진행 절차 */
+  .flow {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 22px 26px; box-shadow: var(--shadow); margin-top: 18px;
+  }
+  .flow ol { padding-left: 0; list-style: none; counter-reset: step; margin: 0; }
+  .flow li {
+    counter-increment: step; padding: 10px 0 10px 50px; position: relative;
+    border-bottom: 1px dashed var(--line); font-size: 14.5px;
+  }
+  .flow li:last-child { border-bottom: none; }
+  .flow li::before {
+    content: counter(step); position: absolute; left: 0; top: 10px;
+    width: 34px; height: 34px; background: var(--ink); color: #fff;
+    border-radius: 50%; text-align: center; line-height: 34px;
+    font-weight: 700; font-size: 13px;
+  }
+  .flow .min { color: var(--accent); font-weight: 700; font-size: 13px; margin-right: 8px; }
+
+  /* 평가표 */
+  table.rubric {
+    width: 100%; border-collapse: collapse; margin-top: 16px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  table.rubric th, table.rubric td {
+    border-bottom: 1px solid var(--line); padding: 10px 14px; font-size: 13.5px; text-align: left;
+    vertical-align: top;
+  }
+  table.rubric thead th { background: #f3efe6; font-weight: 700; color: #4a4030; }
+  table.rubric tbody tr:last-child td { border-bottom: none; }
+  table.rubric td.cri { width: 24%; font-weight: 700; }
+  table.rubric td.lvl { text-align: center; width: 8%; }
+
+  footer { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+
+  @media print {
+    body { background: #fff; font-size: 11pt; }
+    .wrap { padding: 0; max-width: none; }
+    section { page-break-inside: avoid; }
+    h2 { page-break-after: avoid; }
+    .mindmap-box, .blank-board, .topic-card, .stance, .flow, table.rubric, .meta { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">학생 지도용 · 혐오표현 예방교육 (2차시)</div>
+  <h1>일베 용어 — 토의·마인드맵 수업 패키지</h1>
+  <p class="lede">1차시 「용어 인식 자료」(별도 HTML)를 학습한 학생을 대상으로, 마인드맵 정리 + 찬반 토론으로 비판적 사고를 심화하는 활동지.</p>
+</header>
+
+<div class="meta">
+  <div><span class="k">대상</span><span class="v">중2 ~ 고1</span></div>
+  <div><span class="k">차시</span><span class="v">2차시 (각 45분)</span></div>
+  <div><span class="k">모둠 인원</span><span class="v">4인</span></div>
+  <div><span class="k">토론 유형</span><span class="v">찬반(2:2) 미니 디베이트</span></div>
+  <div><span class="k">선수 학습</span><span class="v">「일베용어_교육자료」 1차시</span></div>
+</div>
+
+<!-- ============== 1차시: 마인드맵 ============== -->
+<section>
+  <h2>1차시 · 마인드맵으로 구조 정리하기</h2>
+  <p class="sec-sub">학생활동 스타일: 일부 노드를 빈칸(<code>???</code>)으로 두어 모둠에서 채워 넣도록 설계했다. 교사 시연 후 학생용 학습지 출력 → 모둠 토의 → 발표 순으로 진행.</p>
+
+  <h3 style="margin-top:24px;font-size:16px;">▶ 교사 시연용 (완성본)</h3>
+  <div class="mindmap-box">
+<div class="mermaid">
+mindmap
+  root(("일베 용어<br/>혐오표현 인식"))
+    ("1. 고인·참사 조롱<br/>○○절 시리즈")
+      ("중력절/운지절<br/>(노무현)")
+      ("압력절/슨상절<br/>(김대중)")
+      ("홍어절/민주화절<br/>(5·18)")
+      ("통구이절<br/>(대구지하철)")
+      ("어묵절/오뎅데이<br/>(세월호)")
+    ("2. 지역 차별")
+      ("홍어")
+      ("전라디언")
+      ("라도것")
+    ("3. 정치인 비하")
+      ("~~노 / 이기야")
+      ("슨상님 / 머통령")
+      ("문재앙 / 대깨문")
+      ("좌좀 / 찢재명")
+    ("4. 여성·소수자 혐오")
+      ("김치녀 / 삼일한")
+      ("게이야")
+      ("짱깨 / 똥남아")
+      ("장애드립")
+    ("5. 작동 패턴")
+      ("죽음을 농담으로")
+      ("사투리·외모 조롱")
+      ("단어 의미 뒤집기")
+      ("집단 비인격화")
+      ("'농담' 회피 논리")
+    ("6. 비판 근거")
+      ("사자 명예훼손")
+      ("5·18 왜곡 처벌법")
+      ("학교폭력 가중요소")
+      ("국가인권위법 §2")
+      ("청소년 자살 모방")
+</div>
+  </div>
+
+  <h3 style="margin-top:32px;font-size:16px;">▶ 학생 활동용 (빈칸형)</h3>
+  <div class="mindmap-box">
+<div class="mermaid">
+mindmap
+  root(("일베 용어<br/>혐오표현 인식"))
+    ("1. 고인·참사 조롱")
+      ("중력절 → ???")
+      ("어묵절 → ???")
+      ("???")
+    ("2. 지역 차별")
+      ("홍어 = ???")
+      ("???")
+    ("3. 정치인 비하")
+      ("~~노 → ???")
+      ("???")
+    ("4. 여성·소수자 혐오")
+      ("김치녀 → ???")
+      ("???")
+    ("5. 작동 패턴<br/>(5가지 채우기)")
+      ("① ???")
+      ("② ???")
+      ("③ ???")
+      ("④ ???")
+      ("⑤ ???")
+    ("6. 비판 근거")
+      ("법적 근거 → ???")
+      ("윤리적 근거 → ???")
+</div>
+  </div>
+
+  <div class="blank-board">
+    <h3>모둠 빈칸 채우기 (학습지 인쇄용)</h3>
+    <p class="hint">아래 문장을 모둠에서 토의해 채워 넣으세요.</p>
+    <ul>
+      <li>① "중력절·운지절"은 <span class="blank">　　　　　</span> 전 대통령의 <span class="blank">　　　　　</span>일을 조롱하는 표현이다.</li>
+      <li>② "어묵절"은 <span class="blank">　　　　　</span> 참사 희생자를 <span class="blank">　　　　　</span>(으)로 비하한 데서 시작됐다.</li>
+      <li>③ "홍어"는 호남 지역민을 <span class="blank">　　　　　</span>(으)로 빗대 비하하는 말이다.</li>
+      <li>④ 일베에서 '민주화'는 원래 의미를 뒤집어 <span class="blank">　　　　　</span>(이)라는 뜻으로 쓰인다.</li>
+      <li>⑤ 일베식 화법의 5가지 패턴 중 가장 위험하다고 생각하는 것은 <span class="blank">　　　　　</span>이며, 그 이유는 <span class="blank">　　　　　　　　　　　　　　　　</span>.</li>
+      <li>⑥ 친구가 SNS에서 "운지해라"라고 썼다면, 이는 사실상 <span class="blank">　　　　　</span>(이)라는 의미이므로 학교폭력 사안 중 <span class="blank">　　　　　</span>에 해당할 수 있다.</li>
+    </ul>
+  </div>
+
+  <div class="activity-note">
+    <strong>지도 팁</strong> — 마인드맵을 그리는 동안 학생이 용어를 큰 소리로 반복하지 않도록 사전 안내. "단어가 아니라 <em>패턴</em>을 외우는 활동"임을 강조.
+  </div>
+</section>
+
+<!-- ============== 2차시: 토론 ============== -->
+<section>
+  <h2>2차시 · 찬반 토론(2:2 미니 디베이트)</h2>
+  <p class="sec-sub">세 가지 논제 중 한 가지를 학급에서 선정. 모둠을 4인 1조로 편성하고, 2명은 찬성·2명은 반대 입장을 맡아 입론→교차질의→최종변론 순으로 진행.</p>
+
+  <h3 style="margin-top:8px;font-size:16px;">▶ 논제 후보</h3>
+  <div class="topic-card">
+    <div class="label">논제 A · 학교폭력 적용</div>
+    <p class="q">"친구가 카톡 단톡방에서 '~노', '게이야' 같은 일베 말투를 농담으로 썼다면, 학교폭력 사안으로 다루어야 한다."</p>
+    <p class="why">생활지도·학교폭력 사안 처리 절차와 직결. 학생 일상과 가장 가까운 논제.</p>
+  </div>
+  <div class="topic-card">
+    <div class="label">논제 B · 표현의 자유</div>
+    <p class="q">"온라인 혐오표현을 법으로 처벌하는 것은 표현의 자유를 침해하는 것이다."</p>
+    <p class="why">민주시민교육·헌법 가치와 연결. 고학년에 적합.</p>
+  </div>
+  <div class="topic-card">
+    <div class="label">논제 C · 방관자 책임</div>
+    <p class="q">"단톡방에서 친구가 혐오표현을 쓰는 것을 보고도 말리지 않은 사람도 책임이 있다."</p>
+    <p class="why">학교폭력 방관자 문제와 직결. 도덕·시민 교과 연계.</p>
+  </div>
+
+  <h3 style="margin-top:32px;font-size:16px;">▶ 입론 카드 (논제 A 예시)</h3>
+  <div class="stance-grid">
+    <div class="stance pro">
+      <h4>● 찬성 (학교폭력으로 다뤄야 한다)</h4>
+      <ol>
+        <li>일베 용어 다수는 호남·여성·성소수자·장애인을 향한 <strong>차별 표현</strong>이며, 「학교폭력예방법」상 언어폭력에 해당한다.</li>
+        <li>"농담"이라고 해도 듣는 사람이 특정 집단의 일원이라면 <strong>2차 가해</strong>가 된다. 가해 의도 여부와 무관하다.</li>
+        <li>초기에 학교 차원에서 제지하지 않으면 <strong>혐오의 일상화</strong>로 이어진다. 깨진 유리창 이론.</li>
+        <li>나의 입론: <span class="fill"></span><span class="fill"></span></li>
+      </ol>
+    </div>
+    <div class="stance con">
+      <h4>● 반대 (학교폭력으로 보기엔 과하다)</h4>
+      <ol>
+        <li>학생이 의미를 모르고 따라 쓴 경우까지 처벌하면 <strong>교육적 기회</strong>를 박탈하게 된다. 우선 가르쳐야 한다.</li>
+        <li>학교폭력 사안 처리는 피해 신고·피해자 특정이 전제다. 단톡방에 특정 피해자가 없는 경우는 <strong>훈계·교육</strong>이 더 효과적이다.</li>
+        <li>모든 농담을 사안화하면 학생 간 신고 남발 → <strong>역효과</strong>를 부를 수 있다.</li>
+        <li>나의 입론: <span class="fill"></span><span class="fill"></span></li>
+      </ol>
+    </div>
+  </div>
+
+  <h3 style="margin-top:32px;font-size:16px;">▶ 토론 진행 절차 (45분)</h3>
+  <div class="flow">
+    <ol>
+      <li><span class="min">3분</span><strong>논제 선정 및 입장 배정</strong> — 학급 투표 또는 교사 지정. 본인의 평소 신념과 반대 입장을 일부러 맡게 하면 학습 효과 증대.</li>
+      <li><span class="min">10분</span><strong>입론 준비</strong> — 모둠별로 입론 카드 작성. 위 예시 + 1차시 자료 참조.</li>
+      <li><span class="min">6분</span><strong>입론 발표</strong> — 찬성 3분 → 반대 3분.</li>
+      <li><span class="min">8분</span><strong>교차질의</strong> — 찬↔반 각 4분씩. "그렇다면 ○○ 경우에는?" 식의 반박 질문.</li>
+      <li><span class="min">6분</span><strong>작전 회의</strong> — 모둠별 2분 + 최종변론 준비 4분.</li>
+      <li><span class="min">6분</span><strong>최종변론</strong> — 반대 3분 → 찬성 3분(역순으로 마지막 발언권 균형).</li>
+      <li><span class="min">6분</span><strong>판정 및 회고</strong> — 청중 거수 + 교사 강평. "내 입장이 토론 전후로 어떻게 바뀌었는가" 학생 1인 1발언.</li>
+    </ol>
+  </div>
+
+  <h3 style="margin-top:32px;font-size:16px;">▶ 자기·동료 평가 루브릭</h3>
+  <table class="rubric">
+    <thead>
+      <tr>
+        <th>평가 기준</th>
+        <th>4 (우수)</th>
+        <th>3 (양호)</th>
+        <th>2 (보통)</th>
+        <th>1 (노력)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="cri">근거의 타당성</td>
+        <td>법령·자료 인용, 구체적 사례 제시</td>
+        <td>자료 인용은 있으나 사례가 일반적</td>
+        <td>주장만 반복, 근거 빈약</td>
+        <td>근거 제시 못함</td>
+      </tr>
+      <tr>
+        <td class="cri">상대 의견 경청·반박</td>
+        <td>상대 핵심을 정확히 짚고 반박</td>
+        <td>일부 반박 성공</td>
+        <td>자기 말만 반복</td>
+        <td>경청 자체가 부족</td>
+      </tr>
+      <tr>
+        <td class="cri">표현의 절제</td>
+        <td>혐오·인신공격 없이 토론 주제만</td>
+        <td>대체로 절제, 사소한 비꼼 있음</td>
+        <td>감정적 표현 일부 등장</td>
+        <td>토론 중 부적절 표현 사용</td>
+      </tr>
+      <tr>
+        <td class="cri">관점 이동</td>
+        <td>토론 후 자기 입장 변화·이유 명확히 설명</td>
+        <td>변화는 있으나 이유 단순</td>
+        <td>변화 없음, 이유 진술</td>
+        <td>회고 안 함</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  생성 도구: <code>korean-teacher</code> MCP (generate_discussion · generate_mindmap 가이드 기반) · 시각화: Mermaid.js · 인쇄 시 컬러 권장
+</footer>
+
+</div>
+</body>
+</html>

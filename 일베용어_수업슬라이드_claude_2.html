@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, initial-scale=1">
+<title>혐오의 말, 우리 교실에는 없도록 — Redesign Premium Slide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Highly calibrated warm classic palette */
+    --ink: #1a1a1c;
+    --paper: #fdfaf4; /* Extremely elegant soft ivory canvas */
+    --paper-secondary: #f6f2e8;
+    
+    --accent: #8b2c2c; /* Classic Crimson Red (Saturation carefully tuned) */
+    --accent-hover: #6f2020;
+    --accent-soft: #fcf1f1;
+    
+    --ok: #205c36;
+    --ok-soft: #edf7f1;
+    --warn: #92620f;
+    --warn-soft: #fdf8eb;
+    
+    --text-muted: #57575e;
+    --text-subtle: #7a7a85;
+    --line: #e8e3d7;
+    
+    --shadow-refined: 0 1px 3px rgba(26,26,28,.02), 0 8px 24px rgba(26,26,28,.04);
+  }
+
+  /* Core Reveal Override */
+  .reveal {
+    font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .reveal .slides { text-align: left; }
+  .reveal section { padding: 40px 64px !important; box-sizing: border-box; }
+  
+  /* Typography fine-tuning */
+  .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal p, .reveal li {
+    letter-spacing: -0.03em;
+  }
+  .reveal h1 { 
+    font-size: 2.1em; 
+    font-weight: 800; 
+    color: var(--ink); 
+    margin-bottom: 0.4em; 
+    line-height: 1.25;
+  }
+  .reveal h2 { 
+    font-size: 1.45em; 
+    font-weight: 800; 
+    color: var(--accent); 
+    border-bottom: 2px solid var(--accent); 
+    padding-bottom: 6px; 
+    margin-bottom: 24px; 
+    display: inline-block;
+  }
+  .reveal h3 { 
+    font-size: 0.85em; 
+    font-weight: 600; 
+    color: var(--text-subtle); 
+    letter-spacing: 0.05em; 
+    text-transform: uppercase; 
+    margin: 0 0 12px; 
+  }
+  .reveal p, .reveal li { font-size: 0.85em; line-height: 1.65; color: var(--text-muted); }
+  
+  .reveal ul { list-style: none; padding-left: 0; }
+  .reveal ul li {
+    position: relative; padding: 6px 0 6px 24px; margin: 0;
+  }
+  .reveal ul li::before {
+    content: "—"; position: absolute; left: 0; color: var(--accent); font-weight: 700;
+  }
+
+  /* 표지 */
+  .cover { background-color: var(--paper-secondary) !important; }
+  .cover-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    position: relative;
+  }
+  .cover h1 { font-size: 2.6em; line-height: 1.2; margin-bottom: 0.25em; font-weight: 900; }
+  .cover .sub { font-size: 1.15em; color: var(--text-muted); margin: 0 0 1.8em; }
+  .cover .meta { 
+    font-size: 0.72em; 
+    color: var(--text-subtle); 
+    border-top: 1px solid var(--line); 
+    padding-top: 16px; 
+    max-width: 600px; 
+    line-height: 1.6;
+  }
+  .cover .chip {
+    display: inline-block; 
+    background-color: var(--accent); 
+    color: #ffffff; 
+    padding: 5px 14px;
+    border-radius: 4px; 
+    font-size: 0.6em; 
+    letter-spacing: 0.05em; 
+    font-weight: 700; 
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+
+  /* 카드 그리드 - AI 템플릿 느낌을 지우기 위해 면 중심의 심플 레이아웃 설계 */
+  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+  .card { 
+    background: var(--paper); 
+    border: 1px solid var(--line); 
+    border-radius: 8px; 
+    padding: 20px; 
+    box-shadow: var(--shadow-refined); 
+  }
+  .card h4 { 
+    margin: 0 0 10px; 
+    font-size: 0.95em; 
+    color: var(--accent); 
+    font-weight: 700; 
+    display: flex;
+    align-items: center;
+  }
+  .card p { font-size: 0.7em; color: var(--text-muted); margin: 0; line-height: 1.5; }
+  
+  .num-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent); font-weight: 800; font-size: 0.85em; margin-right: 8px;
+  }
+
+  /* 강조박스 */
+  .callout { background: var(--paper-secondary); border-left: 3px solid var(--accent); padding: 18px 20px; border-radius: 4px; margin-top: 20px; }
+  .callout p { font-size: 0.78em; color: var(--text-muted); margin: 0; font-weight: 500; }
+  
+  .ok-callout { background: var(--ok-soft); border-left-color: var(--ok); }
+  .ok-callout p { color: var(--ok); }
+  
+  .warn-callout { background: var(--warn-soft); border-left-color: var(--warn); }
+  .warn-callout p { color: var(--warn); }
+
+  /* 두 컬럼 */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 16px; }
+
+  /* 표 */
+  .reveal table { border-collapse: collapse; margin-top: 16px; width: 100%; background: var(--paper); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-refined); }
+  .reveal table th, .reveal table td { padding: 14px 18px; font-size: 0.72em; border-bottom: 1px solid var(--line); vertical-align: middle; text-align: left; }
+  .reveal table th { background: var(--paper-secondary); font-weight: 700; color: var(--ink); }
+  .reveal table tr:last-child td { border-bottom: none; }
+  .reveal table td.cri { color: var(--accent); font-weight: 700; white-space: nowrap; }
+
+  /* 큰 숫자 패턴 */
+  .pattern-row { display: flex; align-items: flex-start; margin: 12px 0; border-bottom: 1px dashed var(--line); padding-bottom: 12px; }
+  .pattern-row:last-child { border-bottom: none; }
+  .pattern-num {
+    flex: 0 0 48px; font-size: 1.6em; font-weight: 300; color: var(--accent);
+    line-height: 1;
+  }
+  .pattern-body h4 { font-size: 0.9em; margin: 0 0 4px; font-weight: 700; color: var(--ink); }
+  .pattern-body p { font-size: 0.72em; color: var(--text-muted); margin: 0; line-height: 1.4; }
+
+  /* 단톡방 가짜 채팅 - 촌스러운 색상을 연하게 보정 */
+  .chat {
+    background: #f1ebd9; 
+    border-radius: 12px; 
+    padding: 24px; 
+    margin: 20px auto 12px;
+    max-width: 480px; 
+  }
+  .chat .name { font-size: 0.6em; color: var(--text-muted); margin: 4px 2px 2px 8px; font-weight: 600; }
+  .chat .bubble {
+    display: inline-block; background: var(--paper); padding: 8px 14px; border-radius: 8px;
+    font-size: 0.75em; max-width: 78%; margin: 2px 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.03);
+    color: var(--ink);
+  }
+  .chat .me { text-align: right; }
+  .chat .me .bubble { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+
+  /* 큰 단어 강조 */
+  .big-words {
+    display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; justify-content: center;
+  }
+  .big-words .w {
+    background: var(--paper); border: 1px solid var(--accent); padding: 12px 20px;
+    border-radius: 4px; font-weight: 700; color: var(--accent); font-size: 0.85em;
+  }
+
+  /* 닫는 슬라이드 */
+  .closing { text-align: center; }
+  .help-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 32px; }
+  .help-grid .card { text-align: center; padding: 16px; }
+  .help-grid .card h4 { font-size: 0.78em; color: var(--accent); }
+  .help-grid .card p { font-size: 0.65em; }
+
+  /* 페이지 번호 */
+  .pgnum {
+    position: absolute; bottom: 20px; right: 28px; font-size: 0.5em; color: var(--text-subtle);
+    font-family: monospace;
+  }
+
+  /* 인용·근거 */
+  .src { font-size: 0.62em; color: var(--text-subtle); margin-top: 16px; }
+  .src::before { content: "출처 — "; color: var(--accent); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- 1: 표지 -->
+<section class="cover">
+  <div class="cover-container">
+    <span class="chip">학생 지도용 · 2차시</span>
+    <h1>혐오의 말,<br>우리 교실에는 없도록</h1>
+    <p class="sub">일베 용어로 배우는 혐오표현 인식 예방교육</p>
+    <div class="meta">
+      대상: 중학교 2~3학년 · 분량: 2차시(각 45분)<br>
+      제작: 배재중학교 박효용 · 2026
+    </div>
+    <div class="pgnum">01 / 15</div>
+  </div>
+</section>
+
+<!-- 2: 오늘의 약속 -->
+<section>
+  <h3>도입</h3>
+  <h1>오늘 수업의 약속, 세 가지</h1>
+  <div class="card-grid">
+    <div class="card">
+      <h4><span class="num-badge">1</span>이해</h4>
+      <p>단어를 외우는 수업이 아닙니다. 그 말이 어떻게 작동하는지 <strong>구조</strong>를 보는 시간입니다.</p>
+    </div>
+    <div class="card">
+      <h4><span class="num-badge">2</span>존중</h4>
+      <p>누구의 출신·외모·정체성도 농담 소재로 삼지 않습니다. 옆 친구가 당사자일 수 있습니다.</p>
+    </div>
+    <div class="card">
+      <h4><span class="num-badge">3</span>용기</h4>
+      <p>모르고 썼다면 부끄러워 말기. 알고 멈추는 용기가 더 큰 자산입니다.</p>
+    </div>
+  </div>
+  <div class="callout"><p>이 수업의 목표는 처벌이 아니라 <strong>알아차림</strong>입니다.</p></div>
+  <div class="pgnum">02 / 15</div>
+</section>
+
+<!-- 3: 도입 - 단톡방 -->
+<section>
+  <h3>도입 질문</h3>
+  <h1>이런 말, 본 적 있나요?</h1>
+  <div class="chat">
+    <div class="name">A</div>
+    <div class="bubble">아 ㅋㅋ 운지해라 진짜</div>
+    <div class="name">B</div>
+    <div class="bubble">~노 너 또 그러노</div>
+    <div class="me"><div class="name">나</div><div class="bubble">대깨문 ㅋㅋ</div></div>
+    <div class="name">C</div>
+    <div class="bubble">게이야 이거 봐바</div>
+  </div>
+  <ul>
+    <li>게임 채팅·SNS·단톡방에 한 번쯤 등장하는 말들</li>
+    <li>뜻을 아는 학생? 그냥 따라 써본 학생?</li>
+    <li>이 말이 <strong>어디서 · 왜 · 누구를 향해</strong> 만들어졌는지 함께 봅니다</li>
+  </ul>
+  <div class="pgnum">03 / 15</div>
+</section>
+
+<!-- 4: ○○절 -->
+<section>
+  <h3>카테고리 1</h3>
+  <h1>"○○절" 시리즈 — 죽음을 명절로 부르는 말</h1>
+  <table>
+    <thead><tr><th>용어</th><th>가리키는 날</th><th>비판받는 지점</th></tr></thead>
+    <tbody>
+      <tr><td class="cri">중력절·운지절</td><td>전직 대통령 서거일</td><td>자살을 농담으로 박제</td></tr>
+      <tr><td class="cri">어묵절·오뎅데이</td><td>세월호 참사일 (4·16)</td><td>희생 학생 시신을 음식에 비유</td></tr>
+      <tr><td class="cri">통구이절</td><td>대구 지하철 참사일 (2·18)</td><td>화재 희생자 시신 모욕</td></tr>
+      <tr><td class="cri">홍어절·민주화절</td><td>5·18 민주화운동 기념일</td><td>민주화운동 폄훼 + 지역 비하</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><p>사망일·참사일을 <strong>'명절(節)'</strong>로 부르는 화법 자체가 인간 존엄의 부정입니다.</p></div>
+  <div class="pgnum">04 / 15</div>
+</section>
+
+<!-- 5: 시체팔이·교통사고드립 -->
+<section>
+  <h3>카테고리 2</h3>
+  <h1>시체팔이 · 교통사고드립</h1>
+  <div class="two-col">
+    <div class="card">
+      <h4>시체팔이</h4>
+      <p style="font-size:0.7em">유가족이 보상금을 노리고 희생자를 이용한다는 음모론적 비난.<br>진상규명을 요구하는 가족에게 가하는 <strong>두 번째 폭력</strong>.</p>
+    </div>
+    <div class="card">
+      <h4>교통사고드립</h4>
+      <p style="font-size:0.7em">"세월호는 단순 교통사고일 뿐"이라며 참사 의미를 축소.<br>304명이 사망한 사회적 참사를 <strong>책임 회피 논리</strong>로 환원.</p>
+    </div>
+  </div>
+  <div class="warn-callout"><p>참사를 농담으로 다루는 순간, 다음 참사를 막을 사회적 학습이 멈춥니다.</p></div>
+  <div class="pgnum">05 / 15</div>
+</section>
+
+<!-- 6: 지역 -->
+<section>
+  <h3>카테고리 3</h3>
+  <h1>지역을 음식으로 부르는 말</h1>
+  <ul>
+    <li><strong>홍어</strong> — 호남 향토음식을 사람 비하 호칭으로 사용</li>
+    <li><strong>전라디언</strong> — "전라도 + 인디언". 호남인을 미개한 원주민으로 비유</li>
+    <li><strong>라도것</strong> — 인간을 '것'으로 지칭하는 비인격화</li>
+  </ul>
+  <div class="callout"><p>출신 지역으로 사람을 평가하는 것 = <strong>「국가인권위법」 제2조 차별행위</strong>. 「헌법」 평등권 침해.</p></div>
+  <p class="src">국가인권위원회 「혐오표현 리포트」(2019)</p>
+  <div class="pgnum">06 / 15</div>
+</section>
+
+<!-- 7: 정치인 -->
+<section>
+  <h3>카테고리 4</h3>
+  <h1>말투를 박제하고, 이름을 멸칭으로</h1>
+  <ul>
+    <li><strong>~~노 · 이기야</strong> — 전직 대통령의 말투를 자살 암시로 박제</li>
+    <li><strong>슨상님 · 머통령 · 문재앙 · 대깨문 · 찢재명</strong> — 정치인 이름을 멸칭으로 변형</li>
+    <li><strong>좌좀</strong> — "좌파 + 좀비". 견해 차이를 인간성 부정으로 비약</li>
+  </ul>
+  <div class="callout"><p>정치 비판은 <strong>정책</strong>으로 합니다. <strong>사람 자체</strong>를 깎아내리는 것은 비판이 아니라 혐오입니다.</p></div>
+  <div class="pgnum">07 / 15</div>
+</section>
+
+<!-- 8: 여성·소수자 -->
+<section>
+  <h3>카테고리 5</h3>
+  <h1>가장 흔하게 마주칠 부류</h1>
+  <table>
+    <tbody>
+      <tr><td class="cri">김치녀 · 삼일한</td><td>여성 전체 일반화, 가정폭력 미화</td></tr>
+      <tr><td class="cri">게이야</td><td>성소수자를 일상 호칭·농담 소재화</td></tr>
+      <tr><td class="cri">짱깨 · 똥남아 · 튀기</td><td>인종·민족 멸칭</td></tr>
+      <tr><td class="cri">장애드립</td><td>장애인을 농담 소재로 삼는 발언 일반</td></tr>
+    </tbody>
+  </table>
+  <div class="warn-callout"><p>다문화 학생, 여학생, 성소수자 친구가 <strong>지금 옆자리에 있을 수 있다</strong>는 사실을 기억해 주세요.</p></div>
+  <div class="pgnum">08 / 15</div>
+</section>
+
+<!-- 9: 5대 패턴 (핵심) -->
+<section>
+  <h3>핵심 정리</h3>
+  <h1>혐오표현 5대 작동 패턴</h1>
+  <p style="font-size:0.75em;color:var(--text-muted);margin:0 0 16px">단어가 달라도 작동 방식은 같습니다. 패턴만 알아도 신조어에 적극 대응할 수 있습니다.</p>
+  <div class="pattern-list">
+    <div class="pattern-row">
+      <div class="pattern-num">01</div>
+      <div class="pattern-body"><h4>죽음을 농담으로 뒤집기</h4><p>사망·참사를 '명절'·'드립'·'기념일'로 부릅니다.</p></div>
+    </div>
+    <div class="pattern-row">
+      <div class="pattern-num">02</div>
+      <div class="pattern-body"><h4>사투리·외모를 조롱 도구로</h4><p>특정 지역 말투, 신체 특징을 멸칭화하여 차별적 시선을 주입합니다.</p></div>
+    </div>
+    <div class="pattern-row">
+      <div class="pattern-num">03</div>
+      <div class="pattern-body"><h4>단어 의미 뒤집기</h4><p>'민주화' = 공격, '선생님' = 멸칭. 공동체 내부의 정상 어휘를 오염시킵니다.</p></div>
+    </div>
+    <div class="pattern-row">
+      <div class="pattern-num">04</div>
+      <div class="pattern-body"><h4>집단 정체성 비인격화</h4><p>"○○것 · ○○충 · ○○족"으로 지칭하여 인간을 사물이나 벌레로 격하합니다.</p></div>
+    </div>
+    <div class="pattern-row">
+      <div class="pattern-num">05</div>
+      <div class="pattern-body"><h4>"농담이었다"로 회피하기</h4><p>풍자를 가장하지만, 집단성 및 반복성 그 자체가 혐오 표현의 본질입니다.</p></div>
+    </div>
+  </div>
+  <div class="pgnum">09 / 15</div>
+</section>
+
+<!-- 10: 농담 회피 논리 -->
+<section>
+  <h3>회피 논리 해체</h3>
+  <h1>"농담이었어"라고 하면 괜찮을까?</h1>
+  <div class="big-words">
+    <span class="w">한 명이 쓰면 농담</span>
+    <span class="w">모두가 쓰면 문화</span>
+    <span class="w">문화가 되면 폭력</span>
+  </div>
+  <ul style="margin-top:24px">
+    <li>일대일 농담과 <strong>집단적·반복적 사용</strong>은 전혀 다른 차원입니다</li>
+    <li>듣는 사람이 그 집단의 일원이라면 의도와 무관하게 <strong>2차 가해</strong></li>
+    <li>'깨진 유리창 이론' — 작은 표현을 방치하면 더 큰 차별로 자랍니다</li>
+  </ul>
+  <div class="pgnum">10 / 15</div>
+</section>
+
+<!-- 11: 법적 책임 -->
+<section>
+  <h3>법적 책임</h3>
+  <h1>법은 어떻게 보고 있을까?</h1>
+  <div class="card-grid">
+    <div class="card"><h4>정보통신망법 §70</h4><p>사자(死者) 명예훼손 — 고인 조롱은 형사 처벌 대상.</p></div>
+    <div class="card"><h4>5·18 특별법 §8</h4><p>5·18 왜곡·폄훼 처벌 (2021 신설). 학교·온라인 모두 적용.</p></div>
+    <div class="card"><h4>학교폭력예방법</h4><p>언어폭력·사이버폭력 사안으로 처리 가능. 단톡방·게임 채팅 포함.</p></div>
+    <div class="card"><h4>국가인권위법 §2</h4><p>출신지역·성별·장애로 인한 차별행위 금지.</p></div>
+    <div class="card"><h4>양성평등기본법</h4><p>성별을 이유로 한 차별 표현 금지.</p></div>
+    <div class="card"><h4>교칙·학칙</h4><p>혐오표현 사용은 선도위원회 회부 가능.</p></div>
+  </div>
+  <div class="pgnum">11 / 15</div>
+</section>
+
+<!-- 12: 마인드맵 활동 (2차시 시작) -->
+<section class="cover">
+  <div class="cover-container">
+    <span class="chip" style="background-color: var(--ok); color: #fff;">2차시 · 활동 1</span>
+    <h1>마인드맵으로 정리하기</h1>
+    <ul>
+      <li>6개 가지로 마인드맵 그리기 — 고인 조롱 / 지역 / 정치 / 여성·소수자 / 패턴 / 법</li>
+      <li>학습지 빈칸 채우기 — 모둠 4인 토의</li>
+      <li>발표 — 가장 위험하다고 생각한 패턴 1개 선정 + 이유</li>
+    </ul>
+    <div class="ok-callout" style="max-width: 720px;"><p>마인드맵의 목표는 <strong>단어 암기가 아니라 구조 이해</strong>입니다.</p></div>
+    <p style="font-size:0.65em;color:var(--text-subtle);margin-top:20px">활동 시간: 20분 (개별 5분 + 모둠 토의 10분 + 발표 5분)</p>
+    <div class="pgnum">12 / 15</div>
+  </div>
+</section>
+
+<!-- 13: 토론 -->
+<section class="cover">
+  <div class="cover-container">
+    <span class="chip" style="background-color: var(--ok); color: #fff;">2차시 · 활동 2</span>
+    <h1>찬반 토론 — 논제 선택</h1>
+    <div class="card-grid">
+      <div class="card"><h4>논제 A</h4><p>단톡방 일베 말투를 <strong>학교폭력 사안</strong>으로 다루어야 하는가</p></div>
+      <div class="card"><h4>논제 B</h4><p>혐오표현 처벌은 <strong>표현의 자유</strong> 침해인가</p></div>
+      <div class="card"><h4>논제 C</h4><p>혐오표현을 보고도 말리지 않은 <strong>방관자</strong>도 책임이 있는가</p></div>
+    </div>
+    <table style="margin-top:20px; max-width: 800px;">
+      <thead><tr><th>단계</th><th>시간</th><th>형식</th></tr></thead>
+      <tbody>
+        <tr><td>입론</td><td>찬 3분 → 반 3분</td><td>모둠 입론 카드 활용</td></tr>
+        <tr><td>교차질의</td><td>각 4분</td><td>"그렇다면 ○○ 경우는?"</td></tr>
+        <tr><td>최종변론</td><td>반 3분 → 찬 3분</td><td>역순 발언권</td></tr>
+      </tbody>
+    </table>
+    <div class="pgnum">13 / 15</div>
+  </div>
+</section>
+
+<!-- 14: 자기 점검 -->
+<section>
+  <h3>마무리 자기 점검</h3>
+  <h1>내가 바꾸어야 할 것 한 가지</h1>
+  <div class="two-col">
+    <div class="card">
+      <h4>① 멈출 단어 1개</h4>
+      <p style="font-size:0.7em">평소 무심코 쓰던 말 중에 오늘부터 멈출 단어 <strong>한 개</strong>를 적어 봅니다.</p>
+    </div>
+    <div class="card">
+      <h4>② 친구에게 건넬 한 문장</h4>
+      <p style="font-size:0.7em">친구가 그런 말을 썼을 때 어떻게 말해 줄지 <strong>한 문장</strong> 준비합니다.</p>
+    </div>
+  </div>
+  <div class="ok-callout" style="margin-top:24px">
+    <p>침묵도 동의가 됩니다. 작은 한마디가 교실 문화를 바꿉니다.<br>
+    <strong>'검열'이 아니라 '존중'</strong>입니다.</p>
+  </div>
+  <div class="pgnum">14 / 15</div>
+</section>
+
+<!-- 15: 닫는 슬라이드 -->
+<section class="closing cover">
+  <div class="cover-container" style="align-items: center; text-align: center;">
+    <h1>고맙습니다</h1>
+    <p style="font-size:1.15em;color:var(--text-muted);margin-bottom:24px">함께 만드는 안전한 교실</p>
+    <h3 style="color:var(--accent);text-align:center">도움이 필요할 때</h3>
+    <div class="help-grid" style="max-width: 800px; width: 100%;">
+      <div class="card"><h4>담임 선생님</h4><p>가장 먼저, 편하게</p></div>
+      <div class="card"><h4>생활안전부</h4><p>박효용 선생님</p></div>
+      <div class="card"><h4>Wee클래스</h4><p>비밀 상담 가능</p></div>
+      <div class="card"><h4>117</h4><p>학교폭력 신고</p></div>
+    </div>
+    <p class="src" style="text-align:center;margin-top:28px">참고 — 1차시 학습지 마지막 페이지 · 국가인권위 「혐오표현 리포트」</p>
+    <div class="pgnum">15 / 15</div>
+  </div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: false,
+    transition: 'fade',
+    width: 1280,
+    height: 720,
+    margin: 0.05,
+    controls: true,
+    progress: true,
+    keyboard: true,
+    overview: true,
+    pdfSeparateFragments: false
+  });
+</script>
+</body>
+</html>

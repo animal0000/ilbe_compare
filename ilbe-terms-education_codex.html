@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>일베 및 온라인 혐오표현 교육 자료</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --paper: #ffffff;
+      --ink: #1d2433;
+      --muted: #5b667a;
+      --line: #d8deea;
+      --accent: #0f766e;
+      --warn: #b45309;
+      --danger: #b91c1c;
+      --soft: #eef7f5;
+      --soft-warn: #fff7ed;
+      --soft-danger: #fef2f2;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
+      line-height: 1.65;
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 40px 0 64px;
+    }
+
+    header {
+      background: linear-gradient(180deg, #e9f7f4 0%, #ffffff 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 44px 0 36px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 44px 0 16px;
+      padding-top: 6px;
+      font-size: 24px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 19px;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    .lede {
+      max-width: 880px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .notice {
+      margin-top: 22px;
+      padding: 16px 18px;
+      border: 1px solid #badbd4;
+      background: var(--soft);
+      border-radius: 8px;
+    }
+
+    .notice strong {
+      color: var(--accent);
+    }
+
+    .section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+      box-shadow: 0 8px 28px rgba(29, 36, 51, 0.04);
+    }
+
+    .quote-box {
+      border-left: 5px solid var(--accent);
+      background: var(--soft);
+      padding: 16px 18px;
+      margin: 18px 0;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .pill {
+      min-height: 88px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .pill b {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .pill span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      min-width: 940px;
+      border-collapse: collapse;
+    }
+
+    caption {
+      text-align: left;
+      padding: 14px 16px;
+      font-weight: 800;
+      color: var(--ink);
+      background: #f9fafc;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+
+    th {
+      color: #263044;
+      background: #f4f6fa;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    code.term {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: #f1f5f9;
+      color: #111827;
+      font-family: "D2Coding", "Consolas", monospace;
+      font-size: 0.95em;
+      white-space: nowrap;
+    }
+
+    .risk {
+      display: inline-block;
+      margin-bottom: 6px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .risk-danger {
+      color: var(--danger);
+      background: var(--soft-danger);
+    }
+
+    .risk-warn {
+      color: var(--warn);
+      background: var(--soft-warn);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .teacher-script {
+      display: grid;
+      gap: 12px;
+    }
+
+    .script-line {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: #fff;
+    }
+
+    .script-line b {
+      color: var(--accent);
+    }
+
+    .source-list a {
+      color: #0f5f87;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    footer {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 0 0 48px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 820px) {
+      main {
+        width: min(100% - 20px, 1120px);
+        padding-top: 24px;
+      }
+
+      .hero {
+        width: min(100% - 20px, 1120px);
+        padding: 30px 0;
+      }
+
+      .section {
+        padding: 18px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      header {
+        background: #fff;
+      }
+
+      main,
+      .hero,
+      footer {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .section,
+      .table-wrap {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      a {
+        color: #000;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hero">
+      <h1>일베 및 온라인 혐오표현 교육 자료</h1>
+      <p class="lede">
+        아이들이 뜻을 모른 채 유행어처럼 쓰기 쉬운 표현을 원어 그대로 정리한 자료입니다.
+        목표는 단어를 외우게 하는 것이 아니라, 그 표현이 실제로 누구의 죽음, 참사, 지역, 정체성, 정치 성향을 겨냥하는지 이해시키고 사용을 멈추게 하는 것입니다.
+      </p>
+      <div class="notice">
+        <strong>수업 원칙:</strong> 원어는 정확히 알려주되 따라 말하기 놀이로 만들지 않습니다.
+        설명 직후에는 반드시 “왜 사용하면 안 되는가”와 “대신 어떻게 말할 것인가”를 연결합니다.
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>한 문장 기준</h2>
+      <div class="quote-box">
+        “이 말들은 그냥 웃긴 인터넷 유행어가 아니라, 누군가의 죽음·참사·지역·장애·성별·정치 성향을 깎아내려 웃음을 만드는 말입니다.”
+      </div>
+      <p>
+        아이들에게는 “몰랐으니 괜찮다”에서 끝내지 않고, “이제 알았으니 다시 쓰지 않는 것이 책임 있는 행동”이라고 안내합니다.
+      </p>
+      <div class="grid" aria-label="혐오표현을 알아보는 기준">
+        <div class="pill">
+          <b>죽음을 웃음거리로 만드는가</b>
+          <span>고인, 자살, 참사, 시신, 유가족을 조롱하면 즉시 멈춰야 합니다.</span>
+        </div>
+        <div class="pill">
+          <b>사람을 집단명으로 깎아내리는가</b>
+          <span>지역, 성별, 장애, 나이, 정치 성향을 벌레·음식·좀비처럼 부르면 혐오표현입니다.</span>
+        </div>
+        <div class="pill">
+          <b>역사를 왜곡하거나 피해자 탓을 하는가</b>
+          <span>민주화운동·참사를 “폭동”, “교통사고”, “돈벌이”로 축소하면 피해를 반복합니다.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>주요 표현 정리</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>원어, 뜻, 유래, 비판 지점</caption>
+          <thead>
+            <tr>
+              <th scope="col">원어</th>
+              <th scope="col">정확한 뜻</th>
+              <th scope="col">유래·사용 맥락</th>
+              <th scope="col">비판받을 지점</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code class="term">중력절</code></td>
+              <td>고 노무현 전 대통령의 서거일을 “중력 때문에 떨어진 날”처럼 조롱해 부르는 말입니다.</td>
+              <td>2009년 5월 23일 투신 사망을 “기념일”처럼 희화화하는 일베·디시 계열 표현입니다.</td>
+              <td><span class="risk risk-danger">고인 모독</span><br>자살과 죽음을 장난으로 만들고 유족과 추모자를 모욕합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">운지</code> <code class="term">운지절</code></td>
+              <td>“떨어져 죽다”, “자살하다”, “망하다”라는 뜻으로 쓰이는 고 노무현 전 대통령 사망 조롱 표현입니다.</td>
+              <td>광고 속 “운지천” 표현과 투신 사망을 억지로 연결해 만든 말입니다. 일베에서는 5월 23일을 <code class="term">운지절</code>이라고도 부릅니다.</td>
+              <td><span class="risk risk-danger">자살 조롱</span><br>사람의 죽음을 실패나 웃음거리로 소비하게 만듭니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">압력절</code></td>
+              <td>10·29 이태원 참사 희생자들이 압사한 일을 “압력”이라는 말장난으로 조롱하는 말입니다.</td>
+              <td>참사 원인인 압사 상황을 날짜 기념일처럼 비틀어 부르는 표현입니다. 최초 출처는 명확히 특정하기 어렵지만 극우·혐오 커뮤니티 맥락에서 사용됩니다.</td>
+              <td><span class="risk risk-danger">참사 조롱</span><br>희생자와 유가족의 고통을 가볍게 만들고 피해자 책임론을 강화합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">탱크절</code> <code class="term">땅크</code></td>
+              <td>5·18 광주민주화운동 당시 군사 진압과 탱크 이미지를 이용해 5·18을 조롱하거나 전두환을 찬양하는 말입니다.</td>
+              <td><code class="term">땅크</code>는 전두환과 탱크를 엮어 전두환을 “강한 지도자”처럼 찬양하는 식으로 쓰였습니다. <code class="term">탱크절</code>은 5·18을 모욕하는 날짜 조롱 표현으로 쓰입니다.</td>
+              <td><span class="risk risk-danger">역사 왜곡</span><br>국가폭력 피해자와 민주화운동의 의미를 훼손합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">슨상님</code></td>
+              <td>김대중 전 대통령을 비하해 부르는 말입니다.</td>
+              <td>“선생님”의 전라도식 발음을 조롱하는 듯한 표현과 김대중 전 대통령 비하가 결합했습니다.</td>
+              <td><span class="risk risk-danger">고인·지역 비하</span><br>정치인 비판이 아니라 말투와 출신 지역까지 조롱합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">슨상절</code></td>
+              <td>김대중 전 대통령 관련 날짜를 조롱하듯 기념일화하는 말입니다.</td>
+              <td><code class="term">슨상님</code>에서 파생된 표현입니다. 일부 커뮤니티에서는 생일·서거일을 비꼬는 변형 표현도 씁니다.</td>
+              <td><span class="risk risk-danger">고인 조롱</span><br>사망자와 지지자, 호남 지역민을 함께 모욕합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">홍어</code> <code class="term">홍어절</code></td>
+              <td>전라도 사람을 홍어에 빗대 낮춰 부르는 말입니다.</td>
+              <td>전라도 음식인 홍어의 냄새 이미지를 전라도 사람에게 덮어씌운 지역혐오 표현입니다. <code class="term">홍어절</code>은 호남 관련 날짜를 조롱식으로 부를 때 쓰입니다.</td>
+              <td><span class="risk risk-danger">지역혐오</span><br>특정 지역민을 냄새나 혐오감의 대상으로 만듭니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">전라디언</code></td>
+              <td>전라도 사람을 외계인이나 이방인처럼 부르는 멸칭입니다.</td>
+              <td><code class="term">전라도</code>에 영어식 접미 표현을 붙여 “우리와 다른 이상한 집단”처럼 보이게 만든 말입니다.</td>
+              <td><span class="risk risk-danger">지역민 비인간화</span><br>출신 지역만으로 사람을 배제하고 낙인찍습니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">라도것</code></td>
+              <td>전라도 사람을 “것들”처럼 낮춰 부르는 말입니다.</td>
+              <td><code class="term">전라도</code>를 줄인 <code class="term">라도</code>와 사람을 낮추는 <code class="term">것</code>이 결합한 표현입니다.</td>
+              <td><span class="risk risk-danger">인격 부정</span><br>사람을 사람으로 부르지 않고 물건처럼 취급합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">민주화</code> <code class="term">민주화절</code> <code class="term">ㅁㅈㅎ</code></td>
+              <td>일베식으로는 “비추천”, “망하게 하다”, “짓밟다”, “하향평준화”라는 부정적 뜻으로 쓰입니다.</td>
+              <td>원래 긍정적 역사어인 민주화를 부정어로 뒤집어 쓰면서 민주화운동 자체를 비웃는 효과를 냅니다.</td>
+              <td><span class="risk risk-danger">민주화운동 조롱</span><br>민주주의를 위해 희생한 사람들의 의미를 훼손합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">폭동절</code> <code class="term">폭동 드립</code></td>
+              <td>5·18 광주민주화운동을 “폭동”이라고 왜곡해 부르는 말입니다.</td>
+              <td>5·18을 민주화운동이 아니라 폭동으로 몰아가는 극우 역사왜곡 표현입니다.</td>
+              <td><span class="risk risk-danger">역사 왜곡</span><br>국가폭력 책임을 지우고 피해자와 광주시민을 공격합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">통구이절</code> <code class="term">통구이드립</code></td>
+              <td>대구 지하철 참사 희생자들을 불에 탄 고기처럼 조롱하는 말입니다.</td>
+              <td>2003년 대구 지하철 화재 참사를 음식·화상 이미지로 비하한 표현입니다.</td>
+              <td><span class="risk risk-danger">참사 희생자 모욕</span><br>비극적 사고와 시신 훼손을 웃음거리로 만듭니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">어묵</code> <code class="term">오뎅</code> <code class="term">어묵절</code> <code class="term">오뎅데이</code></td>
+              <td>세월호 희생자, 특히 단원고 학생 희생자들을 어묵·오뎅에 빗대 조롱하는 말입니다.</td>
+              <td>일부 일베 이용자들이 세월호 희생자를 물속에서 사망했다는 이유로 음식에 빗대며 퍼뜨렸습니다. 실제 모욕 게시물로 수사와 처벌 논란이 있었습니다.</td>
+              <td><span class="risk risk-danger">미성년 희생자 조롱</span><br>사망자, 유족, 생존 학생에게 심각한 2차 피해를 줍니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">시체팔이</code></td>
+              <td>유가족이나 피해자가 진상규명·책임자 처벌·보상을 요구할 때 “죽은 사람을 이용해 이익을 본다”고 모욕하는 말입니다.</td>
+              <td>세월호, 이태원 참사 등에서 유가족의 목소리를 공격하는 표현으로 반복 사용되었습니다.</td>
+              <td><span class="risk risk-danger">피해자 공격</span><br>애도와 권리 요구를 부정하고 유가족을 가해자처럼 만듭니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">교통사고드립</code></td>
+              <td>세월호 같은 사회적 참사를 “그냥 교통사고”라고 축소하는 말입니다.</td>
+              <td>국가와 기관의 책임, 구조 실패, 진상규명 요구를 지우기 위해 참사를 단순 사고처럼 말하는 프레임입니다.</td>
+              <td><span class="risk risk-danger">참사 축소</span><br>피해자 책임론을 강화하고 사회적 재발 방지 논의를 막습니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">~~노</code> <code class="term">노노체</code></td>
+              <td>문장 끝에 아무 데나 <code class="term">노</code>를 붙이는 일베식 말투입니다.</td>
+              <td>겉으로는 경상도 사투리처럼 보이지만, 일베식 사용에서는 노무현 전 대통령의 성 <code class="term">노</code>와 동남 방언 조롱이 섞여 있습니다.</td>
+              <td><span class="risk risk-warn">맥락 주의</span><br>실제 동남 방언과 구분해야 합니다. 일베식 남용은 방언 사용자와 고인을 함께 조롱합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">이기야</code></td>
+              <td>말끝에 붙이는 일베식 어미입니다.</td>
+              <td>노무현 전 대통령의 발언과 동남 방언을 조롱식으로 밈화한 표현입니다.</td>
+              <td><span class="risk risk-warn">방언 희화화</span><br>특정 지역 말투와 고인을 놀림의 재료로 씁니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">게이</code> <code class="term">게이야</code> <code class="term">일게이</code></td>
+              <td>원래 <code class="term">게이</code>는 성소수자를 뜻하지만, 일부 커뮤니티에서는 “얘”, “친구”, “이용자”처럼 씁니다.</td>
+              <td><code class="term">guy</code>식 장난 표현과 일베 게시판 이용자를 뜻하는 <code class="term">일게이</code>가 섞여 퍼졌습니다.</td>
+              <td><span class="risk risk-warn">성소수자 비하 위험</span><br>성적 지향을 장난말·놀림말로 쓰면 혐오표현이 됩니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">머통령</code></td>
+              <td><code class="term">대통령</code>을 모양이 비슷한 글자로 바꿔 쓴 말입니다.</td>
+              <td>디시 야구갤러리 계열의 글자 놀이인 야민정음 표현입니다. 단독으로 반드시 일베 용어는 아닙니다.</td>
+              <td><span class="risk risk-warn">맥락 의존</span><br>정치 조롱 문맥에서 쓰이면 비하가 될 수 있습니다. 단어 자체보다 함께 쓰인 문장을 봐야 합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">앙망</code> <code class="term">앙망문</code></td>
+              <td>요즘 인터넷에서는 비꼬는 사과문, 억지 반성문, 굴욕적 요청문이라는 뜻으로 쓰입니다.</td>
+              <td>원래 <code class="term">앙망</code>은 “간절히 바람”이라는 한자어입니다. 일베식 맥락에서는 김대중 전 대통령 관련 문서 표현을 조롱하며 퍼졌습니다.</td>
+              <td><span class="risk risk-warn">고인 조롱 맥락</span><br>일반 한자어와 달리 일베식 사용은 특정 정치인 조롱이 깔려 있습니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">좌좀</code></td>
+              <td>진보 성향 사람을 “좌파 좀비”라고 부르는 말입니다.</td>
+              <td><code class="term">좌파</code>와 <code class="term">좀비</code>의 합성어입니다.</td>
+              <td><span class="risk risk-danger">비인간화</span><br>정치적 반대자를 생각 없는 괴물처럼 만들어 대화를 막습니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">대깨문</code></td>
+              <td>“대가리가 깨져도 문재인”의 줄임말입니다. 문재인 전 대통령 지지자를 맹목적인 사람처럼 비하합니다.</td>
+              <td>초기에는 강한 지지 구호처럼 쓰인 면도 있었으나, 이후에는 지지자를 조롱하는 멸칭으로 널리 쓰였습니다.</td>
+              <td><span class="risk risk-warn">정치 낙인</span><br>정책 비판이 아니라 지지자 전체를 무지한 집단으로 몰아갑니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">문재앙</code></td>
+              <td>문재인 전 대통령을 “재앙”에 빗대 비하하는 말입니다.</td>
+              <td><code class="term">문재인</code>과 <code class="term">재앙</code>을 합친 정치적 멸칭입니다.</td>
+              <td><span class="risk risk-warn">인격 조롱</span><br>정책 비판을 넘어 사람 자체를 재난처럼 취급합니다.</td>
+            </tr>
+            <tr>
+              <td><code class="term">찢재명</code></td>
+              <td>이재명 정치인을 비하하는 별명입니다.</td>
+              <td>과거 가족 간 욕설 논란에서 나온 표현을 정치적 조롱으로 굳힌 말입니다.</td>
+              <td><span class="risk risk-warn">인격 조롱</span><br>정치적 평가보다 모욕과 낙인찍기로 작동합니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>추가로 자주 보이는 계열</h2>
+
+      <h3>고 노무현 전 대통령 조롱 계열</h3>
+      <ul>
+        <li><code class="term">노무</code>: 이름의 일부를 떼어 “너무” 대신 쓰는 식의 조롱 표현입니다.</li>
+        <li><code class="term">노알라</code>: 노무현 전 대통령 얼굴을 코알라와 합성해 조롱하던 표현입니다.</li>
+        <li><code class="term">MC무현</code>: 생전 음성을 합성해 노래처럼 만들며 고인을 희화화하는 표현입니다.</li>
+        <li><code class="term">고무통</code>: “고 노무현 전 대통령”을 줄인 듯 꾸며 낮춰 부르는 말입니다.</li>
+        <li><code class="term">두부</code>: 사망 원인인 두부 외상을 음식 단어처럼 조롱하는 말입니다.</li>
+        <li><code class="term">야 기분 좋다</code>: 고인의 발언 일부를 사망 조롱 밈과 결합해 쓰는 표현입니다.</li>
+      </ul>
+
+      <h3>호남·광주 지역혐오 계열</h3>
+      <ul>
+        <li><code class="term">7시</code>: 지도나 게임 화면에서 전라도 위치를 “7시 방향”이라고 부르며 지역민을 비하하는 말입니다.</li>
+        <li><code class="term">네다홍</code>: “네, 다음 홍어”의 줄임말로 상대를 전라도 사람으로 몰아 비하합니다.</li>
+        <li><code class="term">까보전</code>: “까 보니 전라도”의 줄임말로, 마음에 들지 않는 사람은 결국 전라도 출신일 것이라는 편견을 담습니다.</li>
+        <li><code class="term">전라인민공화국</code>: 전라도의 정치 성향을 북한에 빗대 비하하는 말입니다.</li>
+        <li><code class="term">슨상그라드</code>: 김대중 전 대통령 비하 표현과 도시 이름을 결합해 광주를 조롱하는 말입니다.</li>
+      </ul>
+
+      <h3>참사 유가족 공격 계열</h3>
+      <ul>
+        <li><code class="term">유족충</code>: 유가족을 벌레에 빗대는 표현입니다.</li>
+        <li><code class="term">목숨장사</code> <code class="term">시체장사</code>: 사망자를 이용해 이익을 챙긴다는 식으로 유가족을 모욕합니다.</li>
+        <li><code class="term">세금도둑</code> <code class="term">특혜충</code>: 피해자 지원이나 보상을 부당한 특혜처럼 몰아갑니다.</li>
+      </ul>
+
+      <h3>성별·장애·나이·외모 비하 계열</h3>
+      <ul>
+        <li><code class="term">김치녀</code> <code class="term">한녀</code> <code class="term">피싸개</code>: 여성을 집단으로 비하하는 표현입니다.</li>
+        <li><code class="term">보빨</code>: 여성을 존중하거나 친절히 대하는 남성을 조롱하는 표현입니다.</li>
+        <li><code class="term">삼일한</code>: 여성폭력을 정당화하는 뜻으로 쓰이는 매우 위험한 표현입니다.</li>
+        <li><code class="term">정회원</code> <code class="term">엑윽엑엑</code>: 장애인을 조롱하거나 장애를 비정상성의 상징처럼 쓰는 표현입니다.</li>
+        <li><code class="term">병신드립</code>: 장애 비하어를 무능함·실수의 비유로 쓰는 표현입니다.</li>
+        <li><code class="term">틀딱</code>: 노인을 틀니 이미지로 조롱하는 나이 차별 표현입니다.</li>
+        <li><code class="term">급식충</code>: 초중고생을 벌레처럼 낮춰 부르는 말입니다.</li>
+        <li><code class="term">파오후</code>: 몸집, 숨소리, 외모를 조롱하는 말입니다.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>수업용 설명 문장</h2>
+      <div class="teacher-script">
+        <div class="script-line">
+          <b>도입:</b>
+          “오늘 다루는 말들은 따라 하라고 배우는 말이 아닙니다. 뜻을 모르고 쓰면 누군가에게 큰 상처를 줄 수 있어서 정확히 확인하는 시간입니다.”
+        </div>
+        <div class="script-line">
+          <b>핵심:</b>
+          “재미있는 말처럼 보여도 실제 뜻이 ‘죽은 사람을 놀리자’, ‘참사 피해자를 조롱하자’, ‘전라도 사람을 사람 취급하지 말자’라면 장난이 아닙니다.”
+        </div>
+        <div class="script-line">
+          <b>책임:</b>
+          “모르고 쓴 것은 배울 기회가 될 수 있지만, 알고도 계속 쓰는 것은 혐오에 참여하는 행동입니다.”
+        </div>
+        <div class="script-line">
+          <b>대체 행동:</b>
+          “뜻을 모르는 밈은 쓰기 전에 검색하거나 어른에게 물어봅니다. 누군가 말렸을 때는 ‘왜 예민해?’가 아니라 ‘무슨 뜻인지 알려줘’라고 말합니다.”
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>학생 활동 질문</h2>
+      <ul>
+        <li>이 표현은 누구를 겨냥하고 있나요?</li>
+        <li>이 표현을 듣는 당사자나 가족은 어떤 기분일까요?</li>
+        <li>이 말이 “정치 비판”인지 “사람 조롱”인지 어떻게 구분할 수 있을까요?</li>
+        <li>같은 생각을 혐오표현 없이 말하려면 어떤 문장으로 바꿀 수 있을까요?</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>참고 자료</h2>
+      <p class="muted">
+        아래 자료는 표현의 유래와 사회적 비판 지점을 확인하기 위해 참고한 공개 자료입니다.
+        교육 현장에서는 원문을 그대로 보여주기보다 필요한 부분만 교사가 설명하는 편이 안전합니다.
+      </p>
+      <ul class="source-list">
+        <li><a href="https://www.mju.ac.kr/bbs/col/263/17492/download.do">명지법학 자료: 일베 혐오표현과 지역혐오 설명</a></li>
+        <li><a href="https://www.korean.go.kr/nkview/nklife/2017_3/27_0301.pdf">국립국어원 자료: 한국어 차별·혐오 표현 설명</a></li>
+        <li><a href="https://www.opennet.or.kr/wp-content/uploads/2023/11/%ED%98%90%EC%98%A4%EC%B0%A8%EB%B3%84%EB%8C%80%EC%9D%91%EB%B0%A9%EC%95%88%EB%AA%A8%EC%83%89%ED%86%A0%EB%A1%A0%ED%9A%8C%EC%9E%90%EB%A3%8C%EC%A7%912%EC%B0%A8.pdf">오픈넷 토론회 자료: 재난 피해자 혐오표현 사례</a></li>
+        <li><a href="https://www.donga.com/news/Society/article/all/20150128/69330323/1">동아일보: 세월호 희생자 모욕 ‘어묵’ 게시물 수사 보도</a></li>
+        <li><a href="https://zdnet.co.kr/view/?no=20260518134229">ZDNet Korea: 5·18 기념일 ‘탱크 데이’ 문구 논란 보도</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      작성 목적: 혐오표현 예방 교육. 이 문서에 포함된 원어는 사용을 권장하기 위한 것이 아니라 의미와 피해를 이해시키기 위한 교육 자료입니다.
+    </p>
+  </footer>
+</body>
+</html>
