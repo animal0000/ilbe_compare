@@ -305,6 +305,18 @@
 <script>
     // ===== Data =====
     const FILES = [
+        // ===== 신규 실습·활동 시뮬레이터 =====
+        {
+            key: 'act-sim', num: 'ACT', cat: 'activity', catLabel: '실습·시뮬레이터',
+            label: '단톡방 업스탠더 시뮬레이터 (중학생용)',
+            src: 'chat_simulator.html',
+            swatch: '#88c0d0',
+            notes: [
+                ['대상:', '중학생 실습용 4D(직접·우회·신고·사후) 분기 시뮬레이터'],
+                ['구성:', '게임/참사/지역/성별 4대 시나리오 + 실시간 피드백'],
+                ['피드백:', '5대 패턴 분석 + 2026 현행 법령·판례 + 대체 화법 치트시트']
+            ]
+        },
         {
             key: 'orig', num: '00', cat: 'orig', catLabel: '원본',
             label: '원본 (antigravity)',
@@ -484,6 +496,7 @@
     ];
 
     const CATEGORIES = [
+        { id: 'activity', label: '🔥 실습·시뮬레이터' },
         { id: 'orig', label: '원본' },
         { id: 'new', label: '이번 세션 (4종)' },
         { id: 'codex', label: 'Codex 작업' },
@@ -661,7 +674,7 @@
     });
 
     // Default selection = first new variant (v01)
-    const defaultBtn = document.querySelector('.skill-btn[data-key="v01"]') || document.querySelector('.skill-btn');
+    const defaultBtn = document.querySelector('.skill-btn[data-key="act-sim"]') || document.querySelector('.skill-btn');
     if (defaultBtn) {
         defaultBtn.classList.add('active');
         frame.src = defaultBtn.dataset.src;

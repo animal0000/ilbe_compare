@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>단톡방 혐오표현 업스탠더(Upstander) 시뮬레이터</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #181b21;
+    --panel-sub: #21252e;
+    --line: #2e3440;
+    --line-light: #3b4252;
+    --ink: #eceff4;
+    --ink-muted: #9aa2b4;
+    --accent: #5e81ac;
+    --accent-teal: #88c0d0;
+    --mint: #a3be8c;
+    --warn: #ebcb8b;
+    --danger: #bf616a;
+    --purple: #b48ead;
+    --chat-bg: #1e222b;
+    --bubble-other: #2e3440;
+    --bubble-me: #4c566a;
+    --bubble-alert: #4c3038;
+    --radius: 14px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.35);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  /* 헤더 */
+  header.top-nav {
+    height: 60px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  .brand .tag {
+    background: rgba(136, 192, 208, 0.15);
+    color: var(--accent-teal);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border: 1px solid rgba(136, 192, 208, 0.3);
+  }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .btn-sub {
+    background: var(--panel-sub);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 0.38rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .btn-sub:hover {
+    background: var(--line);
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+  }
+
+  /* 진행 단계 바 */
+  .progress-strip {
+    background: var(--panel-sub);
+    border-bottom: 1px solid var(--line);
+    padding: 0.6rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+  }
+  .steps-dots {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .step-pill {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    color: var(--ink-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  .step-pill.active {
+    background: var(--accent-teal);
+    color: #0d1117;
+  }
+  .step-pill.done {
+    background: rgba(163, 190, 140, 0.2);
+    color: var(--mint);
+    border: 1px solid var(--mint);
+  }
+
+  /* 메인 컨테이너 */
+  main.app-shell {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 460px 1fr;
+    max-width: 1360px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  /* 좌측: 스마트폰 메신저 프레임 */
+  .phone-frame {
+    background: var(--chat-bg);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    height: 720px;
+    overflow: hidden;
+    position: sticky;
+    top: 76px;
+  }
+  .phone-header {
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .chat-title-group h3 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .chat-title-group .members-count {
+    color: var(--ink-muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .chat-title-group .scenario-tag {
+    font-size: 0.7rem;
+    color: var(--accent-teal);
+  }
+
+  .chat-body {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .date-divider {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--ink-muted);
+    margin: 0.4rem 0;
+    position: relative;
+  }
+  .date-divider span {
+    background: rgba(0,0,0,0.3);
+    padding: 0.2rem 0.8rem;
+    border-radius: 999px;
+  }
+
+  .chat-bubble {
+    display: flex;
+    gap: 0.55rem;
+    max-width: 86%;
+    animation: fadeIn 0.3s ease-out;
+  }
+  .chat-bubble.other {
+    align-self: flex-start;
+  }
+  .chat-bubble.me {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+  }
+  .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: var(--panel-sub);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .bubble-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .bubble-sender {
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+  .bubble-text {
+    padding: 0.65rem 0.9rem;
+    border-radius: 14px;
+    font-size: 0.87rem;
+    line-height: 1.45;
+    word-break: break-word;
+  }
+  .chat-bubble.other .bubble-text {
+    background: var(--bubble-other);
+    color: var(--ink);
+    border-top-left-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .chat-bubble.other.toxic .bubble-text {
+    background: var(--bubble-alert);
+    border: 1px solid rgba(191, 97, 106, 0.4);
+    color: #ffd8d8;
+  }
+  .chat-bubble.me .bubble-text {
+    background: var(--accent);
+    color: #fff;
+    border-top-right-radius: 4px;
+  }
+  .bubble-meta {
+    font-size: 0.65rem;
+    color: var(--ink-muted);
+    align-self: flex-end;
+    margin: 0 0.2rem;
+  }
+
+  .typing-indicator {
+    display: none;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.5rem 0.8rem;
+    background: var(--panel-sub);
+    border-radius: 12px;
+    width: fit-content;
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+  }
+  .typing-dots {
+    display: flex;
+    gap: 3px;
+  }
+  .typing-dots span {
+    width: 5px;
+    height: 5px;
+    background: var(--ink-muted);
+    border-radius: 50%;
+    animation: blink 1.2s infinite;
+  }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  /* 우측: 분석 및 선택 컨트롤 패널 */
+  .control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .situation-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.4rem;
+  }
+  .situation-card .badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .badge-warn {
+    background: rgba(235, 203, 139, 0.15);
+    color: var(--warn);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: 6px;
+    border: 1px solid rgba(235, 203, 139, 0.3);
+  }
+  .situation-card h2 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+  }
+  .situation-card p {
+    color: var(--ink-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  /* 4D 선택지 영역 */
+  .decision-zone {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+  }
+  .decision-zone h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .decision-zone .instruction {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    margin-bottom: 1rem;
+  }
+  .choices-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .choice-btn {
+    background: var(--panel-sub);
+    border: 1px solid var(--line-light);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    text-align: left;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+  .choice-btn:hover {
+    border-color: var(--accent-teal);
+    background: rgba(136, 192, 208, 0.08);
+    transform: translateY(-1px);
+  }
+  .choice-btn.selected {
+    border-color: var(--accent-teal);
+    background: rgba(136, 192, 208, 0.15);
+  }
+  .choice-type-pill {
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .pill-direct { background: rgba(94, 129, 172, 0.2); color: #81a1c1; border: 1px solid #81a1c1; }
+  .pill-distract { background: rgba(163, 190, 140, 0.2); color: var(--mint); border: 1px solid var(--mint); }
+  .pill-delegate { background: rgba(180, 142, 173, 0.2); color: var(--purple); border: 1px solid var(--purple); }
+  .pill-delay { background: rgba(235, 203, 139, 0.2); color: var(--warn); border: 1px solid var(--warn); }
+  .pill-bystander { background: rgba(191, 97, 106, 0.2); color: var(--danger); border: 1px solid var(--danger); }
+  .choice-text {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  /* 피드백 분석 카드 (선택 후 등장) */
+  .feedback-box {
+    display: none;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    animation: fadeIn 0.4s ease-out;
+  }
+  .feedback-box.active {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .feedback-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .feedback-header h4 {
+    font-size: 1.05rem;
+    font-weight: 800;
+  }
+  .feedback-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+  .fact-tile {
+    background: var(--panel-sub);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+  }
+  .fact-tile h5 {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--accent-teal);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .fact-tile p {
+    font-size: 0.83rem;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .law-tag {
+    display: inline-block;
+    background: rgba(180, 142, 173, 0.15);
+    color: var(--purple);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-top: 0.3rem;
+  }
+
+  .next-action-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+  }
+  .btn-primary {
+    background: var(--accent-teal);
+    color: #0d1117;
+    border: 0;
+    padding: 0.7rem 1.4rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover {
+    background: #73b3c5;
+    transform: translateY(-1px);
+  }
+
+  /* 최종 리포트 카드 */
+  .report-screen {
+    display: none;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 2rem;
+    grid-column: 1 / -1;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .report-screen.active {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+  }
+  .report-badge-banner {
+    text-align: center;
+    padding: 1.8rem 1rem;
+    background: linear-gradient(135deg, rgba(94, 129, 172, 0.2), rgba(136, 192, 208, 0.1));
+    border-radius: 16px;
+    border: 1px solid rgba(136, 192, 208, 0.25);
+    margin-bottom: 1.8rem;
+  }
+  .report-badge-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+  .report-badge-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent-teal);
+    margin-bottom: 0.3rem;
+  }
+  .report-summary-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+  }
+  .stat-card {
+    background: var(--panel-sub);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .stat-card .val {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--mint);
+  }
+  .stat-card .lbl {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    margin-top: 0.2rem;
+  }
+
+  .pledge-box {
+    background: rgba(163, 190, 140, 0.1);
+    border: 1px dashed var(--mint);
+    border-radius: 14px;
+    padding: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+  .pledge-box h4 {
+    font-size: 1rem;
+    color: var(--mint);
+    margin-bottom: 0.6rem;
+  }
+  .pledge-box ul {
+    padding-left: 1.2rem;
+    font-size: 0.88rem;
+    line-height: 1.8;
+  }
+
+  /* 모달 레이어 */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-box {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 1.8rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0.8rem;
+  }
+  .modal-head h3 { font-size: 1.15rem; font-weight: 700; }
+  .close-btn {
+    background: transparent; border: 0; color: var(--ink-muted); font-size: 1.4rem; cursor: pointer;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  @media (max-width: 960px) {
+    main.app-shell {
+      grid-template-columns: 1fr;
+    }
+    .phone-frame {
+      position: relative;
+      top: 0;
+      height: 540px;
+    }
+    .feedback-grid {
+      grid-template-columns: 1fr;
+    }
+    .report-summary-stats {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="top-nav">
+  <div class="brand">
+    <span>🛡️ 단톡방 업스탠더 시뮬레이터</span>
+    <span class="tag">중학생 실습용</span>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-sub" onclick="openModal('modalCheat')">📖 4D 화법 치트시트</button>
+    <button class="btn-sub" onclick="openModal('modalPattern')">🔍 5대 패턴표</button>
+    <a href="compare.html" class="btn-sub" style="text-decoration:none;">통합 뷰어로 ↗</a>
+  </div>
+</header>
+
+<div class="progress-strip">
+  <span id="scenarioIndicator">시나리오 1 / 4: 게임 파티 단톡방</span>
+  <div class="steps-dots">
+    <span class="step-pill active" id="dot1">1. 게임 밈</span>
+    <span class="step-pill" id="dot2">2. 사회적 참사</span>
+    <span class="step-pill" id="dot3">3. 지역 차별</span>
+    <span class="step-pill" id="dot4">4. 성별·합성 밈</span>
+  </div>
+</div>
+
+<main class="app-shell" id="mainContainer">
+  <!-- 좌측 스마트폰 메신저 -->
+  <div class="phone-frame">
+    <div class="phone-header">
+      <div class="chat-title-group">
+        <h3 id="roomTitle">반 배틀그라운드 팟 <span class="members-count">(5)</span></h3>
+        <span class="scenario-tag" id="roomSub">게임 단톡방 상황</span>
+      </div>
+      <div style="font-size:0.8rem; color:var(--ink-muted);">● 온라인</div>
+    </div>
+
+    <div class="chat-body" id="chatStream">
+      <div class="date-divider"><span>오늘</span></div>
+      <!-- 메시지들이 자바스크립트로 렌더링됩니다 -->
+    </div>
+
+    <div class="typing-indicator" id="typingBar">
+      <span id="typingUser">친구</span>님이 입력 중
+      <div class="typing-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 우측 컨트롤 및 상황 설명 영역 -->
+  <div class="control-panel" id="controlPanel">
+    <div class="situation-card">
+      <div class="badge-row">
+        <span class="badge-warn" id="sitBadge">⚠️ 상황 발생</span>
+        <span style="font-size:0.75rem; color:var(--ink-muted);" id="sitTarget">표적: 고인 조롱 및 사투리 오용</span>
+      </div>
+      <h2 id="sitTitle">게임 도중 혐오 표현이 쏟아지는 순간</h2>
+      <p id="sitDesc">단톡방에서 친구들이 게임 패배를 핑계로 고인 모독 밈과 일베식 어투를 아무렇지 않게 쓰고 있습니다. 당신은 단톡방의 참여자입니다. 어떻게 반응하시겠습니까?</p>
+    </div>
+
+    <!-- 4D 선택지 카드 -->
+    <div class="decision-zone" id="decisionZone">
+      <h3>👉 당신의 선택 (Action)</h3>
+      <p class="instruction">이 상황을 방관하지 않고 올바르게 대처할 수 있는 방법을 골라보세요.</p>
+      
+      <div class="choices-grid" id="choicesList">
+        <!-- 버튼 렌더링 -->
+      </div>
+    </div>
+
+    <!-- 피드백 분석 결과 박스 (선택 후 등장) -->
+    <div class="feedback-box" id="feedbackBox">
+      <div class="feedback-header">
+        <h4 id="fbTitle">분석 결과: 직접 개입 (Direct)</h4>
+        <span id="fbScoreTag" style="font-size:0.8rem; font-weight:700; color:var(--mint);">+업스탠더 지수 상승</span>
+      </div>
+
+      <p id="fbStory" style="font-size:0.88rem; line-height:1.6; color:var(--ink);"></p>
+
+      <div class="feedback-grid">
+        <div class="fact-tile">
+          <h5>🎯 실제 유래 팩트체크</h5>
+          <p id="fbOriginText">—</p>
+        </div>
+        <div class="fact-tile">
+          <h5>🔍 5대 작동 패턴 분석</h5>
+          <p id="fbPatternText">—</p>
+        </div>
+        <div class="fact-tile">
+          <h5>⚖️ 법적 책임 및 학교 규범</h5>
+          <p id="fbLawText">—</p>
+        </div>
+        <div class="fact-tile">
+          <h5>🗣️ 추천 대체 화법</h5>
+          <p id="fbAltText">—</p>
+        </div>
+      </div>
+
+      <div class="next-action-row">
+        <button class="btn-primary" id="btnNext" onclick="nextScenario()">다음 시나리오로 진행 ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 최종 리포트 화면 -->
+  <div class="report-screen" id="reportScreen">
+    <div class="report-badge-banner">
+      <div class="report-badge-icon" id="badgeIcon">🛡️</div>
+      <div class="report-badge-title" id="badgeTitle">교실을 지키는 용기 있는 업스탠더</div>
+      <p id="badgeDesc" style="color:var(--ink-muted); font-size:0.9rem; max-width:600px; margin:0 auto;">
+        단톡방에서 혐오 표현을 마주쳤을 때 침묵하지 않고 상황에 맞게 용기를 낸 당신 덕분에 교실의 언어 문화가 더 안전해졌습니다.
+      </p>
+    </div>
+
+    <div class="report-summary-stats">
+      <div class="stat-card">
+        <div class="val" id="statDirect">0회</div>
+        <div class="lbl">직접 개입 (Direct)</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="statDistract">0회</div>
+        <div class="lbl">화제 전환 (Distract)</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="statDelegate">0회</div>
+        <div class="lbl">도움 요청 (Delegate)</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="statDelay">0회</div>
+        <div class="lbl">사후 위로 (Delay)</div>
+      </div>
+    </div>
+
+    <div class="pledge-box">
+      <h4>📜 나의 교실 디지털 언어 실천 약속</h4>
+      <ul>
+        <li><strong>하나,</strong> 뜻을 모르는 인터넷 밈이나 신조어는 유행이라고 무작정 따라 쓰지 않는다.</li>
+        <li><strong>둘,</strong> 누군가의 비극적 죽음, 참사, 지역, 성별, 장애를 조롱거리로 삼는 말을 단호히 멈춘다.</li>
+        <li><strong>셋,</strong> 친구가 그런 말을 쓸 때 "그냥 장난인데 왜 그래?"라며 동조하거나 방관하지 않고, 안전하게 브레이크를 건다.</li>
+      </ul>
+    </div>
+
+    <div style="display:flex; justify-content:center; gap:1rem;">
+      <button class="btn-primary" onclick="restartSimulation()">처음부터 다시 실습하기</button>
+      <a href="compare.html" class="btn-sub" style="text-decoration:none; padding:0.7rem 1.4rem;">전체 가이드 비교 화면으로 이동</a>
+    </div>
+  </div>
+</main>
+
+<!-- 모달 1: 4D 화법 치트시트 -->
+<div class="modal-overlay" id="modalCheat">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>📖 업스탠더 4D 실전 화법 치트시트</h3>
+      <button class="close-btn" onclick="closeModal('modalCheat')">&times;</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:1rem; font-size:0.88rem; line-height:1.6;">
+      <div style="background:var(--panel-sub); padding:1rem; border-radius:10px; border-left:3px solid #81a1c1;">
+        <strong style="color:#81a1c1;">1. Direct (직접 개입)</strong> — 친한 친구에게 뜻을 알려줄 때
+        <p style="margin-top:0.3rem; color:var(--ink-muted);">"야, 그 말 게임 밈 아니라 고인(참사 피해자) 조롱하는 일베 은어야. 쓰지 말자."</p>
+      </div>
+      <div style="background:var(--panel-sub); padding:1rem; border-radius:10px; border-left:3px solid var(--mint);">
+        <strong style="color:var(--mint);">2. Distract (화제 전환)</strong> — 분위기가 험악해지는 것을 막고 흐름을 끊을 때
+        <p style="margin-top:0.3rem; color:var(--ink-muted);">"그런 억지 드립은 패스하자. 아까 하던 게임/수업 얘기 마저 해!"</p>
+      </div>
+      <div style="background:var(--panel-sub); padding:1rem; border-radius:10px; border-left:3px solid var(--purple);">
+        <strong style="color:var(--purple);">3. Delegate (도움 요청·위임)</strong> — 반복적이거나 특정 친구를 겨냥해 괴롭힐 때
+        <p style="margin-top:0.3rem; color:var(--ink-muted);">대화 화면 캡처 후 담임 선생님·Wee클래스에 비공개 상담 요청 또는 117 학교폭력 신고센터 접수.</p>
+      </div>
+      <div style="background:var(--panel-sub); padding:1rem; border-radius:10px; border-left:3px solid var(--warn);">
+        <strong style="color:var(--warn);">4. Delay (사후 지지)</strong> — 단톡방에서 상처받았을 친구를 따로 챙길 때
+        <p style="margin-top:0.3rem; color:var(--ink-muted);">개인 톡으로 "아까 단톡방에서 저런 말 나와서 기분 상했지? 나도 저 말 진짜 별로라고 생각해. 힘내."</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 모달 2: 5대 작동 패턴 분석표 -->
+<div class="modal-overlay" id="modalPattern">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>🔍 신조어 자가 판별 5대 작동 패턴</h3>
+      <button class="close-btn" onclick="closeModal('modalPattern')">&times;</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:1rem; font-size:0.86rem; line-height:1.6;">
+      <div style="background:var(--panel-sub); padding:0.9rem; border-radius:10px;">
+        <strong>1. 죽음·참사를 명절·놀이로 뒤집기 (중력절, 어묵절, 압력절, 통구이절)</strong>
+        <p style="color:var(--ink-muted);">누군가의 비극적 죽음이나 사회적 참사일을 '○○절', '○○데이'로 부르며 오락 도구로 소비하는가?</p>
+      </div>
+      <div style="background:var(--panel-sub); padding:0.9rem; border-radius:10px;">
+        <strong>2. 지역·사투리·신체 특징을 조롱 도구화 (~~노, 슨상님, 홍어, 틀딱)</strong>
+        <p style="color:var(--ink-muted);">특정 지역의 말투·음식이나 타인의 장애, 나이, 외모를 비하의 재료로 악용하는가?</p>
+      </div>
+      <div style="background:var(--panel-sub); padding:0.9rem; border-radius:10px;">
+        <strong>3. 역사·가치 어휘의 의미 뒤집기 (민주화=비추천, 앙망문, 폭동절)</strong>
+        <p style="color:var(--ink-muted);">민주화운동이나 소중한 헌법적 가치를 '파괴·비추천' 등 나쁜 뜻으로 강제 오염시키는가?</p>
+      </div>
+      <div style="background:var(--panel-sub); padding:0.9rem; border-radius:10px;">
+        <strong>4. 집단 정체성 비인격화 (~충, ~것, 좀비, 김치녀)</strong>
+        <p style="color:var(--ink-muted);">동료 시민이나 집단을 벌레(~충), 물건(~것), 짐승, 괴물로 취급해 인간성을 부정하는가?</p>
+      </div>
+      <div style="background:var(--panel-sub); padding:0.9rem; border-radius:10px;">
+        <strong>5. '농담·밈이었다'는 책임 회피 (운지, 게이야, 야민정음 악용)</strong>
+        <p style="color:var(--ink-muted);">'그냥 유행어인데 왜 예민하냐'며 책임을 회피하고 상대를 공격하는가?</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 시나리오 데이터 정의 (검증된 SSOT 기반)
+  const SCENARIOS = [
+    {
+      id: 1,
+      name: "게임 파티 단톡방",
+      roomTitle: "🎮 배틀그라운드 랭커 팟 (5)",
+      roomSub: "게임 중 혐오 밈 남발 상황",
+      sitBadge: "⚠️ 고인 모독 & 사투리 오용",
+      sitTarget: "표적: 고 노무현 전 대통령 서거 및 동남 방언",
+      sitTitle: "게임에서 패배하자 터져 나온 혐오 밈",
+      sitDesc: "주말 저녁 친구들과 게임을 하던 도중, 한 친구가 절벽에서 떨어져 사망하자 단톡방에 고인 모독 밈과 왜곡된 어투가 마구 올라옵니다.",
+      messages: [
+        { sender: "민준", text: "아 2층에서 낙하산 잘못 펴서 떨어짐 ㅠㅠ", toxic: false },
+        { sender: "준호", text: "아 ㅋㅋㅋ 야 민준이 방금 부엉이바위에서 운지했노 ㅋㅋㅋㅋㅋ", toxic: true },
+        { sender: "태식", text: "운지 점수 실화냐? 노무 못하노 이기야 ㅋㅋㅋ", toxic: true },
+        { sender: "민준", text: "아 진짜 창피하게 왜 그러냐...", toxic: false }
+      ],
+      choices: [
+        {
+          type: "Direct",
+          label: "직접 개입 (Direct)",
+          pillClass: "pill-direct",
+          text: "\"야 '운지', '~노' 게임 유행어 아니라 노무현 전 대통령 투신 서거 조롱하는 일베 은어잖아. 그런 말 쓰지 마.\"",
+          peerReaction: [
+            { sender: "나", text: "야 '운지', '~노' 게임 유행어 아니라 노무현 전 대통령 투신 서거 조롱하는 일베 은어잖아. 그런 말 쓰지 마.", me: true },
+            { sender: "준호", text: "어... 진짜? 스트리머가 쓰길래 그냥 게임 유행어인 줄 알았는데... 몰랐다 미안.", toxic: false },
+            { sender: "민준", text: "나도 들을 때마다 기분 별로였는데 고맙다.", toxic: false }
+          ],
+          score: "direct",
+          fbStory: "당신의 명확한 지적 덕분에 준호가 뜻도 모르고 쓰던 일베 밈을 인지하고 사과했습니다. 단톡방에 침묵이 깨지고 건강한 기준이 세워졌습니다.",
+          origin: "1990년대 '운지천' 음료 광고(절벽 낙하 장면)와 노무현 전 대통령의 투신 서거를 합성해 디시/일베에서 만든 악질 고인 모독 은어. 경상도 어법에 맞지 않는 억지 '~노' 결합.",
+          pattern: "패턴 1 (죽음을 오락으로 소비) + 패턴 5 (게임 밈으로 죄책감 희석).",
+          law: "고인에 대한 허위사실 명예훼손(형법 제308조), 단톡방 내 조롱성 발언은 학교폭력예방법 제2조 사이버폭력 사안 처리 가능.",
+          alt: "\"떨어졌다\", \"실패했다\", \"아깝다\" 등 정상적인 일상어로 충분히 감정을 표현할 수 있습니다."
+        },
+        {
+          type: "Distract",
+          label: "화제 전환 (Distract)",
+          pillClass: "pill-distract",
+          text: "\"그런 드립 패스하고 빨리 다음 판 준비나 눌러. 다음 판엔 내가 오더 내린다!\"",
+          peerReaction: [
+            { sender: "나", text: "그런 드립 패스하고 빨리 다음 판 준비나 눌러. 다음 판엔 내가 오더 내린다!", me: true },
+            { sender: "태식", text: "ㅇㅋㅇㅋ 준비 누름. 어디로 내릴 거?", toxic: false }
+          ],
+          score: "distract",
+          fbStory: "공격적인 혐오 밈의 분위기를 빠르게 끊고 게임 본래의 대화로 전환시켰습니다. 혐오 표현이 단톡방의 주류 문화로 굳어지는 것을 차단했습니다.",
+          origin: "'운지'는 생명 존엄성을 조롱하는 단어입니다. 유래를 모르는 학생들은 게임 실패를 뜻하는 가벼운 은어로 착각하기 쉽습니다.",
+          pattern: "패턴 5: '게임 드립'이라는 가면 뒤에 숨는 화법.",
+          law: "반복적인 고인 모독 표현 방치는 단톡방 구성원 전체에게 무감각증을 유발합니다.",
+          alt: "어색함을 피하면서 대화의 흐름을 건강한 주제로 돌리는 현명한 완충 화법입니다."
+        },
+        {
+          type: "Delegate",
+          label: "신고·위임 (Delegate)",
+          pillClass: "pill-delegate",
+          text: "\"단톡방에서 일베 고인 모독 말투 계속 쓰면 방 캡처해서 학폭 담당 선생님께 보여드릴 거야.\"",
+          peerReaction: [
+            { sender: "나", text: "단톡방에서 일베 고인 모독 말투 계속 쓰면 방 캡처해서 학폭 담당 선생님께 보여드릴 거야.", me: true },
+            { sender: "준호", text: "아 왜 갑자기 정색하고 그래... 알았어 지울게.", toxic: false }
+          ],
+          score: "delegate",
+          fbStory: "단호하게 학교 규범과 공식적 제재 가능성을 상기시켜 추가적인 일베 밈 사용을 즉각 멈추게 만들었습니다.",
+          origin: "일베식 노노체는 단순한 사투리가 아닌 반사회적 집단 은어입니다.",
+          pattern: "패턴 2 + 패턴 5.",
+          law: "학교폭력예방법 제2조에 따라 단체 채팅방에서의 언어폭력·사이버폭력은 학교폭력대책심의위원회에 회부될 수 있습니다.",
+          alt: "지속적인 혐오 발언에는 학교 생활지도 시스템과 담임교사의 개입이 필수적입니다."
+        },
+        {
+          type: "Bystander",
+          label: "방관 및 동조 (Bystander)",
+          pillClass: "pill-bystander",
+          text: "\"ㅋㅋㅋㅋㅋ 아 개웃기네\" (같이 웃으며 넘어간다)",
+          peerReaction: [
+            { sender: "나", text: "ㅋㅋㅋㅋㅋ 아 개웃기네", me: true },
+            { sender: "준호", text: "거봐 ㅈㄴ 웃기지? 쟤 오늘부터 운지 장인임 ㅋㅋㅋ", toxic: true },
+            { sender: "민준", text: "(단톡방에서 아무 말도 하지 않는다)", toxic: false }
+          ],
+          score: "bystander",
+          fbStory: "침묵과 동조는 혐오 발언자에게 '여기선 이런 말을 써도 되는구나'라는 확신을 줍니다. 상처받은 민준이는 단톡방에서 고립되었습니다.",
+          origin: "'운지'는 타인의 슬픈 죽음을 유희화한 패륜적 은어입니다.",
+          pattern: "패턴 5의 함정에 빠진 결과입니다.",
+          law: "방관 역시 침묵으로 동조하는 결과를 낳으며, 교실 내 '깨진 유리창'이 됩니다.",
+          alt: "침묵은 동의가 됩니다. 단 한 마디의 제지가 교실 문화를 지킵니다."
+        }
+      ]
+    },
+    {
+      id: 2,
+      name: "급식 및 점심시간 단톡방",
+      roomTitle: "🍱 3반 급식 소통방 (28)",
+      roomSub: "사회적 참사 희생자 모욕 상황",
+      sitBadge: "🚨 참사 희생자 비하",
+      sitTarget: "표적: 4·16 세월호 참사 및 10·29 이태원 참사 희생자",
+      sitTitle: "급식 메뉴 사진에 달린 잔혹한 조롱",
+      sitDesc: "오늘 급식으로 어묵국이 나오자, 한 학생이 급식 사진을 올리며 세월호 희생 학생들을 모욕하는 은어를 쓰고, 다른 학생이 이태원 참사 조롱 은어로 맞장구를 칩니다.",
+      messages: [
+        { sender: "지우", text: "오늘 점심 어묵국 나왔네 맛있겠다 ㅎㅎ", toxic: false },
+        { sender: "도현", text: "오 오늘 단원고 어묵 먹방 데이네? 어묵절 개꿀 ㅋㅋㅋ", toxic: true },
+        { sender: "성민", text: "ㄹㅇ 이태원 압력절 때 먹어야 제맛인데 ㅋㅋ", toxic: true }
+      ],
+      choices: [
+        {
+          type: "Direct",
+          label: "직접 개입 (Direct)",
+          pillClass: "pill-direct",
+          text: "\"도현아, 성민아. 어묵이랑 압력절은 세월호랑 이태원 참사로 돌아가신 분들 조롱하는 범죄 표현이야. 선 넘지 마.\"",
+          peerReaction: [
+            { sender: "나", text: "도현아, 성민아. 어묵이랑 압력절은 세월호랑 이태원 참사로 돌아가신 분들 조롱하는 범죄 표현이야. 선 넘지 마.", me: true },
+            { sender: "지우", text: "맞아... 학생들 목숨 잃은 사건인데 음식에 비유하는 거 진짜 아니야.", toxic: false },
+            { sender: "도현", text: "아... 그냥 인터넷에서 다들 쓰길래 드립친 건데... 지울게.", toxic: false }
+          ],
+          score: "direct",
+          fbStory: "참사 희생자를 향한 비인간적인 조롱에 즉각 단호한 경고를 보냈습니다. 다른 친구(지우)도 용기를 내어 연대했습니다.",
+          origin: "2015년 일베 회원이 단원고 교복을 입고 어묵을 먹는 사진을 올려 법원에서 모욕죄 실형(징역 4월)을 선고받은 실제 범죄 어휘. '압력절' 역시 이태원 참사 압사 희생자를 조롱하기 위해 만든 패륜어.",
+          pattern: "패턴 1 (참사를 명절로 뒤집기) + 패턴 4 (사람을 음식으로 비인격화).",
+          law: "실제 법원에서 형법 제311조 모욕죄로 징역 4월 실형 및 법정구속된 전례가 있는 명백한 불법 범죄 표현입니다.",
+          alt: "사회적 참사 희생자와 유가족의 고통을 존중하고, 참사일은 유희가 아닌 추모의 날로 기억해야 합니다."
+        },
+        {
+          type: "Delegate",
+          label: "신고·위임 (Delegate)",
+          pillClass: "pill-delegate",
+          text: "\"단톡방에 참사 희생자 모욕 글 올린 거 캡처해서 학급 회의 안건으로 올리고 담임 선생님께 말씀드릴게.\"",
+          peerReaction: [
+            { sender: "나", text: "단톡방에 참사 희생자 모욕 글 올린 거 캡처해서 학급 회의 안건으로 올리고 담임 선생님께 말씀드릴게.", me: true },
+            { sender: "도현", text: "야 미안해 바로 삭제했어! 선생님한텐 말하지 말아줘 ㅠㅠ", toxic: false }
+          ],
+          score: "delegate",
+          fbStory: "사안의 중대성을 일깨워 즉각 게시글을 자진 삭제하게 만들었습니다. 공적 제재 절차가 효과적으로 작동했습니다.",
+          origin: "세월호·이태원 참사 희생자를 모욕하는 행위는 단순 악플이 아니라 형사처벌 대상입니다.",
+          pattern: "패턴 1 + 패턴 4.",
+          law: "정보통신망법 제70조(명예훼손) 및 형법 제311조(모욕죄) 위반 소지가 매우 높습니다.",
+          alt: "학급 공동체의 규칙을 세우는 중요한 개입입니다."
+        },
+        {
+          type: "Delay",
+          label: "사후 지원 (Delay)",
+          pillClass: "pill-delay",
+          text: "(단톡방을 나온 뒤 지우에게 개인 톡으로 위로와 지지를 보낸다)",
+          peerReaction: [
+            { sender: "나", text: "(지우에게 1:1 메시지) 아까 도현이랑 성민이 말한 거 진짜 너무 심하다. 너 어묵국 올린 건데 당황했지?", me: true },
+            { sender: "지우", text: "응... 너무 놀라고 소름 돋았는데 네가 말 걸어줘서 고마워.", toxic: false }
+          ],
+          score: "delay",
+          fbStory: "혐오 표현으로 인해 불쾌감과 충격을 받았을 친구를 개인적으로 챙기며 안전한 연대감을 형성했습니다.",
+          origin: "혐오 표현은 듣는 사람에게도 심리적 외상과 고통을 줍니다.",
+          pattern: "참사 유가족이나 당사자 친구가 교실에 있을 때 2차 가해가 발생합니다.",
+          law: "피해 학생에 대한 보호와 심리적 지지는 학교폭력 예방의 핵심입니다.",
+          alt: "\"너 잘못 아니야\", \"나도 그 말 진짜 잘못됐다고 생각해\"라는 한 마디가 큰 힘이 됩니다."
+        },
+        {
+          type: "Bystander",
+          label: "방관 및 동조 (Bystander)",
+          pillClass: "pill-bystander",
+          text: "\"ㅋㅋㅋㅋ 오뎅탕 압력솥에 끓였노\" (드립에 맞장구친다)",
+          peerReaction: [
+            { sender: "나", text: "ㅋㅋㅋㅋ 오뎅탕 압력솥에 끓였노", me: true },
+            { sender: "성민", text: "ㅋㅋㅋㅋ 역시 배운 놈", toxic: true },
+            { sender: "지우", text: "(급식 사진을 조용히 삭제한다)", toxic: false }
+          ],
+          score: "bystander",
+          fbStory: "희생자 모욕에 맞장구를 치면서 단톡방은 순식간에 참사 피해자를 난도질하는 가해의 공간으로 변질되었습니다.",
+          origin: "어묵 모욕 사건은 실제 법정구속된 범죄입니다.",
+          pattern: "타인의 끔찍한 죽음을 장난으로 즐기는 반인륜적 태도가 굳어집니다.",
+          law: "공동으로 타인을 모욕하는 행위는 집단 사이버폭력 가해자가 될 수 있습니다.",
+          alt: "아무리 사소한 농담이라도 죽음과 참사를 건드리는 선을 넘어서는 안 됩니다."
+        }
+      ]
+    },
+    {
+      id: 3,
+      name: "체험학습 및 여행 계획 단톡방",
+      roomTitle: "🚄 전주·광주 수학여행 모둠 (6)",
+      roomSub: "지역 차별 및 5·18 왜곡 상황",
+      sitBadge: "🚨 지역 혐오 & 역사 왜곡",
+      sitTarget: "표적: 호남 지역민 및 5·18 민주화운동",
+      sitTitle: "지역 여행지 선정 중 등장한 비하 표현",
+      sitDesc: "수학여행 모둠 코스를 정하던 중 한 친구가 전라도 지역을 거론하자, 특정 수산물 비하어와 5·18 희생자 조롱 밈을 올립니다.",
+      messages: [
+        { sender: "예은", text: "우리 모둠 전주 한옥마을 갔다가 광주 비엔날레 가보는 거 어때?", toxic: false },
+        { sender: "현우", text: "아 전라도? 홍어 소굴을 왜 감? 라도것들 동네 냄새남 ㅋㅋㅋ", toxic: true },
+        { sender: "진수", text: "거기 가면 관짝에 홍어 택배 착불로 실려오는 거 아님? ㅋㅋㅋ", toxic: true }
+      ],
+      choices: [
+        {
+          type: "Direct",
+          label: "직접 개입 (Direct)",
+          pillClass: "pill-direct",
+          text: "\"현우야, 진수야. '홍어'랑 '택배' 엮는 거 5·18 희생자들 조롱하다 대법원에서 유죄 판결받은 범죄 밈이야. 지역 차별하지 마.\"",
+          peerReaction: [
+            { sender: "나", text: "현우야, 진수야. '홍어'랑 '택배' 엮는 거 5·18 희생자들 조롱하다 대법원에서 유죄 판결받은 범죄 밈이야. 지역 차별하지 마.", me: true },
+            { sender: "예은", text: "맞아 우리 반에도 고향이 전라도인 친구들 있는데 그런 말 들으면 얼마나 상처받겠어.", toxic: false },
+            { sender: "현우", text: "아... 판결까지 난 건 줄은 몰랐네. 미안.", toxic: false }
+          ],
+          score: "direct",
+          fbStory: "대법원 판결 사실과 교실 내 동료 학생의 인권을 구체적으로 들어 지역 차별 발언을 즉각 저지했습니다.",
+          origin: "2013년 일베 회원이 5·18 희생자 관을 붙잡고 오열하는 어머니 사진에 택배 송장을 합성해 대법원에서 모욕죄(징역 6월, 집행유예 1년) 유죄가 확정된 실제 사건.",
+          pattern: "패턴 2 (지역·음식 비하) + 패턴 4 (사람을 물건/음식으로 격하).",
+          law: "국가인권위원회법 제2조제3호(출신 지역 차별 금지) 및 5·18민주화운동특별법 제8조(허위사실 유포 처벌).",
+          alt: "모든 지역은 고유한 역사와 문화를 지닌 소중한 삶의 터전입니다. 출신 지역에 대한 차별은 민주 시민의 자질에 어긋납니다."
+        },
+        {
+          type: "Distract",
+          label: "화제 전환 (Distract)",
+          pillClass: "pill-distract",
+          text: "\"그런 편견 섞인 말은 치우고, 전주 한옥마을 먹거리랑 광주 코스 볼거리 진짜 많아. 계획표 보자.\"",
+          peerReaction: [
+            { sender: "나", text: "그런 편견 섞인 말은 치우고, 전주 한옥마을 먹거리랑 광주 코스 볼거리 진짜 많아. 계획표 보자.", me: true },
+            { sender: "예은", text: "응! 경기전이랑 초코파이 체험도 있대 링크 보낼게.", toxic: false }
+          ],
+          score: "distract",
+          fbStory: "근거 없는 지역 혐오를 배격하고 수학여행의 긍정적 목표와 탐색으로 모둠원들의 시선을 이끌었습니다.",
+          origin: "'라도것', '전라디언'은 낡은 지역감정을 부추겨 특정 지역을 배제하려는 일베의 멸칭입니다.",
+          pattern: "패턴 4: 집단 비인격화.",
+          law: "지역 혐오는 공동체의 신뢰를 파괴하는 명백한 차별 행위입니다.",
+          alt: "풍부한 역사와 문화를 직접 경험하는 수학여행의 본질을 상기시키는 화법입니다."
+        },
+        {
+          type: "Bystander",
+          label: "방관 및 동조 (Bystander)",
+          pillClass: "pill-bystander",
+          text: "(그냥 조용히 읽고 아무 말도 하지 않는다)",
+          peerReaction: [
+            { sender: "나", text: "(읽음)", me: true },
+            { sender: "현우", text: "거봐 다들 전라도는 거르고 싶어하잖아 딴 데 가자", toxic: true },
+            { sender: "예은", text: "...알았어 그럼 다른 데 알아볼게.", toxic: false }
+          ],
+          score: "bystander",
+          fbStory: "침묵하자 지역 혐오 발언자가 모둠 전체의 의견인 양 몰아가며 왜곡된 결정을 내리게 되었습니다.",
+          origin: "5·18 왜곡과 호남 비하는 온라인에서 시작되어 오프라인의 인간관계까지 오염시킵니다.",
+          pattern: "방관이 편견을 정당화하는 순간입니다.",
+          law: "교실 내 침묵이 지속되면 차별당하는 소수자 학생은 침묵 속에 고립됩니다.",
+          alt: "단 한 사람이 \"그건 좀 아니지 않냐\"라고만 해도 편견의 확산을 멈출 수 있습니다."
+        }
+      ]
+    },
+    {
+      id: 4,
+      name: "학급 뒷담화 단톡방",
+      roomTitle: "👥 비밀 단톡방 (4)",
+      roomSub: "성별 비하 및 딥페이크·합성 밈 공유",
+      sitBadge: "🚨 성별 혐오 & 사이버폭력",
+      sitTarget: "표적: 여학생 및 AI 음성·얼굴 합성 밈",
+      sitTitle: "여학생 비하와 고인 합성 음원 공유",
+      sitDesc: "수행평가 조별 과제 불만을 이야기하던 중, 여학생들을 '김치녀', '삼일한'이라 부르며 고인 음성 합성 밈(MC무현) 영상을 올립니다.",
+      messages: [
+        { sender: "철수", text: "아 오늘 우리 조 여자애들 발표 자료 늦게 줌 개짜증남", toxic: false },
+        { sender: "영호", text: "ㄹㅇ 김치녀들 종특임 삼일한 마렵다 ㅋㅋㅋ", toxic: true },
+        { sender: "동진", text: "이거나 봐라 ㅋㅋㅋ MC무현 신곡 딥페이크 합성 개찰짐", toxic: true }
+      ],
+      choices: [
+        {
+          type: "Direct",
+          label: "직접 개입 (Direct)",
+          pillClass: "pill-direct",
+          text: "\"영호야 '삼일한'은 가정폭력 미화하는 범죄 용어야. 그리고 동진아 타인 얼굴·음성 합성해서 유포하는 거 학폭법상 사이버폭력인 거 몰라?\"",
+          peerReaction: [
+            { sender: "나", text: "영호야 '삼일한'은 가정폭력 미화하는 범죄 용어야. 그리고 동진아 타인 얼굴·음성 합성해서 유포하는 거 학폭법상 사이버폭력인 거 몰라?", me: true },
+            { sender: "철수", text: "어... 나도 조별과제 때문에 화났던 건데 그렇게 심한 단어까지 쓰는 건 좀 아닌 것 같다.", toxic: false },
+            { sender: "영호", text: "아 미안 홧김에 막 썼네 영상 지울게.", toxic: false }
+          ],
+          score: "direct",
+          fbStory: "성차별적 폭력 언어와 딥페이크·합성 음원의 법적 위험성을 명확히 짚어 가해 행동을 즉각 중단시켰습니다.",
+          origin: "'삼일한(여자는 3일에 한 번 때려야 한다)'은 일베의 대표적인 여성 혐오 및 폭력 선동어. 'MC무현'은 고인의 음성을 강제 합성해 조롱하는 딥페이크형 사이버폭력의 원조.",
+          pattern: "패턴 4 (성별 비인격화) + 패턴 5 (합성 기술을 악용한 놀이화).",
+          law: "학교폭력예방법 제2조제1호의3(인공지능 기술 등을 이용한 음성·영상 합성물 제작·반포 사이버폭력) 및 양성평등기본법 제3조제1호 위반.",
+          alt: "조별과제 문제는 구체적인 역할 분담과 소통으로 해결해야 하며, 성별 전체를 일반화해 폭력 용어를 쓰는 것은 정당화될 수 없습니다."
+        },
+        {
+          type: "Delegate",
+          label: "신고·위임 (Delegate)",
+          pillClass: "pill-delegate",
+          text: "\"딥페이크 영상이랑 폭력적인 말 쓴 거 다 남았어. 지우지 않으면 생활안전부 선생님께 캡처본 제출할 거야.\"",
+          peerReaction: [
+            { sender: "나", text: "딥페이크 영상이랑 폭력적인 말 쓴 거 다 남았어. 지우지 않으면 생활안전부 선생님께 캡처본 제출할 거야.", me: true },
+            { sender: "동진", text: "삭제했어 삭제했어! 진짜 장난이었어 미안해.", toxic: false }
+          ],
+          score: "delegate",
+          fbStory: "디지털 성범죄와 사이버폭력에 대한 엄정한 책임을 상기시켜 불법 합성물의 추가 확산을 원천 차단했습니다.",
+          origin: "타인의 음성과 얼굴을 무단 합성해 조롱하는 행위는 장난이 아닌 중대한 범죄입니다.",
+          pattern: "패턴 5: 사이버 폭력의 유희화.",
+          law: "최근 개정된 학교폭력예방법은 AI 딥페이크 및 음성 합성물 제작·유포를 심각한 사이버폭력으로 규정해 엄벌합니다.",
+          alt: "디지털 공간에서의 증거 확보와 학교폭력 전담기구 연계는 2차 피해를 막는 가장 안전한 방패입니다."
+        },
+        {
+          type: "Bystander",
+          label: "방관 및 동조 (Bystander)",
+          pillClass: "pill-bystander",
+          text: "\"영상 다운받아야지 ㅋㅋㅋ\" (합성 영상을 저장하고 웃는다)",
+          peerReaction: [
+            { sender: "나", text: "영상 다운받아야지 ㅋㅋㅋ", me: true },
+            { sender: "동진", text: "딴 애들 방에도 뿌려야겠음 ㅋㅋㅋ", toxic: true }
+          ],
+          score: "bystander",
+          fbStory: "동조 반응에 힘입은 친구가 불법 합성 음원을 다른 학급 단톡방으로까지 유포하여 피해가 걷잡을 수 없이 커졌습니다.",
+          origin: "MC무현 등 고인 음성 합성물은 인간 존엄을 파괴하는 사이버 테러입니다.",
+          pattern: "유포 동조로 인한 피해 확산.",
+          law: "불법 합성물을 다운로드하고 공유하는 행위 역시 사이버폭력 공범이 될 수 있습니다.",
+          alt: "불법 합성물은 소비하지도, 저장하지도, 전달하지도 않는 것이 디지털 시민의 기본 의무입니다."
+        }
+      ]
+    }
+  ];
+
+  let currentIdx = 0;
+  let userStats = { direct: 0, distract: 0, delegate: 0, delay: 0, bystander: 0 };
+
+  function renderScenario(idx) {
+    const s = SCENARIOS[idx];
+    document.getElementById('scenarioIndicator').textContent = `시나리오 ${idx + 1} / ${SCENARIOS.length}: ${s.name}`;
+    document.getElementById('roomTitle').innerHTML = `${s.roomTitle} <span class="members-count">(참여)</span>`;
+    document.getElementById('roomSub').textContent = s.roomSub;
+
+    document.getElementById('sitBadge').textContent = s.sitBadge;
+    document.getElementById('sitTarget').textContent = s.sitTarget;
+    document.getElementById('sitTitle').textContent = s.sitTitle;
+    document.getElementById('sitDesc').textContent = s.sitDesc;
+
+    // 점 갱신
+    for (let i = 1; i <= 4; i++) {
+      const dot = document.getElementById(`dot${i}`);
+      dot.className = 'step-pill';
+      if (i < idx + 1) dot.className = 'step-pill done';
+      else if (i === idx + 1) dot.className = 'step-pill active';
+    }
+
+    // 채팅창 렌더링
+    const chatStream = document.getElementById('chatStream');
+    chatStream.innerHTML = '<div class="date-divider"><span>오늘</span></div>';
+
+    // 순차 메시지 등장
+    s.messages.forEach((m, mIdx) => {
+      const bubble = document.createElement('div');
+      bubble.className = `chat-bubble other ${m.toxic ? 'toxic' : ''}`;
+      bubble.innerHTML = `
+        <div class="avatar">${m.sender[0]}</div>
+        <div class="bubble-content">
+          <span class="bubble-sender">${m.sender}</span>
+          <div class="bubble-text">${m.text}</div>
+        </div>
+      `;
+      chatStream.appendChild(bubble);
+    });
+
+    chatStream.scrollTop = chatStream.scrollHeight;
+
+    // 선택지 렌더링
+    const choicesList = document.getElementById('choicesList');
+    choicesList.innerHTML = '';
+    s.choices.forEach((c, cIdx) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.innerHTML = `
+        <span class="choice-type-pill ${c.pillClass}">${c.label}</span>
+        <span class="choice-text">${c.text}</span>
+      `;
+      btn.onclick = () => selectChoice(idx, cIdx);
+      choicesList.appendChild(btn);
+    });
+
+    // 피드백 박스 숨김
+    document.getElementById('feedbackBox').classList.remove('active');
+    document.getElementById('decisionZone').style.display = 'block';
+  }
+
+  function selectChoice(sIdx, cIdx) {
+    const s = SCENARIOS[sIdx];
+    const c = s.choices[cIdx];
+
+    // 점수 누적
+    if (userStats[c.score] !== undefined) userStats[c.score]++;
+
+    // 채팅창에 내 발언 및 후속 친구 반응 추가
+    const chatStream = document.getElementById('chatStream');
+    c.peerReaction.forEach(pr => {
+      const b = document.createElement('div');
+      b.className = `chat-bubble ${pr.me ? 'me' : 'other'} ${pr.toxic ? 'toxic' : ''}`;
+      if (pr.me) {
+        b.innerHTML = `
+          <div class="bubble-content">
+            <span class="bubble-sender" style="text-align:right;">나</span>
+            <div class="bubble-text">${pr.text}</div>
+          </div>
+        `;
+      } else {
+        b.innerHTML = `
+          <div class="avatar">${pr.sender[0]}</div>
+          <div class="bubble-content">
+            <span class="bubble-sender">${pr.sender}</span>
+            <div class="bubble-text">${pr.text}</div>
+          </div>
+        `;
+      }
+      chatStream.appendChild(b);
+    });
+
+    chatStream.scrollTop = chatStream.scrollHeight;
+
+    // 선택지 영역 숨기고 피드백 박스 노출
+    document.getElementById('decisionZone').style.display = 'none';
+    const fbBox = document.getElementById('feedbackBox');
+    fbBox.classList.add('active');
+
+    document.getElementById('fbTitle').textContent = `선택 결과: ${c.label}`;
+    document.getElementById('fbScoreTag').textContent = c.score === 'bystander' ? '⚠️ 방관 위험 경고' : '✨ 훌륭한 업스탠더 실천';
+    document.getElementById('fbScoreTag').style.color = c.score === 'bystander' ? 'var(--danger)' : 'var(--mint)';
+    document.getElementById('fbStory').textContent = c.fbStory;
+
+    document.getElementById('fbOriginText').textContent = c.origin;
+    document.getElementById('fbPatternText').textContent = c.pattern;
+    document.getElementById('fbLawText').textContent = c.law;
+    document.getElementById('fbAltText').textContent = c.alt;
+
+    const btnNext = document.getElementById('btnNext');
+    if (sIdx === SCENARIOS.length - 1) {
+      btnNext.textContent = "최종 업스탠더 결과 확인하기 🏆";
+    } else {
+      btnNext.textContent = "다음 시나리오로 진행 ➔";
+    }
+  }
+
+  function nextScenario() {
+    currentIdx++;
+    if (currentIdx < SCENARIOS.length) {
+      renderScenario(currentIdx);
+    } else {
+      showFinalReport();
+    }
+  }
+
+  function showFinalReport() {
+    document.querySelector('.phone-frame').style.display = 'none';
+    document.getElementById('controlPanel').style.display = 'none';
+    const rep = document.getElementById('reportScreen');
+    rep.classList.add('active');
+
+    document.getElementById('statDirect').textContent = userStats.direct + '회';
+    document.getElementById('statDistract').textContent = userStats.distract + '회';
+    document.getElementById('statDelegate').textContent = userStats.delegate + '회';
+    document.getElementById('statDelay').textContent = userStats.delay + '회';
+
+    const bIcon = document.getElementById('badgeIcon');
+    const bTitle = document.getElementById('badgeTitle');
+    const bDesc = document.getElementById('badgeDesc');
+
+    if (userStats.bystander >= 2) {
+      bIcon.textContent = "⚠️";
+      bTitle.textContent = "방관의 무게를 성찰하는 디딤돌";
+      bDesc.textContent = "단톡방에서 '나 하나 침묵한다고 달라질까?' 생각했던 순간들이 혐오의 불씨를 키웠습니다. 이제 침묵을 깨고 한 걸음 더 나아갈 수 있습니다.";
+    } else if (userStats.direct >= 2) {
+      bIcon.textContent = "🛡️";
+      bTitle.textContent = "정의로운 교실 수호자 (Guardian)";
+      bDesc.textContent = "혐오 표현에 주저하지 않고 단호한 사실과 법적 책임을 제시해 친구들을 일깨운 최고의 업스탠더입니다!";
+    } else {
+      bIcon.textContent = "🤝";
+      bTitle.textContent = "지혜로운 분위기 메이커 (Peacemaker)";
+      bDesc.textContent = "상황에 맞춰 화제를 전환하고 상처받은 친구를 따뜻하게 챙기는 균형 잡힌 4D 전략을 실천했습니다.";
+    }
+  }
+
+  function restartSimulation() {
+    currentIdx = 0;
+    userStats = { direct: 0, distract: 0, delegate: 0, delay: 0, bystander: 0 };
+    document.querySelector('.phone-frame').style.display = 'flex';
+    document.getElementById('controlPanel').style.display = 'flex';
+    document.getElementById('reportScreen').classList.remove('active');
+    renderScenario(0);
+  }
+
+  function openModal(id) {
+    document.getElementById(id).classList.add('active');
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+  }
+
+  // 초기 실행
+  renderScenario(0);
+</script>
+</body>
+</html>
