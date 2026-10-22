@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>학부모용 가정통신문 & 온라인 혐오언어 자녀 대화 가이드</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --paper: #ffffff;
+      --line: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #64748b;
+      --brand: #0284c7;
+      --brand-soft: #e0f2fe;
+      --danger: #dc2626;
+      --danger-soft: #fef2f2;
+      --success: #16a34a;
+      --success-soft: #f0fdf4;
+      --amber: #d97706;
+      --amber-soft: #fffbeb;
+      --font: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* 상단 네비 & 액션 바 */
+    .top-action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .badge-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+    }
+    .btn-print {
+      background: #0f172a;
+      color: #ffffff;
+      border: 0;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.15s;
+    }
+    .btn-print:hover { background: #334155; }
+
+    /* 메인 문서 카드 (가정통신문 규격 종이 느낌) */
+    .letter-paper {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      padding: 2.5rem 2.25rem;
+      margin-bottom: 2rem;
+    }
+
+    /* 공문 헤더 */
+    .letter-header {
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.75rem;
+      text-align: center;
+    }
+    .letter-header .doc-num {
+      text-align: right;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+    .letter-header h1 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+      color: #0f172a;
+    }
+    .letter-header .target-txt {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* 본문 섹션 */
+    .letter-intro {
+      font-size: 0.95rem;
+      color: #334155;
+      margin-bottom: 1.75rem;
+      word-break: keep-all;
+      background: #f8fafc;
+      padding: 1.25rem;
+      border-radius: 8px;
+      border-left: 4px solid var(--brand);
+    }
+    .letter-intro p { margin-bottom: 0.6rem; }
+    .letter-intro p:last-child { margin-bottom: 0; }
+
+    .sec-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid var(--brand);
+      padding-left: 0.6rem;
+    }
+
+    /* 3단계 대화 모델 */
+    .dialogue-steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .step-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1.25rem;
+      background: #ffffff;
+      transition: all 0.2s;
+    }
+    .step-card:hover { border-color: var(--brand); }
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+    .step-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-header h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .step-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .speech-box {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+    }
+    .speech-box strong { color: var(--brand); }
+    .speech-box.warning {
+      background: var(--danger-soft);
+      border-left: 3px solid var(--danger);
+      color: #991b1b;
+    }
+    .speech-box.good {
+      background: var(--success-soft);
+      border-left: 3px solid var(--success);
+      color: #166534;
+    }
+
+    /* 자녀가 자주 쓰는 위험 은어 6선 표 */
+    .terms-table-wrap {
+      overflow-x: auto;
+      margin-bottom: 2rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    table.terms-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    table.terms-table th, table.terms-table td {
+      padding: 0.75rem 0.9rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    table.terms-table th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    table.terms-table tr:last-child td { border-bottom: 0; }
+    .term-badge-tag {
+      font-weight: 700;
+      color: var(--danger);
+      background: var(--danger-soft);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.2rem;
+    }
+
+    /* 법적 책임 및 학교폭력 규정 안내 */
+    .legal-alert-box {
+      background: var(--danger-soft);
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .legal-alert-box h4 {
+      color: var(--danger);
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .legal-alert-box ul {
+      margin-left: 1.2rem;
+      font-size: 0.85rem;
+      color: #7f1d1d;
+      line-height: 1.6;
+    }
+
+    /* 학교 및 전문기관 상담 창구 안내 */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .contact-card {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+    }
+    .contact-card h5 {
+      font-size: 0.85rem;
+      color: #0f172a;
+      margin-bottom: 0.25rem;
+      font-weight: 700;
+    }
+    .contact-card .num {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--brand);
+    }
+    .contact-card .note {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    /* 가정 연계 약속 서명란 */
+    .pledge-box {
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem;
+      background: #fcfcfd;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .pledge-box h4 {
+      font-size: 1rem;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+    }
+    .pledge-box p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+    .sign-row {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    /* 인쇄 최적화 print CSS */
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .top-action-bar { display: none; }
+      .letter-paper { border: 0; box-shadow: none; padding: 0; }
+      .letter-header h1 { font-size: 1.5rem; }
+      .step-card { page-break-inside: avoid; }
+      .terms-table-wrap { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 상단 액션 바 -->
+  <div class="top-action-bar">
+    <div class="badge-bar">👨‍👩‍👧‍👦 학교-가정 연계 인성·디지털 시민성 지도 자료</div>
+    <button class="btn-print" onclick="window.print()">🖨️ 가정통신문 인쇄하기</button>
+  </div>
+
+  <!-- 공문/가정통신문 본체 -->
+  <main class="letter-paper">
+    <div class="letter-header">
+      <div class="doc-num">제 2026 - 디지털생활-01호</div>
+      <h1>[가정통신문] 청소년 온라인 혐오·차별 은어 실태 및 가정 내 대화 가이드</h1>
+      <div class="target-txt">학부모님 가정에 건강과 평안이 가득하기를 기원합니다.</div>
+    </div>
+
+    <div class="letter-intro">
+      <p>최근 청소년들이 즐겨 이용하는 온라인 게임, 유튜브 숏폼, SNS(인스타그램·틱톡), 반 단톡방 등에서 <strong>극우 커뮤니티(일베 등)에서 유래한 고인 모독, 참사 희생자 조롱, 지역·성별 비하 은어</strong>가 단순한 '유행어'나 '놀이 밈'으로 위장하여 급속도로 유포되고 있습니다.</p>
+      <p>한국지능정보사회진흥원(NIA) 사이버폭력 실태조사에 따르면, 청소년의 약 70% 이상이 <strong>"단순한 장난이나 유행이라서", "뜻도 모르고 친구들이 쓰니까"</strong> 이러한 혐오 표현을 무심코 모방하고 있는 것으로 나타났습니다.</p>
+      <p>뜻을 모르고 썼더라도 이는 피해 당사자에게 씻을 수 없는 상처를 남기며, 법적으로는 <strong>모욕죄·명예훼손죄 형사처벌 및 학교폭력예방법에 따른 중대 징계 조치</strong> 대상이 될 수 있습니다. 이에 가정에서 자녀와 따뜻하고 효과적으로 대화할 수 있는 3단계 가이드를 안내해 드립니다.</p>
+    </div>
+
+    <!-- 섹션 1: 가정 내 3단계 대화 가이드 -->
+    <h3 class="sec-title">1. 자녀가 혐오 은어를 썼을 때 — 감정적 다그침 대신 3단계 대화법</h3>
+    <div class="dialogue-steps">
+      <!-- 1단계 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-badge">1</div>
+          <h4>1단계: 뜻과 출처 물어보기 (비난 대신 경청)</h4>
+        </div>
+        <p class="step-desc">자녀가 무심코 '운지', '어묵', '~노' 등을 썼을 때 즉시 "너 어디서 그런 나쁜 말을 써!"라며 혼내면 자녀는 방어적으로 숨기거나 반발합니다. 먼저 의미를 알고 있는지 차분히 물어보세요.</p>
+        <div class="speech-box warning">
+          ❌ <strong>잘못된 대화:</strong> "너 방금 뭐라고 했어? 어디서 그런 버릇없는 일베 말투를 배워와?"
+        </div>
+        <div class="speech-box good">
+          ⭕ <strong>추천 대화:</strong> "방금 쓴 그 말, 엄마/아빠는 처음 들어보는데 무슨 뜻이야? 친구들이나 게임에서 자주 써?"
+        </div>
+      </div>
+
+      <!-- 2단계 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-badge">2</div>
+          <h4>2단계: 진짜 유래와 피해자 알려주기 (사실 직시)</h4>
+        </div>
+        <p class="step-desc">자녀가 "그냥 게임에서 망했을 때 쓰는 유행어인데?"라고 답하면, 그 단어가 사실은 누군가의 비극적인 죽음이나 아픔을 조롱하기 위해 만들어진 말임을 차분한 사실로 알려줍니다.</p>
+        <div class="speech-box good">
+          ⭕ <strong>추천 대화:</strong> "그랬구나, 너는 게임에서 져서 쓴 거였네. 그런데 그 말은 사실 전직 대통령이나 세월호·이태원 참사에서 억울하게 목숨을 잃은 사람들을 비웃으려고 일베라는 사이트에서 만든 끔찍한 말이란다. 법원에서도 실형 처벌을 받았어. 만약 우리 가족이 그런 일을 겪었는데 남들이 그렇게 놀리면 기분이 어떨까?"
+        </div>
+      </div>
+
+      <!-- 3단계 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-badge">3</div>
+          <h4>3단계: 힙하고 바른 대체어 약속하기 (대안 제시)</h4>
+        </div>
+        <p class="step-desc">말을 못 쓰게만 막으면 대화가 단절됩니다. 자녀의 감정(아쉬움, 분노, 재미)을 있는 그대로 인정해주되, 타인을 해치지 않는 멋지고 바른 일상어로 바꿔 부르도록 대안을 함께 정합니다.</p>
+        <div class="speech-box good">
+          ⭕ <strong>추천 대화:</strong> "성적이 떨어지거나 게임이 잘 안 풀려서 속상했던 거지? 그럴 때는 '아 망했다', '점수 떡락했네'처럼 솔직하게 표현해도 충분히 멋져. 앞으로는 우리 가족끼리도, 친구들 단톡방에서도 고인을 아프게 하는 말 대신 건강한 말을 써보기로 약속하자."
+        </div>
+      </div>
+    </div>
+
+    <!-- 섹션 2: 청소년 다빈도 위험 은어 6선 표 -->
+    <h3 class="sec-title">2. 자녀들이 자주 쓰는 인터넷 위험 밈 6선 팩트체크</h3>
+    <div class="terms-table-wrap">
+      <table class="terms-table">
+        <thead>
+          <tr>
+            <th style="width: 18%;">자녀가 쓰는 말</th>
+            <th style="width: 22%;">자녀가 아는 뜻</th>
+            <th style="width: 38%;">숨겨진 진짜 유래 및 법적 문제</th>
+            <th style="width: 22%;">권장 대체 표현</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span class="term-badge-tag">운지 / 운지절</span><br>
+              "점수 운지했다"
+            </td>
+            <td>떨어졌다, 망했다, 게임에서 낙하했다</td>
+            <td>광동제약 '운지천' TV 광고(절벽 점프)와 노무현 전 대통령의 투신 서거를 악의적으로 합성한 고인 모독 은어 (형법 제308조)</td>
+            <td>망했다, 떨어졌다, 실패했다</td>
+          </tr>
+          <tr>
+            <td>
+              <span class="term-badge-tag">어묵 / 오뎅</span><br>
+              "어묵 먹었다"
+            </td>
+            <td>단순 간식 어묵, 별생각 없음</td>
+            <td>세월호 참사 바닷속 희생 학생들을 어묵에 빗대어 모욕한 범죄 표현. <strong>수원지방법원에서 모욕죄로 징역 4월 실형 선고 및 법정구속 확정</strong></td>
+            <td>절대 사용 금지<br>(실형 선고 범죄 표현)</td>
+          </tr>
+          <tr>
+            <td>
+              <span class="term-badge-tag">압력절</span><br>
+              "10월 29일 압력절"
+            </td>
+            <td>압력, 축제 명절 드립</td>
+            <td>10·29 이태원 참사 희생자들의 비극적 압사(壓死) 사망 원인을 명절처럼 조롱하는 2차 가해 표현 (정보통신망법 제70조)</td>
+            <td>10·29 참사 추모일<br>(사용 금지)</td>
+          </tr>
+          <tr>
+            <td>
+              <span class="term-badge-tag">일베식 노노체</span><br>
+              "밥 맛있노 이기야"
+            </td>
+            <td>경상도 사투리, 유튜브 유행어</td>
+            <td>실제 사투리 문법을 파괴하고 고 노무현 전 대통령을 상시 조롱하기 위해 평서문·감탄문에 억지로 어미를 결합한 인위적 은어</td>
+            <td>~네, ~구나, ~야, 완전 맛있다</td>
+          </tr>
+          <tr>
+            <td>
+              <span class="term-badge-tag">민주화 (ㅁㅈㅎ)</span><br>
+              "저 글 민주화시키자"
+            </td>
+            <td>비추천, 망가뜨림, 제재</td>
+            <td>대한민국 헌법의 핵심 가치이자 민주화운동을 폄훼하기 위해 일베 비추천 버튼 이름으로 사용하며 뜻을 부정적으로 뒤집음</td>
+            <td>비추천, 반대, 제재하자</td>
+          </tr>
+          <tr>
+            <td>
+              <span class="term-badge-tag">삼일한 / 김치녀</span><br>
+              "삼일한 해야 됨"
+            </td>
+            <td>재미있는 남녀 갈등 밈</td>
+            <td>'여성은 3일에 한 번 때려야 한다'는 여성 폭력 옹호와 특정 성별 비하. 성희롱 및 학교폭력예방법 위반 사안</td>
+            <td>차별·폭력 표현으로<br>즉시 사용 중단</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 섹션 3: 법적 책임 및 학교폭력 사안 안내 -->
+    <h3 class="sec-title">3. 학부모님께서 꼭 유의하셔야 할 법적 책임 안내</h3>
+    <div class="legal-alert-box">
+      <h4>🚨 "장난삼아 썼다"는 변명은 법적으로 통하지 않습니다</h4>
+      <ul>
+        <li><strong>형사처벌 대상:</strong> 온라인에서 타인을 모욕하거나 거짓 사실로 명예를 훼손하면 「형법」 제311조(모욕죄) 및 「정보통신망법」 제70조에 따라 실형이나 벌금형에 처해집니다. 만 14세 이상 청소년은 형사처벌 대상이며, 만 10~14세 미만 촉법소년도 가정법원 소년부로 송치되어 소년원 송치 등 보호처분을 받습니다.</li>
+        <li><strong>학교폭력 사안 처리:</strong> 학급 단톡방이나 SNS 댓글에서 친구의 외모, 지역, 가족을 비하하거나 고인 모독 은어로 조롱하는 행위는 「학교폭력예방법」 제2조 사이버폭력·모욕에 해당하여 학교폭력대책심의위원회(학폭위) 회부 및 생활기록부 기재 조치가 이루어집니다.</li>
+        <li><strong>피해 학생 보호:</strong> 교실이나 단톡방에서 이러한 혐오 표현의 표적이 된 학생은 심각한 우울증과 등교 거부, 외상후 스트레스 장애를 겪습니다. 타인의 인권을 존중하는 교육이 최선의 예방책입니다.</li>
+      </ul>
+    </div>
+
+    <!-- 섹션 4: 전문 상담 창구 -->
+    <h3 class="sec-title">4. 교내 및 전문기관 상담 창구</h3>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h5>학교 Wee클래스 / 상담실</h5>
+        <div class="num">교내 직통</div>
+        <div class="note">자녀의 언어 습관 및 교우관계 비공개 상담</div>
+      </div>
+      <div class="contact-card">
+        <h5>학교폭력 신고센터</h5>
+        <div class="num">국번없이 117</div>
+        <div class="note">24시간 학교폭력·사이버괴롭힘 긴급 상담</div>
+      </div>
+      <div class="contact-card">
+        <h5>청소년 사이버상담센터</h5>
+        <div class="num">국번없이 1388</div>
+        <div class="note">청소년 심리·위기 문자 및 전화 상담</div>
+      </div>
+      <div class="contact-card">
+        <h5>방송통신심의위원회</h5>
+        <div class="num">국번없이 1377</div>
+        <div class="note">온라인 불법·유해·혐오정보 삭제 요청</div>
+      </div>
+    </div>
+
+    <!-- 가정 내 실천 약속란 -->
+    <div class="pledge-box">
+      <h4>🌱 우리 가족 디지털 안전 언어 실천 약속</h4>
+      <p>"우리 가족은 누군가의 비극과 아픔을 비웃는 말을 단톡방이나 대화에서 쓰지 않으며, 친구의 인격을 존중하는 바른 언어로 소통하겠습니다."</p>
+      <div class="sign-row">
+        <span>학생 서명: ____________________</span>
+        <span>학부모 서명: ____________________</span>
+      </div>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

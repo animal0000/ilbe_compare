@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5대 혐오 패턴 판별 퀴즈 & 실시간 대체어 사전 (중학생용)</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #121826;
+      --card-border: #1f293d;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.15);
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-glow: rgba(245, 158, 11, 0.15);
+      --purple: #a855f7;
+      --radius: 14px;
+      --font: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem 1rem 3rem;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* 상단 헤더 */
+    header.main-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-top: 1rem;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    header h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    header p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      word-break: keep-all;
+    }
+
+    /* 탭 네비게이션 */
+    .nav-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      background: #0f172a;
+      padding: 0.375rem;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      margin-bottom: 2rem;
+    }
+    .tab-btn {
+      background: transparent;
+      border: 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.75rem 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      color: #04101e;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+    }
+
+    /* 탭 컨텐츠 래퍼 */
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========================================================= */
+    /* 1. 퀴즈 모드 스타일 */
+    /* ========================================================= */
+    .quiz-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .quiz-progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #1e293b;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .quiz-meta {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .quiz-score-badge {
+      font-size: 0.8rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-weight: 600;
+    }
+
+    .scenario-box {
+      background: #0b111e;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    .scenario-box .quote {
+      color: #38bdf8;
+      font-weight: 700;
+      font-size: 1.05rem;
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+    .scenario-box .ctx {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .quiz-question {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--text-main);
+      word-break: keep-all;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+      margin-bottom: 1.5rem;
+    }
+    .opt-btn {
+      background: #182234;
+      border: 1px solid #28354d;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      color: var(--text-main);
+      font-size: 0.925rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      transition: all 0.15s ease;
+      line-height: 1.5;
+    }
+    .opt-btn:hover:not(:disabled) {
+      background: #202d44;
+      border-color: var(--accent);
+      transform: translateX(4px);
+    }
+    .opt-btn .opt-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #2b3952;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .opt-btn.correct {
+      background: rgba(16, 185, 129, 0.18) !important;
+      border-color: var(--success) !important;
+      color: #6ee7b7 !important;
+    }
+    .opt-btn.correct .opt-num {
+      background: var(--success);
+      color: #04101e;
+    }
+    .opt-btn.wrong {
+      background: rgba(239, 68, 68, 0.18) !important;
+      border-color: var(--danger) !important;
+      color: #fca5a5 !important;
+    }
+    .opt-btn.wrong .opt-num {
+      background: var(--danger);
+      color: #ffffff;
+    }
+
+    /* 정답/오답 해설 패널 */
+    .explanation-panel {
+      display: none;
+      background: #0c1424;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 0.25s ease;
+    }
+    .explanation-panel.active { display: block; }
+    .exp-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+    .exp-title.correct { color: var(--success); }
+    .exp-title.wrong { color: var(--danger); }
+    
+    .exp-block {
+      margin-bottom: 0.75rem;
+      font-size: 0.875rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    .exp-block strong { color: #f8fafc; }
+    .exp-pill {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      margin-right: 0.35rem;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+    }
+    .exp-alt-box {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 3px solid var(--success);
+      padding: 0.6rem 0.8rem;
+      border-radius: 4px;
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      color: #a7f3d0;
+    }
+
+    .quiz-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .btn-next {
+      background: var(--accent);
+      color: #04101e;
+      border: 0;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: none;
+    }
+    .btn-next:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    /* 퀴즈 결과 화면 */
+    .result-card {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 2.25rem 1.75rem;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .result-icon { font-size: 3.5rem; margin-bottom: 0.75rem; }
+    .result-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .result-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; word-break: keep-all; }
+    .result-score-box {
+      display: inline-flex;
+      flex-direction: column;
+      background: #0f172a;
+      border: 2px solid var(--accent);
+      padding: 1rem 2.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.75rem;
+    }
+    .result-score-box .score-val {
+      font-size: 2.75rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .result-score-box .score-label {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+    .pattern-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    .pat-tile {
+      background: #0b111e;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.85rem;
+      font-size: 0.8rem;
+    }
+    .pat-tile h5 {
+      color: var(--accent);
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+    }
+    .pat-tile p { color: var(--text-muted); line-height: 1.4; }
+    .btn-restart {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: var(--text-main);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-restart:hover { background: #334155; }
+
+    /* ========================================================= */
+    /* 2. 대체어 사전 모드 스타일 */
+    /* ========================================================= */
+    .dict-search-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .search-input {
+      flex: 1;
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .tag-chip {
+      background: #182234;
+      border: 1px solid #28354d;
+      color: var(--text-muted);
+      font-size: 0.775rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .tag-chip:hover { color: var(--text-main); background: #223049; }
+    .tag-chip.active {
+      background: var(--accent);
+      color: #04101e;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    .term-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .term-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      transition: all 0.2s ease;
+    }
+    .term-card:hover {
+      border-color: #334155;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+    .term-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .term-name-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .term-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #f8fafc;
+      letter-spacing: -0.01em;
+    }
+    .pill-pat {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: rgba(168, 85, 247, 0.18);
+      color: #d8b4fe;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+    .pill-cat {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: #1e293b;
+      color: var(--text-muted);
+    }
+    .term-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+      font-size: 0.875rem;
+      color: #cbd5e1;
+      line-height: 1.55;
+    }
+    .detail-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .detail-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .detail-val.origin { color: #fca5a5; }
+    .detail-val.critique { color: #cbd5e1; }
+    .detail-val.alt {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      color: #a7f3d0;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .btn-copy-alt {
+      background: #064e3b;
+      border: 0;
+      color: #6ee7b7;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-copy-alt:hover { background: #047857; color: #ffffff; }
+
+    .upstander-line-box {
+      background: #0b111e;
+      border-left: 3px solid var(--purple);
+      border-radius: 0 6px 6px 0;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.825rem;
+      color: #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .upstander-line-box span { flex: 1; }
+    .btn-copy-line {
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      color: #d8b4fe;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-copy-line:hover { background: var(--purple); color: #ffffff; }
+
+    /* ========================================================= */
+    /* 3. 신조어 자가 진단 5문 체크리스트 모드 */
+    /* ========================================================= */
+    .checklist-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .check-intro {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    .check-list-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 2rem;
+    }
+    .check-item {
+      background: #182234;
+      border: 1px solid #28354d;
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .check-item:hover {
+      background: #1f2b42;
+      border-color: #3b4d6e;
+    }
+    .check-item.checked {
+      background: rgba(239, 68, 68, 0.12);
+      border-color: var(--danger);
+    }
+    .check-box-visual {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.15s;
+    }
+    .check-item.checked .check-box-visual {
+      background: var(--danger);
+      border-color: var(--danger);
+      color: #ffffff;
+    }
+    .check-content h4 {
+      font-size: 0.975rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: #f1f5f9;
+    }
+    .check-content p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .check-result-box {
+      background: #0b111e;
+      border: 2px dashed #334155;
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .check-result-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 0.35rem;
+    }
+    .check-result-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    /* 토스트 팝업 */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--accent);
+      color: var(--text-main);
+      padding: 0.65rem 1.25rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* 반응형 모바일 */
+    @media (max-width: 640px) {
+      body { padding: 1rem 0.75rem 2rem; }
+      header h1 { font-size: 1.5rem; }
+      .nav-tabs { grid-template-columns: 1fr; }
+      .quiz-card { padding: 1.25rem; }
+      .quiz-question { font-size: 1.05rem; }
+      .opt-btn { font-size: 0.875rem; padding: 0.8rem; }
+      .term-card { padding: 1rem 1.15rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 메인 헤더 -->
+  <header class="main-header">
+    <div class="badge-pill">🛡️ 중학생 디지털 시민성 실습 도구</div>
+    <h1>5대 혐오 패턴 판별 퀴즈 & 대체어 사전</h1>
+    <p class="subtitle">뜻도 모르고 유행처럼 썼던 온라인 밈, 진짜 유래와 작동 패턴을 꿰뚫고 건강한 내 언어로 바꿉니다.</p>
+  </header>
+
+  <!-- 탭 메뉴 -->
+  <nav class="nav-tabs">
+    <button class="tab-btn active" data-tab="quiz">🎯 패턴 판별 퀴즈</button>
+    <button class="tab-btn" data-tab="dict">📖 대체어 팩트체크 사전</button>
+    <button class="tab-btn" data-tab="check">🔍 신조어 5문 체크리스트</button>
+  </nav>
+
+  <!-- ========================================================= -->
+  <!-- TAB 1: 패턴 판별 퀴즈 -->
+  <!-- ========================================================= -->
+  <section id="tab-quiz" class="tab-pane active">
+    <!-- 퀴즈 진행 카드 -->
+    <div class="quiz-card" id="quizActiveCard">
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quizProgress"></div>
+      </div>
+      
+      <div class="quiz-header">
+        <span class="quiz-meta" id="quizQuestionNum">Question 1 / 8</span>
+        <span class="quiz-score-badge" id="quizLiveScore">점수: 0점</span>
+      </div>
+
+      <!-- 상황 제시 박스 -->
+      <div class="scenario-box">
+        <span class="quote" id="quizQuote">"야 이번 시험 점수 운지했다 ㅋㅋㅋ"</span>
+        <span class="ctx" id="quizContext">반 친구가 게임 단톡방에서 시험 성적이 떨어진 상황을 표현하며 쓴 말입니다.</span>
+      </div>
+
+      <!-- 질문 -->
+      <h3 class="quiz-question" id="quizQuestionText">이 표현이 심각한 혐오 언어로 비판받고 처벌 대상이 되는 핵심 이유는 무엇일까요?</h3>
+
+      <!-- 4지선다 보기 -->
+      <div class="quiz-options" id="quizOptionsList">
+        <!-- JS로 주입 -->
+      </div>
+
+      <!-- 정답 해설 패널 -->
+      <div class="explanation-panel" id="quizExpPanel">
+        <div class="exp-title" id="quizExpTitle">
+          <span id="quizExpIcon">✅</span> <span id="quizExpStatus">정답입니다!</span>
+        </div>
+        <div class="exp-block" id="quizExpFact">
+          <span class="exp-pill">진짜 유래</span> <strong>광동제약 운지천 광고와 노무현 전 대통령의 투신 서거</strong>를 악의적으로 합성한 고인 조롱 은어입니다.
+        </div>
+        <div class="exp-block" id="quizExpLaw">
+          <span class="exp-pill">법적 책임</span> 공연히 사자의 명예를 훼손하면 <strong>「형법」 제308조</strong> 및 학교폭력예방법상 언어폭력에 해당합니다.
+        </div>
+        <div class="exp-alt-box" id="quizExpAlt">
+          💡 <strong>대체 추천:</strong> "시험 망쳤다", "점수 떨어졌다", "탈락했다"로 충분히 감정을 표현할 수 있습니다.
+        </div>
+      </div>
+
+      <!-- 다음 버튼 -->
+      <div class="quiz-actions">
+        <button class="btn-next" id="btnNextQuestion">다음 문제 ➜</button>
+      </div>
+    </div>
+
+    <!-- 퀴즈 완료 결과 카드 -->
+    <div class="result-card" id="quizResultCard">
+      <div class="result-icon" id="resIcon">🏆</div>
+      <h2 class="result-title" id="resTitle">디지털 리터러시 진단 완료!</h2>
+      <p class="result-desc" id="resDesc">인터넷 밈 속에 교묘히 숨겨진 5대 혐오 패턴을 훌륭하게 분별해 냈습니다.</p>
+      
+      <div class="result-score-box">
+        <span class="score-val" id="resScore">80점</span>
+        <span class="score-label">디지털 시민성 점수 (8문항 중 7개 정답)</span>
+      </div>
+
+      <h4 style="text-align: left; margin-bottom: 0.75rem; font-size: 0.95rem; color: #f8fafc;">🛡️ 5대 혐오 작동 패턴 종합 분석</h4>
+      <div class="pattern-summary-grid">
+        <div class="pat-tile">
+          <h5>패턴 1. 참사·죽음의 놀이화</h5>
+          <p>중력절, 어묵, 통구이, 압력절 등 비극적 죽음을 명절·음식으로 뒤집어 소비하는 가장 위험한 패턴</p>
+        </div>
+        <div class="pat-tile">
+          <h5>패턴 2. 지역·방언 왜곡</h5>
+          <p>경상도 사투리 문법을 파괴한 일베식 노노체(~노/이기야), 호남 특산물(홍어) 멸칭화</p>
+        </div>
+        <div class="pat-tile">
+          <h5>패턴 3. 역사·단어 의미 뒤집기</h5>
+          <p>민주화(ㅁㅈㅎ), 앙망문 등 숭고한 역사와 정상 어휘를 비하·조롱 의미로 오염시키는 수법</p>
+        </div>
+        <div class="pat-tile">
+          <h5>패턴 4. 집단 정체성 사물화</h5>
+          <p>~충(벌레), 삼일한, 김치녀 등 특정 성별·세대를 사물·벌레로 격하해 인격을 지우는 폭력</p>
+        </div>
+      </div>
+
+      <button class="btn-restart" id="btnRestartQuiz">🔄 퀴즈 다시 풀기</button>
+    </div>
+  </section>
+
+  <!-- ========================================================= -->
+  <!-- TAB 2: 대체어 팩트체크 사전 -->
+  <!-- ========================================================= -->
+  <section id="tab-dict" class="tab-pane">
+    <!-- 검색 및 필터 태그 -->
+    <div class="dict-search-bar">
+      <input type="text" class="search-input" id="dictSearch" placeholder="궁금한 용어나 밈을 검색해보세요 (예: 운지, 어묵, 노노체, 앙망, 홍어...)" />
+    </div>
+    
+    <div class="filter-tags" id="dictFilterTags">
+      <button class="tag-chip active" data-cat="all">전체보기</button>
+      <button class="tag-chip" data-cat="disaster">참사·고인 조롱</button>
+      <button class="tag-chip" data-cat="history">역사·지역 비하</button>
+      <button class="tag-chip" data-cat="mimic">일상 은어·밈 위장</button>
+      <button class="tag-chip" data-cat="gender">성별·소수자 혐오</button>
+    </div>
+
+    <!-- 용어 카드 리스트 -->
+    <div class="term-cards-grid" id="dictList">
+      <!-- JS 동적 주입 -->
+    </div>
+  </section>
+
+  <!-- ========================================================= -->
+  <!-- TAB 3: 신조어 5문 체크리스트 -->
+  <!-- ========================================================= -->
+  <section id="tab-check" class="tab-pane">
+    <div class="checklist-card">
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; color: #f8fafc;">
+        🔍 새로운 밈 자가 판별 5대 질문 (Checklist)
+      </h3>
+      <p class="check-intro">
+        유튜브 숏폼, 틱톡, 게임 채팅에서 처음 보는 신조어나 유행어가 떴을 때 아래 5가지 질문을 던져보세요. 
+        <strong>단 하나라도 해당한다면, 그것은 유행어가 아니라 누군가를 다치게 하는 혐오 언어</strong>입니다.
+      </p>
+
+      <div class="check-list-items" id="checklistContainer">
+        <!-- 1번 질문 -->
+        <div class="check-item" data-index="1">
+          <div class="check-box-visual">✓</div>
+          <div class="check-content">
+            <h4>1. 누군가의 죽음, 자살, 대형 참사를 웃음거리나 놀이로 삼고 있는가?</h4>
+            <p>전직 대통령의 투신, 세월호·이태원·대구 지하철 참사 희생자들의 사망 원인을 음식이나 명절처럼 비유하는 경우입니다. (예: 운지, 어묵, 통구이, 압력절)</p>
+          </div>
+        </div>
+
+        <!-- 2번 질문 -->
+        <div class="check-item" data-index="2">
+          <div class="check-box-visual">✓</div>
+          <div class="check-content">
+            <h4>2. 특정 지역의 사투리나 향토 음식, 외모·장애를 비하의 재료로 삼는가?</h4>
+            <p>문법에도 안 맞는 억지 노노체(~노/이기야)로 사투리를 흉내 내거나, 호남을 '홍어'에 빗대고 신체 장애를 조롱거리로 쓰는 경우입니다.</p>
+          </div>
+        </div>
+
+        <!-- 3번 질문 -->
+        <div class="check-item" data-index="3">
+          <div class="check-box-visual">✓</div>
+          <div class="check-content">
+            <h4>3. 좋은 뜻의 단어나 역사적 사실을 정반대의 나쁜 뜻으로 뒤집어 쓰는가?</h4>
+            <p>대한민국 헌법의 핵심 가치인 '민주화'를 '망가뜨림/비추천'으로 쓰거나, 5·18을 '폭동'이라 왜곡하고 전두환 탱크 진압을 찬양하는 경우입니다. (예: 민주화, 탱크절, 앙망문)</p>
+          </div>
+        </div>
+
+        <!-- 4번 질문 -->
+        <div class="check-item" data-index="4">
+          <div class="check-box-visual">✓</div>
+          <div class="check-content">
+            <h4>4. 사람을 벌레(~충), 물건(~것), 음식으로 불러 인격을 지우고 있는가?</h4>
+            <p>특정 집단이나 친구를 대화 가능한 동등한 인간이 아니라 박멸해야 할 벌레나 가치 없는 사물로 취급하는 경우입니다. (예: 급식충, 유족충, 김치녀, 라도것)</p>
+          </div>
+        </div>
+
+        <!-- 5번 질문 -->
+        <div class="check-item" data-index="5">
+          <div class="check-box-visual">✓</div>
+          <div class="check-content">
+            <h4>5. 지적받았을 때 "그냥 장난·밈인데 왜 이렇게 진지해?"라며 책임을 넘기는가?</h4>
+            <p>야민정음이나 합성 음원, 게임 감탄사로 위장해 퍼뜨린 뒤 비판하는 사람을 '예민한 사람'으로 몰아붙여 고통을 지우려는 전형적인 회피 수법입니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 체크 결과 판정 박스 -->
+      <div class="check-result-box" id="checkVerdictBox">
+        <div class="check-result-title" id="checkVerdictTitle" style="color: var(--accent);">
+          🛡️ 체크박스를 눌러 직접 진단해보세요
+        </div>
+        <p class="check-result-desc" id="checkVerdictDesc">
+          인터넷에서 접한 의심스러운 표현을 떠올리며 해당되는 항목을 클릭해보세요.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 복사 안내 토스트 -->
+<div class="toast" id="toast">📋 클립보드에 복사되었습니다!</div>
+
+<script>
+  // =========================================================
+  // 1. 데이터 정의 (SSOT 기반)
+  // =========================================================
+  const QUIZ_DATA = [
+    {
+      id: 1,
+      quote: "\"야 이번 시험 점수 운지했다 ㅋㅋㅋ\"",
+      context: "반 친구가 게임 단톡방에서 시험 성적이 떨어진 상황을 표현하며 쓴 말입니다.",
+      question: "이 표현이 단순한 게임 유행어가 아니라 심각한 혐오 언어로 비판받는 핵심 이유는 무엇일까요?",
+      options: [
+        "광동제약 음료수 이름을 무단으로 도용하여 상표권을 침해했기 때문이다.",
+        "한글 맞춤법 규정상 '추락'을 나타내는 표준어가 아니기 때문이다.",
+        "고 노무현 전 대통령의 비극적 투신 서거를 절벽 광고에 악의적으로 합성해 조롱한 데서 유래했기 때문이다.",
+        "게임 캐릭터가 낙하하는 물리 엔진 오류를 비과학적으로 묘사했기 때문이다."
+      ],
+      answer: 2,
+      fact: "1990년대 초 최민식 배우의 '운지천' TV 광고(절벽을 뛰어내리는 장면)에 2009년 노무현 전 대통령의 투신 서거를 합성하여 고인을 조롱하기 위해 일베·디시에서 만든 은어입니다.",
+      law: "공연히 사망한 자의 명예를 훼손하는 것은 「형법」 제308조(사자의 명예훼손) 및 학교폭력예방법상 언어폭력 대상입니다.",
+      alt: "시험 망쳤다 / 점수 떡락했다 / 망했다"
+    },
+    {
+      id: 2,
+      quote: "\"단원고 교복 입고 어묵 들면서 '친구 먹었다'\"",
+      context: "2015년 일베 회원이 온라인에 올려 사회적 공분을 일으키고 법정 구속된 사건입니다.",
+      question: "이 사건에서 가해자들에게 선고된 실제 법원 판결과 적용된 혐오 패턴은 무엇일까요?",
+      options: [
+        "단순 장난으로 인정되어 훈방 조치 및 벌금 5만원이 선고되었다.",
+        "참사 희생자들의 비극적 죽음을 음식에 빗대어 모욕한 혐의로 징역 4월 실형이 선고되고 법정구속되었다.",
+        "식품위생법 위반으로 어묵 제조사에 1억원의 배상금을 지급하도록 판결했다.",
+        "단원고등학교 교복 무단 착용에 따른 경범죄처벌법만 적용되었다."
+      ],
+      answer: 1,
+      fact: "세월호 참사 바닷속 희생 학생들을 어묵에 빗대어 모욕한 일베 회원들에게 수원지방법원 안산지원은 형법 제311조(모욕죄)를 적용해 1·2심 모두 징역 4월 실형을 선고하고 법정구속했습니다.",
+      law: "생존 유가족과 피해자에 대한 악의적 모욕은 「형법」 제311조 및 「정보통신망법」 제70조 위반으로 실형 처벌됩니다.",
+      alt: "세월호 참사 희생자를 모욕하는 패륜적 범죄 표현이므로 절대 사용 금지"
+    },
+    {
+      id: 3,
+      quote: "\"오늘 급식 개맛있노 이기야\"",
+      context: "학교 쉬는 시간에 친구가 문장 끝마다 '~노'와 '이기야'를 붙이며 말하고 있습니다.",
+      question: "이 말투(일베식 노노체)에 대한 설명 중 가장 정확한 것은 무엇일까요?",
+      options: [
+        "전통 경상도 사투리의 자연스러운 표현이므로 아무 문제 없다.",
+        "실제 동남 방언 문법(의문문)을 파괴하고, 고 노무현 전 대통령을 상시 조롱하기 위해 인위적으로 합성한 혐오 은어이다.",
+        "조선시대 훈민정음 창제 당시부터 쓰이던 순우리말 감탄사이다.",
+        "최근 10대들이 Z세대 유행어로 독자 개발한 신조어이다."
+      ],
+      answer: 1,
+      fact: "실제 경상도 방언에서는 의문사가 있는 의문문('어디 가노?')에만 '~노'가 쓰이지만, 일베에서는 노무현 전 대통령의 성씨('노')를 조롱하려고 감탄문·평서문('맛있노')에 마구잡이로 붙이며 언어를 오염시켰습니다.",
+      law: "방언 화자들에게 억울한 오해를 부르고 특정 고인을 조롱하는 언어적 괴롭힘입니다.",
+      alt: "오늘 급식 진짜 맛있다 / 완전 맛도리네"
+    },
+    {
+      id: 4,
+      quote: "\"저 녀석 게임 트롤링하네, 민주화시켜버리자\"",
+      context: "게임 커뮤니티 게시판에서 마음에 들지 않는 유저의 글에 집단 비추천을 누르며 쓴 표현입니다.",
+      question: "일베에서 '민주화'라는 단어를 부정적인 의미로 오염시켜 사용하는 의도는 무엇일까요?",
+      options: [
+        "민주주의 제도의 장점을 널리 알리고 게임을 공정하게 운영하기 위해서",
+        "대한민국 민주화운동의 헌정사적 가치를 폄훼하고, 숭고한 가치 어휘를 '파괴·비추천'의 뜻으로 왜곡하기 위해서",
+        "외래어를 순화하여 우리말 사용을 장려하기 위해서",
+        "선거 투표율을 높이기 위한 온라인 청소년 캠페인의 일환으로"
+      ],
+      answer: 1,
+      fact: "5·18 등 독재에 맞서 싸운 민주화 역사를 '폭동·혼란'으로 비하하려는 극우 시각에서, 헌법의 핵심 가치인 '민주화'를 '망가뜨림/집단 린치'의 뜻으로 변질시켜 일베 비추천 버튼 이름으로 사용했습니다.",
+      law: "역사 왜곡 및 5·18특별법 제8조(허위사실 유포 금지) 입법 취지에 정면으로 반하는 행위입니다.",
+      alt: "비추천 누르자 / 신고하자 / 제재하자"
+    },
+    {
+      id: 5,
+      quote: "\"10월 29일을 압력절이라고 부르는 인터넷 글\"",
+      context: "SNS 숏폼 댓글에 10·29 이태원 참사일을 조롱하는 은어가 올라왔습니다.",
+      question: "이 은어가 따르고 있는 전형적인 일베식 조어 패턴은 무엇일까요?",
+      options: [
+        "물리학 공식의 기압 원리를 기리는 과학 퀴즈 패턴",
+        "대형 참사 희생자들의 비극적 압사 고통에 '~절(節)'을 붙여 축제 명절처럼 조롱하는 참사 유희화 패턴",
+        "외국 문화를 한국식 명절로 현지화하는 문화 교류 패턴",
+        "국가 재난 안전 시스템의 우수성을 칭찬하는 캠페인 패턴"
+      ],
+      answer: 1,
+      fact: "과거 '중력절'(투신 조롱), '어묵절'(익사 조롱), '통구이절'(화재 조롱)처럼 사망 원인에 명절을 뜻하는 '~절(節)'을 결합해 타인의 끔찍한 고통을 웃음거리로 소비하는 극악한 2차 가해 수법입니다.",
+      law: "참사 유가족과 생존자에 대한 정보통신망법 제70조 명예훼손 및 모욕죄에 해당합니다.",
+      alt: "10·29 이태원 참사 추모일"
+    },
+    {
+      id: 6,
+      quote: "\"5·18 희생자 관 붙잡고 우는 어머니 사진에 '택배 왔다, 착불이요' 합성\"",
+      context: "2013년 일베 게시판에 올라와 대법원 유죄 확정 판결을 받은 실제 사건입니다.",
+      question: "이 사건에 대해 대법원이 최종 확정한 죄명과 법적 판단은 무엇일까요?",
+      options: [
+        "표현의 자유 한도 내의 풍자이므로 무죄 판결을 내렸다.",
+        "유가족에 대한 모욕죄가 유죄로 인정되어 징역 6월에 집행유예 1년, 사회봉사가 최종 확정되었다.",
+        "사진 저작권 침해에 대해서만 벌금 10만원을 부과했다.",
+        "택배 회사에 대한 영업방해죄로만 처벌되었다."
+      ],
+      answer: 1,
+      fact: "대법원 1부(2015. 9. 20.)는 희생자의 관을 택배 상자에, 희생자와 유족을 홍어에 빗댄 일베 회원에게 유가족에 대한 모욕죄(형법 제311조) 유죄를 인정하고 징역 6월, 집행유예 1년을 최종 확정했습니다.",
+      law: "타인의 슬픔을 모욕하고 역사적 비극을 조롱하는 것은 형사처벌을 받는 중범죄입니다.",
+      alt: "대법원 유죄 확정 중범죄 표현으로 절대 사용 금지"
+    },
+    {
+      id: 7,
+      quote: "\"삼일한 / 김치녀 / 보슬아치\"",
+      context: "단톡방에서 여학생이나 특정 성별 전체를 비하하며 쓰이는 은어들입니다.",
+      question: "이 표현들에 숨겨진 혐오 메커니즘에 대한 설명으로 옳은 것은 무엇일까요?",
+      options: [
+        "남녀 간의 건전하고 평등한 대화를 촉진하기 위한 유머이다.",
+        "'여성은 3일에 한 번 때려야 한다'는 식의 물리적 폭력을 정당화하고, 특정 성별 집단을 사물·벌레로 격하하는 집단 혐오 표현이다.",
+        "전통 발효식품 김치의 우수성을 알리는 신조어이다.",
+        "여성 청소년의 경제 관념을 지도하기 위한 교육적 용어이다."
+      ],
+      answer: 1,
+      fact: "'삼일한'(여성은 3일에 한 번씩 패야 말을 듣는다), '김치녀', '보슬아치' 등은 여성을 동등한 인격체가 아닌 폭력과 멸시의 대상으로 낙인찍는 극단적 여성 혐오(Misogyny) 표현입니다.",
+      law: "국가인권위원회법 제2조제3호 차별행위이자 학교폭력예방법상 성희롱·언어폭력입니다.",
+      alt: "차별·폭력 조장 멸칭이므로 즉시 사용 중단 및 사용 금지"
+    },
+    {
+      id: 8,
+      quote: "\"선생님한테 걸렸는데 앙망문 쓰면 봐주냐?\"",
+      context: "학급에서 반성문이나 사과문을 작성해야 하는 상황에서 쓰인 말입니다.",
+      question: "'앙망문'이라는 은어의 실제 역사적 유래와 왜곡된 맥락은 무엇일까요?",
+      options: [
+        "'앙망'이라는 단어가 '문재인 전 대통령'과 합성된 말이다.",
+        "1982년 김대중 전 대통령이 신군부의 내란음모 조작으로 수형 생활 중 전두환에게 보낸 탄원서 문구를 비굴한 굴욕 밈으로 조롱한 데서 유래했다.",
+        "조선시대 신문고를 울릴 때 쓰던 공식 상소문 명칭이다.",
+        "고려가요에 등장하는 간절한 사랑 노래의 후렴구이다."
+      ],
+      answer: 1,
+      fact: "신군부의 사형 선고와 투옥 압박 속에서 제출된 1982년 김대중 전 대통령의 탄원서('선처를 앙망하옵니다')를 일베에서 '고소당했을 때 목숨 구걸하는 반성문'이라며 피해자를 조롱하기 위해 오염시킨 말입니다.",
+      law: "사자의 역사적 고난을 왜곡·조롱하고 인간적 모멸감을 주는 언어 오염입니다.",
+      alt: "사과문 / 반성문"
+    }
+  ];
+
+  const DICT_DATA = [
+    {
+      term: "운지 / 운지절",
+      cat: "disaster",
+      catLabel: "참사·고인 조롱",
+      pattern: "패턴 1 + 패턴 5",
+      origin: "1990년대 초 광동제약 '운지천' TV 광고(절벽 다이빙 장면)에 노무현 전 대통령 서거를 악의적으로 합성한 데서 유래 ('추락'의 의태어가 아님).",
+      critique: "비극적 죽음을 게임 캐릭터 낙하나 성적 하락 같은 일상 유행어로 소비해 생명 경시를 부르고 고인을 모독함.",
+      law: "형법 제308조(사자명예훼손), 학교폭력예방법",
+      alt: "떨어졌다 / 망했다 / 실패했다 / 탈락했다",
+      upstander: "그거 노무현 대통령 서거 조롱하는 일베 용어야. 그냥 '망했다'고 하자."
+    },
+    {
+      term: "어묵 / 오뎅 / 어묵절",
+      cat: "disaster",
+      catLabel: "참사·고인 조롱",
+      pattern: "패턴 1 (고통 사물화)",
+      origin: "세월호 참사 바닷속 희생 학생들을 어묵에 빗대어 모욕한 데서 유래. 2015년 일베 회원들이 단원고 교복 입고 어묵 사진 게시.",
+      critique: "수원지방법원 안산지원에서 모욕죄로 징역 4월 실형 선고 및 법정구속 확정된 명백한 범죄 표현.",
+      law: "형법 제311조(모욕), 정보통신망법 제70조",
+      alt: "절대 사용 금지 (실형 선고 범죄 표현)",
+      upstander: "야, 참사 희생자 모욕하는 패륜 표현이야. 그런 말 쓰지 마."
+    },
+    {
+      term: "압력절",
+      cat: "disaster",
+      catLabel: "참사·고인 조롱",
+      pattern: "패턴 1 (참사 유희화)",
+      origin: "10·29 이태원 참사 희생자들의 군중 밀집 압사(壓死) 비극을 '압력'과 '~절'을 결합해 명절처럼 조롱.",
+      critique: "중력절, 어묵절을 모방해 참사 피해자의 고통을 유흥거리로 삼고 유가족에게 극심한 2차 가해를 입힘.",
+      law: "정보통신망법 제70조, 형법 제311조",
+      alt: "10·29 이태원 참사 추모일",
+      upstander: "이태원 참사 희생자 놀리는 말이야. 선 넘지 말자."
+    },
+    {
+      term: "통구이 / 통구이절",
+      cat: "disaster",
+      catLabel: "참사·고인 조롱",
+      pattern: "패턴 1 + 패턴 4",
+      origin: "2003년 대구 지하철 화재 참사(192명 사망) 희생자들을 불에 탄 고기에 빗대어 조롱하고 참사일을 '절'이라 부름.",
+      critique: "화재로 무고하게 희생된 시민들의 고통과 시신을 음식에 비유해 모욕하는 반인륜적 범죄 은어.",
+      law: "형법 제308조, 형법 제311조",
+      alt: "대구 지하철 참사 추모일 (사용 금지)",
+      upstander: "대구 지하철 참사 피해자 모욕하는 말이야. 진짜 불쾌해."
+    },
+    {
+      term: "일베식 노노체 (~노 / 이기야)",
+      cat: "mimic",
+      catLabel: "일상 은어·밈 위장",
+      pattern: "패턴 2 + 패턴 5",
+      origin: "의문사가 있는 의문문에만 쓰이는 경상도 방언 문법을 깨고, 노무현 전 대통령의 성씨('노')를 조롱하려고 모든 문장에 억지 합성.",
+      critique: "지적하면 '사투리인데 왜 그러냐'며 발뺌하지만, 실제 방언 화자까지 오해받게 만드는 인위적 고인 조롱 어미.",
+      law: "학교폭력예방법상 언어폭력",
+      alt: "~네 / ~구나 / ~야 / 완전 맛있다",
+      upstander: "사투리 문법도 안 맞고 일베 말투야. 그냥 편하게 말해줘."
+    },
+    {
+      term: "민주화 (ㅁㅈㅎ)",
+      cat: "history",
+      catLabel: "역사·지역 비하",
+      pattern: "패턴 3 (의미 뒤집기)",
+      origin: "5·18 등 민주화 역사를 폄하하려는 극우 시각에서, 일베 내 '비추천' 버튼 이름으로 채택하여 '파괴·비추천'의 뜻으로 왜곡.",
+      critique: "시민들의 희생으로 이룬 대한민국 헌법의 핵심 가치를 파괴와 린치의 동의어로 각인시키는 악의적 언어 전술.",
+      law: "5·18민주화운동특별법 제8조",
+      alt: "비추천 / 반대 / 실패했다",
+      upstander: "민주화가 왜 나쁜 뜻이야? 그냥 '비추천'이라고 해."
+    },
+    {
+      term: "홍어 택배 / 홍어절",
+      cat: "history",
+      catLabel: "역사·지역 비하",
+      pattern: "패턴 1 + 패턴 2 + 패턴 4",
+      origin: "5·18 희생자 관을 붙잡고 우는 어머니 사진에 택배 송장을 합성 조롱(2013). 대법원에서 모욕죄 징역형 집행유예 확정.",
+      critique: "출신 지역을 음식물에 빗대고 국가폭력에 희생된 시민을 모욕한 대법원 유죄 확정 범죄 행위.",
+      law: "대법원 2015도14761 확정 판결, 형법 제311조, 5·18특별법",
+      alt: "5·18 민주화운동 희생자 / 호남 시민",
+      upstander: "그거 대법원에서 실형 유죄 나온 범죄 표현이야. 입에 담지 마."
+    },
+    {
+      term: "탱크절 / 땅크 / 전땅크",
+      cat: "history",
+      catLabel: "역사·지역 비하",
+      pattern: "패턴 3 (국가폭력 미화)",
+      origin: "5·18 당시 계엄군의 탱크 유혈 진압을 미화하고 전두환을 영웅시('전땅크')하며 5월 18일을 모욕.",
+      critique: "군사반란과 무고한 민간인 학살을 찬양하고 피해자를 모욕하는 반헌법적 역사 왜곡 표현.",
+      law: "5·18민주화운동특별법 제8조",
+      alt: "5·18 민주화운동 기념일",
+      upstander: "군대가 시민 학살한 거 찬양하는 말이야. 장난칠 대상이 아냐."
+    },
+    {
+      term: "앙망문 / 앙망",
+      cat: "history",
+      catLabel: "역사·지역 비하",
+      pattern: "패턴 3 (역사 왜곡)",
+      origin: "1982년 신군부 내란음모 조작으로 수형 중이던 김대중 전 대통령의 탄원서 문구를 '목숨 구걸 반성문'이라며 조롱.",
+      critique: "독재 정권의 사형 위협 속 고난을 겪은 역사적 인물을 비굴한 밈으로 희화화하는 역사 왜곡.",
+      law: "형법 제308조",
+      alt: "반성문 / 사과문 / 탄원서",
+      upstander: "그냥 '반성문'이나 '사과문'이라고 쓰면 돼."
+    },
+    {
+      term: "삼일한 / 김치녀",
+      cat: "gender",
+      catLabel: "성별·소수자 혐오",
+      pattern: "패턴 4 (집단 비인격화)",
+      origin: "'여자는 3일에 한 번 때려야 한다'는 여성 폭력 옹호와 한국 여성을 싸잡아 비하하는 일베 극단 멸칭.",
+      critique: "여성을 폭력과 조롱의 대상으로 격하해 성차별을 조장하고 교실 내 폭력을 유발함.",
+      law: "국가인권위원회법 제2조제3호, 학교폭력예방법",
+      alt: "차별·폭력 표현으로 사용 금지",
+      upstander: "그런 여성 혐오 표현 듣기 진짜 거북해. 쓰지 마."
+    },
+    {
+      term: "머통령",
+      cat: "mimic",
+      catLabel: "일상 은어·밈 위장",
+      pattern: "패턴 5 (야민정음 위장)",
+      origin: "디시인사이드 야민정음의 글자 유사성(대→머)에서 유래했으나 일베에서 대통령 비하 문맥으로 다용.",
+      critique: "글자 장난처럼 보이지만 고인 모독이나 국가 원수 격하 문맥과 결합해 조롱 효과를 배가함.",
+      law: "사용 맥락에 따라 모욕죄 성립 가능",
+      alt: "대통령",
+      upstander: "그냥 '대통령'이라고 바르게 부르자."
+    },
+    {
+      term: "게이 / 게이야",
+      cat: "gender",
+      catLabel: "성별·소수자 혐오",
+      pattern: "패턴 2 + 패턴 5",
+      origin: "'게시판 이용자'의 줄임말이라 변명하나, 실제로는 성소수자를 조롱·비하하는 놀림감으로 쓰며 정착.",
+      critique: "소수자의 성적 지향을 가벼운 자조적 별명으로 소비해 성소수자 차별에 무감각해지게 만듦.",
+      law: "국가인권위원회법 제2조제3호",
+      alt: "친구야 / 얘들아 / 님들",
+      upstander: "그냥 '친구야'나 '얘들아'라고 부르면 좋겠어."
+    }
+  ];
+
+  // =========================================================
+  // 2. 탭 전환 로직
+  // =========================================================
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabPanes.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const targetId = 'tab-' + btn.dataset.tab;
+      document.getElementById(targetId).classList.add('active');
+    });
+  });
+
+  // =========================================================
+  // 3. 퀴즈 엔진
+  // =========================================================
+  let currentQIdx = 0;
+  let score = 0;
+  let answered = false;
+
+  const quizActiveCard = document.getElementById('quizActiveCard');
+  const quizResultCard = document.getElementById('quizResultCard');
+  const quizProgress = document.getElementById('quizProgress');
+  const quizQuestionNum = document.getElementById('quizQuestionNum');
+  const quizLiveScore = document.getElementById('quizLiveScore');
+  const quizQuote = document.getElementById('quizQuote');
+  const quizContext = document.getElementById('quizContext');
+  const quizQuestionText = document.getElementById('quizQuestionText');
+  const quizOptionsList = document.getElementById('quizOptionsList');
+  const quizExpPanel = document.getElementById('quizExpPanel');
+  const quizExpTitle = document.getElementById('quizExpTitle');
+  const quizExpIcon = document.getElementById('quizExpIcon');
+  const quizExpStatus = document.getElementById('quizExpStatus');
+  const quizExpFact = document.getElementById('quizExpFact');
+  const quizExpLaw = document.getElementById('quizExpLaw');
+  const quizExpAlt = document.getElementById('quizExpAlt');
+  const btnNextQuestion = document.getElementById('btnNextQuestion');
+  const btnRestartQuiz = document.getElementById('btnRestartQuiz');
+
+  function loadQuestion(idx) {
+    answered = false;
+    const q = QUIZ_DATA[idx];
+    quizProgress.style.width = ((idx / QUIZ_DATA.length) * 100) + '%';
+    quizQuestionNum.textContent = `Question ${idx + 1} / ${QUIZ_DATA.length}`;
+    quizLiveScore.textContent = `점수: ${score}점`;
+
+    quizQuote.textContent = q.quote;
+    quizContext.textContent = q.context;
+    quizQuestionText.textContent = q.question;
+
+    quizExpPanel.classList.remove('active');
+    btnNextQuestion.style.display = 'none';
+
+    quizOptionsList.innerHTML = '';
+    q.options.forEach((optText, optIdx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.innerHTML = `
+        <span class="opt-num">${optIdx + 1}</span>
+        <span>${optText}</span>
+      `;
+      btn.addEventListener('click', () => handleAnswer(optIdx, btn));
+      quizOptionsList.appendChild(btn);
+    });
+  }
+
+  function handleAnswer(selectedIdx, selectedBtn) {
+    if (answered) return;
+    answered = true;
+
+    const q = QUIZ_DATA[currentQIdx];
+    const isCorrect = (selectedIdx === q.answer);
+    const allOptBtns = quizOptionsList.querySelectorAll('.opt-btn');
+
+    allOptBtns.forEach(b => b.disabled = true);
+
+    if (isCorrect) {
+      score += 10;
+      selectedBtn.classList.add('correct');
+      quizExpTitle.className = 'exp-title correct';
+      quizExpIcon.textContent = '🎉';
+      quizExpStatus.textContent = '정답입니다! 혐오 패턴을 정확히 꿰뚫었습니다.';
+    } else {
+      selectedBtn.classList.add('wrong');
+      allOptBtns[q.answer].classList.add('correct');
+      quizExpTitle.className = 'exp-title wrong';
+      quizExpIcon.textContent = '⚠️';
+      quizExpStatus.textContent = '오답입니다. 숨겨진 유래와 책임을 확인해보세요.';
+    }
+
+    quizLiveScore.textContent = `점수: ${score}점`;
+
+    quizExpFact.innerHTML = `<span class="exp-pill">진짜 유래</span> ${q.fact}`;
+    quizExpLaw.innerHTML = `<span class="exp-pill">법적 책임</span> ${q.law}`;
+    quizExpAlt.innerHTML = `💡 <strong>대체 추천 표현:</strong> ${q.alt}`;
+
+    quizExpPanel.classList.add('active');
+    btnNextQuestion.style.display = 'inline-block';
+    if (currentQIdx === QUIZ_DATA.length - 1) {
+      btnNextQuestion.textContent = '결과 리포트 보기 ➜';
+    } else {
+      btnNextQuestion.textContent = '다음 문제 ➜';
+    }
+  }
+
+  btnNextQuestion.addEventListener('click', () => {
+    if (currentQIdx < QUIZ_DATA.length - 1) {
+      currentQIdx++;
+      loadQuestion(currentQIdx);
+    } else {
+      showQuizResult();
+    }
+  });
+
+  function showQuizResult() {
+    quizProgress.style.width = '100%';
+    quizActiveCard.style.display = 'none';
+    quizResultCard.style.display = 'block';
+
+    const resScore = document.getElementById('resScore');
+    const resIcon = document.getElementById('resIcon');
+    const resTitle = document.getElementById('resTitle');
+    const resDesc = document.getElementById('resDesc');
+
+    resScore.textContent = `${score}점 / 80점`;
+
+    if (score >= 70) {
+      resIcon.textContent = '🛡️';
+      resTitle.textContent = '탁월한 업스탠더 (디지털 시민 리더)';
+      resDesc.textContent = '인터넷 밈에 숨겨진 5대 혐오 패턴을 완벽히 꿰뚫고 있습니다. 단톡방에서 친구들을 이끌어주는 멋진 가이드가 되어주세요!';
+    } else if (score >= 40) {
+      resIcon.textContent = '🔍';
+      resTitle.textContent = '성장하는 팩트체커 (디지털 분별자)';
+      resDesc.textContent = '유행어로 위장한 혐오 표현의 심각성을 인지하기 시작했습니다. 대체어 사전을 둘러보며 나만의 바른 표현을 늘려보세요!';
+    } else {
+      resIcon.textContent = '💡';
+      resTitle.textContent = '새로운 발견이 필요한 탐험가';
+      resDesc.textContent = '그동안 장난인 줄 알았던 밈들이 사실은 법적 처벌과 상처를 남기는 표현이었음을 알게 되었습니다. 지금부터 바꾸면 됩니다!';
+    }
+  }
+
+  btnRestartQuiz.addEventListener('click', () => {
+    currentQIdx = 0;
+    score = 0;
+    quizResultCard.style.display = 'none';
+    quizActiveCard.style.display = 'block';
+    loadQuestion(0);
+  });
+
+  // 초기 퀴즈 로드
+  loadQuestion(0);
+
+  // =========================================================
+  // 4. 대체어 사전 렌더링 & 검색/필터
+  // =========================================================
+  const dictList = document.getElementById('dictList');
+  const dictSearch = document.getElementById('dictSearch');
+  const tagChips = document.querySelectorAll('.tag-chip');
+  let currentFilterCat = 'all';
+
+  function renderDict() {
+    const query = dictSearch.value.trim().toLowerCase();
+    dictList.innerHTML = '';
+
+    const filtered = DICT_DATA.filter(item => {
+      const matchCat = (currentFilterCat === 'all' || item.cat === currentFilterCat);
+      const matchQuery = (
+        item.term.toLowerCase().includes(query) ||
+        item.origin.toLowerCase().includes(query) ||
+        item.critique.toLowerCase().includes(query) ||
+        item.alt.toLowerCase().includes(query)
+      );
+      return matchCat && matchQuery;
+    });
+
+    if (filtered.length === 0) {
+      dictList.innerHTML = `
+        <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted); background: var(--card-bg); border-radius: var(--radius); border: 1px dashed var(--card-border);">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
+          <p>검색 조건에 맞는 용어가 없습니다. 다른 검색어를 입력해보세요.</p>
+        </div>
+      `;
+      return;
+    }
+
+    filtered.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'term-card';
+      card.innerHTML = `
+        <div class="term-card-header">
+          <div class="term-name-wrap">
+            <span class="term-name">${item.term}</span>
+            <span class="pill-pat">${item.pattern}</span>
+          </div>
+          <span class="pill-cat">${item.catLabel}</span>
+        </div>
+
+        <div class="term-details">
+          <div class="detail-row">
+            <span class="detail-label">숨겨진 진짜 유래 (Fact Check)</span>
+            <span class="detail-val origin">${item.origin}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">왜 쓰면 안 되는가? (피해자 관점 & 법적 책임)</span>
+            <span class="detail-val critique">${item.critique} <em>(${item.law})</em></span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">추천 대체 표현 (대신 이렇게 말해요)</span>
+            <div class="detail-val alt">
+              <span>✨ ${item.alt}</span>
+              <button class="btn-copy-alt" data-copy="${item.alt.replace(/"/g, '&quot;')}">대체어 복사</button>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">친구가 썼을 때 단톡방 1초 개입 문장</span>
+            <div class="upstander-line-box">
+              <span>🗣️ "${item.upstander}"</span>
+              <button class="btn-copy-line" data-copy="${item.upstander.replace(/"/g, '&quot;')}">문장 복사</button>
+            </div>
+          </div>
+        </div>
+      `;
+      dictList.appendChild(card);
+    });
+
+    // 클립보드 복사 이벤트 바인딩
+    dictList.querySelectorAll('.btn-copy-alt, .btn-copy-line').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const textToCopy = e.target.dataset.copy;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          showToast(`📋 복사 완료: "${textToCopy}"`);
+        });
+      });
+    });
+  }
+
+  dictSearch.addEventListener('input', renderDict);
+
+  tagChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      tagChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      currentFilterCat = chip.dataset.cat;
+      renderDict();
+    });
+  });
+
+  renderDict();
+
+  // =========================================================
+  // 5. 신조어 자가 진단 5문 체크리스트
+  // =========================================================
+  const checkItems = document.querySelectorAll('.check-item');
+  const checkVerdictBox = document.getElementById('checkVerdictBox');
+  const checkVerdictTitle = document.getElementById('checkVerdictTitle');
+  const checkVerdictDesc = document.getElementById('checkVerdictDesc');
+
+  checkItems.forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('checked');
+      updateCheckVerdict();
+    });
+  });
+
+  function updateCheckVerdict() {
+    const checkedCount = document.querySelectorAll('.check-item.checked').length;
+
+    if (checkedCount === 0) {
+      checkVerdictBox.style.borderColor = '#334155';
+      checkVerdictBox.style.background = '#0b111e';
+      checkVerdictTitle.style.color = 'var(--accent)';
+      checkVerdictTitle.textContent = '🛡️ 체크박스를 눌러 직접 진단해보세요';
+      checkVerdictDesc.textContent = '인터넷에서 접한 의심스러운 표현을 떠올리며 해당되는 항목을 클릭해보세요.';
+    } else if (checkedCount === 1) {
+      checkVerdictBox.style.borderColor = 'var(--warning)';
+      checkVerdictBox.style.background = 'rgba(245, 158, 11, 0.1)';
+      checkVerdictTitle.style.color = 'var(--warning)';
+      checkVerdictTitle.textContent = '⚠️ 주의: 1개 이상 해당! 혐오·차별 은어일 가능성이 매우 높습니다.';
+      checkVerdictDesc.textContent = '타인의 고통이나 출신을 조롱하는 메커니즘이 포함되어 있습니다. 단톡방과 일상에서 사용을 중단하고 주변에 사실을 알려주세요.';
+    } else {
+      checkVerdictBox.style.borderColor = 'var(--danger)';
+      checkVerdictBox.style.background = 'rgba(239, 68, 68, 0.15)';
+      checkVerdictTitle.style.color = 'var(--danger)';
+      checkVerdictTitle.textContent = `🚨 위험: ${checkedCount}개 항목 해당! 법적 처벌과 심각한 2차 가해를 초래하는 고위험 혐오 언어입니다.`;
+      checkVerdictDesc.textContent = '절대로 따라 쓰지 말고, 친구가 쓸 경우 4D 개입(직접 지적/화제 전환/선생님 상담)으로 단호하게 거절해야 합니다.';
+    }
+  }
+
+  // =========================================================
+  // 6. 공통 유틸: 토스트 메시지
+  // =========================================================
+  const toast = document.getElementById('toast');
+  let toastTimer = null;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2200);
+  }
+</script>
+
+</body>
+</html>
